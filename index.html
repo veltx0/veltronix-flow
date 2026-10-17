@@ -172,6 +172,10 @@ const DEFAULT_STATE = {
   clients: [],
   quotes: [],
   tickets: [],
+  products: [],
+  orders: [],
+  expenses: [],
+  projects: [],
   activities: [],
   notifications: [],
   readNotifications: [],
@@ -184,6 +188,7 @@ const DEFAULT_STATE = {
     profileType: "",
     businessName: "",
     sector: "",
+    businessType: "technology",
     services: [],
     customServices: ""
   }
@@ -200,6 +205,10 @@ function loadState(){
       clients: Array.isArray(saved.clients) ? saved.clients : [],
       quotes: Array.isArray(saved.quotes) ? saved.quotes : [],
       tickets: Array.isArray(saved.tickets) ? saved.tickets : [],
+      products: Array.isArray(saved.products) ? saved.products : [],
+      orders: Array.isArray(saved.orders) ? saved.orders : [],
+      expenses: Array.isArray(saved.expenses) ? saved.expenses : [],
+      projects: Array.isArray(saved.projects) ? saved.projects : [],
       activities: Array.isArray(saved.activities) ? saved.activities : [],
       notifications: Array.isArray(saved.notifications) ? saved.notifications : [],
       readNotifications: Array.isArray(saved.readNotifications) ? saved.readNotifications : []
@@ -287,6 +296,23 @@ function applySettings(){
   document.documentElement.style.setProperty("--light",c[2]);
   document.body.classList.toggle("compact",!!db.settings.compact);
 }
+function weekStart(){
+  const d=new Date(); d.setHours(0,0,0,0);
+  const day=(d.getDay()+6)%7; d.setDate(d.getDate()-day);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+}
+function businessTypeOptions(selected="technology"){
+  const options=[
+    ["restaurant","Lanchonete, restaurante ou alimentação"],
+    ["store","Loja ou comércio"],
+    ["services","Prestação de serviços"],
+    ["professional","Profissional autônomo"],
+    ["agency","Agência, design ou marketing"],
+    ["technology","Tecnologia e desenvolvimento"],
+    ["other","Outro tipo de negócio"]
+  ];
+  return options.map(([v,label])=>`<option value="${v}" ${selected===v?"selected":""}>${label}</option>`).join("");
+}
 function profileName(){
   return db.settings.businessName || "Minha organização";
 }
@@ -294,9 +320,26 @@ function initials(){
   return profileName().trim().split(/\s+/).slice(0,2).map(x=>x[0]||"").join("").toUpperCase() || "V";
 }
 
+function businessType(){
+  return db.settings.businessType || "technology";
+}
+function isFoodBusiness(){ return ["restaurant","store"].includes(businessType()); }
+function labels(){
+  const type=businessType();
+  if(type==="restaurant") return {products:"Produtos e estoque",orders:"Pedidos",ordersOne:"Pedido",orderMany:"Pedidos",expense:"Despesas",revenue:"Faturamento",projects:"Rotina da loja"};
+  if(type==="store") return {products:"Produtos e estoque",orders:"Vendas",ordersOne:"Venda",orderMany:"Vendas",expense:"Despesas",revenue:"Faturamento",projects:"Operação da loja"};
+  if(type==="services"||type==="professional") return {products:"Serviços",orders:"Atendimentos pagos",ordersOne:"Atendimento",orderMany:"Atendimentos",expense:"Despesas",revenue:"Receita",projects:"Agenda e tarefas"};
+  if(type==="agency") return {products:"Serviços",orders:"Contratos e vendas",ordersOne:"Contrato",orderMany:"Contratos",expense:"Despesas",revenue:"Receita",projects:"Projetos"};
+  if(type==="other") return {products:"Produtos ou serviços",orders:"Registros de venda",ordersOne:"Registro",orderMany:"Registros",expense:"Despesas",revenue:"Receita",projects:"Operações"};
+  return {products:"Serviços",orders:"Vendas e contratos",ordersOne:"Registro",orderMany:"Registros",expense:"Despesas",revenue:"Receita",projects:"Projetos"};
+}
 const PAGE_META = {
   dashboard:["Dashboard","Visão geral da sua operação"],
   clients:["Clientes","Organize os contatos e relacionamentos"],
+  products:["Produtos e estoque","Cadastre itens, preços e quantidades"],
+  orders:["Pedidos e vendas","Registre movimentações e acompanhe a receita"],
+  expenses:["Despesas","Controle os custos da operação"],
+  projects:["Projetos e tarefas","Organize etapas, prazos e entregas"],
   quotes:["Orçamentos","Crie, acompanhe e gerencie propostas"],
   tickets:["Atendimentos","Acompanhe solicitações e tarefas de clientes"],
   ai:["Assistente IA","Área preparada para integração futura"],
@@ -307,19 +350,21 @@ const PAGE_META = {
 const NAV_ITEMS = [
   {id:"dashboard",icon:"◫",label:"Dashboard"},
   {id:"clients",icon:"♙",label:"Clientes"},
+  {id:"products",icon:"▦",label:"Produtos e estoque"},
+  {id:"orders",icon:"🧾",label:"Pedidos e vendas"},
+  {id:"projects",icon:"◷",label:"Projetos e tarefas"},
+  {id:"expenses",icon:"↘",label:"Despesas"},
   {id:"quotes",icon:"▤",label:"Orçamentos"},
-  {id:"tickets",icon:"◷",label:"Atendimentos"},
+  {id:"tickets",icon:"◴",label:"Atendimentos"},
   {id:"ai",icon:"✧",label:"Assistente IA",soon:true},
   {id:"reports",icon:"▥",label:"Relatórios"}
 ];
-const NAV_MORE = [
-  {id:"notifications",icon:"♧",label:"Notificações"},
-  {id:"settings",icon:"⚙",label:"Configurações"}
-];
 
 function navButton(item){
+  const dynamicLabels=labels();
+  const shownLabel=item.id==="products"?dynamicLabels.products:item.id==="orders"?dynamicLabels.orders:item.id==="projects"?dynamicLabels.projects:item.id==="expenses"?dynamicLabels.expense:item.label;
   return `<button type="button" data-page="${item.id}" class="${currentPage===item.id?"active":""}">
-    <span class="ico">${item.icon}</span><span>${item.label}</span>
+    <span class="ico">${item.icon}</span><span>${shownLabel}</span>
     ${item.soon?'<span class="soon">EM BREVE</span>':""}
     ${item.id==="notifications" && unreadCount()?`<span class="soon">${unreadCount()}</span>`:""}
   </button>`;
@@ -419,6 +464,12 @@ function renderDashboard(){
     ${statCard("Valor aprovado",money(getQuoteTotal("Aprovado")),"↗","Soma dos orçamentos aprovados")}
     ${statCard("Atendimentos abertos",openTickets,"◷","Solicitações não concluídas")}
   </div>
+  <div class="grid stats">
+    ${statCard(labels().products,db.products.length,"▦","Itens cadastrados")}
+    ${statCard(labels().orders,db.orders.filter(o=>o.status!=="Cancelado").length,"🧾","Registros ativos")}
+    ${statCard(labels().revenue,money(db.orders.filter(o=>o.status!=="Cancelado" && (o.date||"").slice(0,10)>=weekStart()).reduce((sum,o)=>sum+Number(o.value||0),0)),"↗","Total registrado nesta semana")}
+    ${statCard("Despesas da semana",money(db.expenses.filter(e=>(e.date||"").slice(0,10)>=weekStart()).reduce((sum,e)=>sum+Number(e.value||0),0)),"↘","Custos registrados")}
+  </div>
   <div class="grid two-col">
     <div class="card">
       <div class="page-head"><div><h2>Atalhos rápidos</h2><div class="muted small">Acesse as ações mais usadas</div></div></div>
@@ -426,6 +477,9 @@ function renderDashboard(){
         <button class="btn quick" data-action="new-client"><span>♙</span><strong>Novo cliente</strong></button>
         <button class="btn quick" data-action="new-quote"><span>▤</span><strong>Novo orçamento</strong></button>
         <button class="btn quick" data-action="new-ticket"><span>◷</span><strong>Novo atendimento</strong></button>
+        <button class="btn quick" data-action="new-product"><span>▦</span><strong>Novo item</strong></button>
+        <button class="btn quick" data-action="new-order"><span>🧾</span><strong>Novo registro</strong></button>
+        <button class="btn quick" data-action="new-expense"><span>↘</span><strong>Nova despesa</strong></button>
       </div>
       <hr>
       <h2>Seus serviços</h2>
@@ -501,6 +555,136 @@ function renderTickets(){
   </div>`;
 }
 
+
+/* MÓDULOS DE GESTÃO POR TIPO DE NEGÓCIO */
+function renderProducts(){
+  const term=searchTerm.toLowerCase();
+  const list=db.products.filter(p=>`${p.name} ${p.category||""}`.toLowerCase().includes(term));
+  const low=list.filter(p=>Number(p.stock||0)<=Number(p.minStock||0));
+  return `${pageHead(labels().products, businessType()==="restaurant"?"Controle ingredientes, produtos e alertas de estoque.":"Cadastre itens, preços e quantidades.",
+    `<button class="btn btn-primary" data-action="new-product">＋ Novo item</button>`)}
+    <div class="grid stats">
+      ${statCard("Itens cadastrados",db.products.length,"▦")}
+      ${statCard("Estoque baixo",db.products.filter(p=>Number(p.stock||0)<=Number(p.minStock||0)).length,"⚠","Itens no limite mínimo")}
+      ${statCard("Valor do estoque",money(db.products.reduce((sum,p)=>sum+Number(p.price||0)*Number(p.stock||0),0)),"◈","Preço de venda × quantidade")}
+      ${statCard("Categorias",new Set(db.products.map(p=>p.category).filter(Boolean)).size,"▤")}
+    </div>
+    <div class="card"><div class="toolbar"><input class="input search" data-search placeholder="Buscar produto, ingrediente ou serviço..." value="${esc(searchTerm)}"><button class="btn" data-action="export-products">Exportar CSV</button></div>
+    ${list.length?`<div class="table-wrap"><table><thead><tr><th>Nome</th><th>Categoria</th><th>Preço</th><th>Quantidade</th><th>Estoque mínimo</th><th>Status</th><th>Ações</th></tr></thead><tbody>
+    ${list.map(p=>`<tr><td><strong>${esc(p.name)}</strong></td><td>${esc(p.category||"—")}</td><td>${money(p.price)}</td><td>${Number(p.stock||0)}</td><td>${Number(p.minStock||0)}</td><td>${Number(p.stock||0)<=Number(p.minStock||0)?'<span class="badge red">Estoque baixo</span>':'<span class="badge green">Disponível</span>'}</td><td><div class="actions"><button class="btn btn-sm" data-action="edit-product" data-id="${p.id}">Editar</button><button class="btn btn-sm btn-danger" data-action="delete-product" data-id="${p.id}">Excluir</button></div></td></tr>`).join("")}
+    </tbody></table></div>`:emptyState("▦","Nenhum item cadastrado","Adicione produtos, ingredientes ou serviços para começar.",'<button class="btn btn-primary" data-action="new-product">＋ Cadastrar primeiro item</button>')}</div>
+    ${low.length?`<div class="notice" style="margin-top:16px">⚠️ Atenção: ${low.length} item(ns) estão no estoque mínimo ou abaixo dele.</div>`:""}`;
+}
+function renderOrders(){
+  const term=searchTerm.toLowerCase();
+  const list=db.orders.filter(o=>`${o.title} ${o.clientName||""} ${o.status} ${o.notes||""}`.toLowerCase().includes(term));
+  const active=db.orders.filter(o=>o.status!=="Cancelado");
+  const week=active.filter(o=>(o.date||"").slice(0,10)>=weekStart());
+  return `${pageHead(labels().orders,"Registre pedidos, vendas ou serviços pagos e acompanhe os valores.",
+    `<button class="btn btn-primary" data-action="new-order">＋ Novo registro</button>`)}
+    <div class="grid stats">
+      ${statCard("Registros",active.length,"🧾","Sem contar cancelados")}
+      ${statCard("Hoje",money(active.filter(o=>(o.date||"").slice(0,10)===today()).reduce((sum,o)=>sum+Number(o.value||0),0)),"↗","Valor registrado hoje")}
+      ${statCard("Esta semana",money(week.reduce((sum,o)=>sum+Number(o.value||0),0)),"▥","Desde segunda-feira")}
+      ${statCard("Ticket médio",money(active.length?active.reduce((sum,o)=>sum+Number(o.value||0),0)/active.length:0),"◈","Média por registro")}
+    </div>
+    <div class="card"><div class="toolbar"><input class="input search" data-search placeholder="Buscar registro ou cliente..." value="${esc(searchTerm)}"><button class="btn" data-action="export-orders">Exportar CSV</button></div>
+    ${list.length?`<div class="table-wrap"><table><thead><tr><th>Registro</th><th>Cliente</th><th>Data</th><th>Valor</th><th>Status</th><th>Ações</th></tr></thead><tbody>
+    ${list.map(o=>`<tr><td><strong>${esc(o.title)}</strong><br><span class="muted">${esc(o.notes||"")}${o.productId?` · ${esc(db.products.find(p=>p.id===o.productId)?.name||"item removido")} × ${Number(o.quantity||1)}`:""}</span></td><td>${esc(o.clientName||"—")}</td><td>${dateText((o.date||"").slice(0,10))}</td><td><strong>${money(o.value)}</strong></td><td>${statusBadge(o.status)}</td><td><div class="actions"><button class="btn btn-sm" data-action="edit-order" data-id="${o.id}">Editar</button><button class="btn btn-sm btn-danger" data-action="delete-order" data-id="${o.id}">Excluir</button></div></td></tr>`).join("")}
+    </tbody></table></div>`:emptyState("🧾","Nenhum registro por aqui","Cadastre o primeiro pedido, venda ou atendimento pago.",'<button class="btn btn-primary" data-action="new-order">＋ Novo registro</button>')}</div>`;
+}
+function renderExpenses(){
+  const term=searchTerm.toLowerCase();
+  const list=db.expenses.filter(e=>`${e.title} ${e.category||""} ${e.notes||""}`.toLowerCase().includes(term));
+  const week=db.expenses.filter(e=>(e.date||"").slice(0,10)>=weekStart()).reduce((sum,e)=>sum+Number(e.value||0),0);
+  return `${pageHead(labels().expense,"Registre custos fixos e variáveis para entender o resultado do negócio.",
+    `<button class="btn btn-primary" data-action="new-expense">＋ Nova despesa</button>`)}
+    <div class="grid stats">
+      ${statCard("Despesas registradas",db.expenses.length,"↘")}
+      ${statCard("Esta semana",money(week),"▥","Desde segunda-feira")}
+      ${statCard("Total acumulado",money(db.expenses.reduce((sum,e)=>sum+Number(e.value||0),0)),"◈")}
+      ${statCard("Resultado estimado semanal",money(db.orders.filter(o=>o.status!=="Cancelado"&&(o.date||"").slice(0,10)>=weekStart()).reduce((sum,o)=>sum+Number(o.value||0),0)-week),"↗","Receitas registradas menos despesas")}
+    </div>
+    <div class="card"><div class="toolbar"><input class="input search" data-search placeholder="Buscar despesa ou categoria..." value="${esc(searchTerm)}"><button class="btn" data-action="export-expenses">Exportar CSV</button></div>
+    ${list.length?`<div class="table-wrap"><table><thead><tr><th>Despesa</th><th>Categoria</th><th>Data</th><th>Valor</th><th>Observações</th><th>Ações</th></tr></thead><tbody>
+    ${list.map(e=>`<tr><td><strong>${esc(e.title)}</strong></td><td>${esc(e.category||"—")}</td><td>${dateText((e.date||"").slice(0,10))}</td><td>${money(e.value)}</td><td>${esc(e.notes||"—")}</td><td><div class="actions"><button class="btn btn-sm" data-action="edit-expense" data-id="${e.id}">Editar</button><button class="btn btn-sm btn-danger" data-action="delete-expense" data-id="${e.id}">Excluir</button></div></td></tr>`).join("")}
+    </tbody></table></div>`:emptyState("↘","Nenhuma despesa cadastrada","Registre compras, aluguel, ingredientes, ferramentas ou outros custos.",'<button class="btn btn-primary" data-action="new-expense">＋ Registrar despesa</button>')}</div>`;
+}
+function renderProjects(){
+  const term=searchTerm.toLowerCase();
+  const list=db.projects.filter(p=>`${p.title} ${p.clientName||""} ${p.status} ${p.description||""}`.toLowerCase().includes(term));
+  return `${pageHead(labels().projects,"Acompanhe projetos, tarefas, prazos e responsáveis.",
+    `<button class="btn btn-primary" data-action="new-project">＋ Novo projeto/tarefa</button>`)}
+    <div class="grid stats">
+      ${statCard("Total",db.projects.length,"◷")}
+      ${statCard("Em andamento",db.projects.filter(p=>p.status==="Em andamento").length,"↗")}
+      ${statCard("Concluídos",db.projects.filter(p=>p.status==="Concluído").length,"✓")}
+      ${statCard("Atrasados",db.projects.filter(p=>p.dueDate&&p.dueDate<today()&&p.status!=="Concluído").length,"⚠")}
+    </div>
+    <div class="card"><div class="toolbar"><input class="input search" data-search placeholder="Buscar projeto ou tarefa..." value="${esc(searchTerm)}"><button class="btn" data-action="export-projects">Exportar CSV</button></div>
+    ${list.length?`<div class="table-wrap"><table><thead><tr><th>Projeto/tarefa</th><th>Cliente</th><th>Prazo</th><th>Valor previsto</th><th>Status</th><th>Ações</th></tr></thead><tbody>
+    ${list.map(p=>`<tr><td><strong>${esc(p.title)}</strong><br><span class="muted">${esc(p.description||"")}</span></td><td>${esc(p.clientName||"—")}</td><td>${dateText(p.dueDate)}</td><td>${money(p.value)}</td><td>${statusBadge(p.status)}</td><td><div class="actions"><button class="btn btn-sm" data-action="edit-project" data-id="${p.id}">Editar</button><button class="btn btn-sm btn-danger" data-action="delete-project" data-id="${p.id}">Excluir</button></div></td></tr>`).join("")}
+    </tbody></table></div>`:emptyState("◷","Nenhum projeto ou tarefa","Crie um registro para organizar as próximas etapas.",'<button class="btn btn-primary" data-action="new-project">＋ Criar projeto/tarefa</button>')}</div>`;
+}
+function showProductForm(item=null){
+  editing=item?{type:"product",id:item.id}:null;
+  openModal(item?"Editar item":"Novo produto, ingrediente ou serviço",`<form id="product-form">
+    <div class="field"><label>Nome *</label><input class="input" name="name" required value="${esc(item?.name||"")}" placeholder="Ex.: Hambúrguer artesanal / Criação de site"></div>
+    <div class="field"><label>Categoria</label><input class="input" name="category" value="${esc(item?.category||"")}" placeholder="Ex.: Bebidas, ingredientes, serviço"></div>
+    <div class="grid" style="grid-template-columns:1fr 1fr">
+      <div class="field"><label>Preço de venda (R$)</label><input class="input" type="number" min="0" step="0.01" name="price" value="${esc(item?.price??"0")}"></div>
+      <div class="field"><label>Quantidade em estoque</label><input class="input" type="number" min="0" step="1" name="stock" value="${esc(item?.stock??"0")}"></div>
+    </div>
+    <div class="field"><label>Alerta de estoque mínimo</label><input class="input" type="number" min="0" step="1" name="minStock" value="${esc(item?.minStock??"0")}"></div>
+    <div class="actions"><button class="btn btn-primary" type="submit">Salvar item</button><button class="btn" type="button" data-action="close-modal">Cancelar</button></div>
+  </form>`);
+}
+function showOrderForm(item=null){
+  editing=item?{type:"order",id:item.id}:null;
+  openModal(item?"Editar registro":`Novo(a) ${labels().ordersOne.toLowerCase()}`,`<form id="order-form">
+    <div class="field"><label>Nome/descrição *</label><input class="input" name="title" required value="${esc(item?.title||"")}" placeholder="Ex.: Pedido #001 / Projeto de site"></div>
+    <div class="field"><label>Cliente (opcional)</label><select class="select" name="clientId">${clientOptions(item?.clientId||"")}</select></div>
+    <div class="grid" style="grid-template-columns:1.4fr .6fr">
+      <div class="field"><label>Produto/serviço vinculado (opcional)</label><select class="select" name="productId"><option value="">Sem vínculo</option>${db.products.map(p=>`<option value="${p.id}" ${item?.productId===p.id?"selected":""}>${esc(p.name)} · estoque ${Number(p.stock||0)}</option>`).join("")}</select></div>
+      <div class="field"><label>Quantidade</label><input class="input" type="number" min="1" step="1" name="quantity" value="${esc(item?.quantity??1)}"></div>
+    </div>
+    <div class="grid" style="grid-template-columns:1fr 1fr">
+      <div class="field"><label>Valor (R$) *</label><input class="input" type="number" min="0" step="0.01" name="value" required value="${esc(item?.value??"")}"></div>
+      <div class="field"><label>Data</label><input class="input" type="date" name="date" value="${esc((item?.date||today()).slice(0,10))}"></div>
+    </div>
+    <div class="field"><label>Status</label><select class="select" name="status">${(businessType()==="restaurant"?["Recebido","Preparando","Pronto","Saiu para entrega","Entregue","Pago","Cancelado"]:["Recebido","Em andamento","Pronto","Concluído","Pago","Cancelado"]).map(x=>`<option ${((item?.status||"Recebido")===x)?"selected":""}>${x}</option>`).join("")}</select></div>
+    <div class="field"><label>Observações</label><textarea class="textarea" name="notes">${esc(item?.notes||"")}</textarea></div>
+    <div class="actions"><button class="btn btn-primary" type="submit">Salvar registro</button><button class="btn" type="button" data-action="close-modal">Cancelar</button></div>
+  </form>`);
+}
+function showExpenseForm(item=null){
+  editing=item?{type:"expense",id:item.id}:null;
+  openModal(item?"Editar despesa":"Nova despesa",`<form id="expense-form">
+    <div class="field"><label>Descrição *</label><input class="input" name="title" required value="${esc(item?.title||"")}" placeholder="Ex.: Compra de ingredientes, aluguel"></div>
+    <div class="field"><label>Categoria</label><input class="input" name="category" value="${esc(item?.category||"")}" placeholder="Ex.: Estoque, estrutura, transporte"></div>
+    <div class="grid" style="grid-template-columns:1fr 1fr">
+      <div class="field"><label>Valor (R$) *</label><input class="input" type="number" min="0" step="0.01" name="value" required value="${esc(item?.value??"")}"></div>
+      <div class="field"><label>Data</label><input class="input" type="date" name="date" value="${esc((item?.date||today()).slice(0,10))}"></div>
+    </div>
+    <div class="field"><label>Observações</label><textarea class="textarea" name="notes">${esc(item?.notes||"")}</textarea></div>
+    <div class="actions"><button class="btn btn-primary" type="submit">Salvar despesa</button><button class="btn" type="button" data-action="close-modal">Cancelar</button></div>
+  </form>`);
+}
+function showProjectForm(item=null){
+  editing=item?{type:"project",id:item.id}:null;
+  openModal(item?"Editar projeto/tarefa":"Novo projeto ou tarefa",`<form id="project-form">
+    <div class="field"><label>Título *</label><input class="input" name="title" required value="${esc(item?.title||"")}" placeholder="Ex.: Entregar pedido / Criar landing page"></div>
+    <div class="field"><label>Cliente (opcional)</label><select class="select" name="clientId">${clientOptions(item?.clientId||"")}</select></div>
+    <div class="field"><label>Descrição</label><textarea class="textarea" name="description">${esc(item?.description||"")}</textarea></div>
+    <div class="grid" style="grid-template-columns:1fr 1fr">
+      <div class="field"><label>Prazo</label><input class="input" type="date" name="dueDate" value="${esc(item?.dueDate||"")}"></div>
+      <div class="field"><label>Valor previsto (R$)</label><input class="input" type="number" min="0" step="0.01" name="value" value="${esc(item?.value??"0")}"></div>
+    </div>
+    <div class="field"><label>Status</label><select class="select" name="status">${["Pendente","Em andamento","Aguardando","Concluído","Cancelado"].map(x=>`<option ${((item?.status||"Pendente")===x)?"selected":""}>${x}</option>`).join("")}</select></div>
+    <div class="actions"><button class="btn btn-primary" type="submit">Salvar projeto/tarefa</button><button class="btn" type="button" data-action="close-modal">Cancelar</button></div>
+  </form>`);
+}
+
 function renderAI(){
   return `${pageHead("Assistente IA","Área reservada para uma integração futura.")}
     <div class="card">
@@ -525,6 +709,12 @@ function renderReports(){
       ${statCard("Valor aprovado",money(approved.reduce((s,q)=>s+Number(q.value||0),0)),"↗")}
       ${statCard("Ticket médio",money(avg),"◈")}
       ${statCard("Atendimentos concluídos",complete,"✓")}
+    </div>
+    <div class="grid stats">
+      ${statCard(labels().revenue+" (semana)",money(db.orders.filter(o=>o.status!=="Cancelado"&&(o.date||"").slice(0,10)>=weekStart()).reduce((sum,o)=>sum+Number(o.value||0),0)),"↗")}
+      ${statCard("Despesas (semana)",money(db.expenses.filter(e=>(e.date||"").slice(0,10)>=weekStart()).reduce((sum,e)=>sum+Number(e.value||0),0)),"↘")}
+      ${statCard("Resultado estimado",money(db.orders.filter(o=>o.status!=="Cancelado"&&(o.date||"").slice(0,10)>=weekStart()).reduce((sum,o)=>sum+Number(o.value||0),0)-db.expenses.filter(e=>(e.date||"").slice(0,10)>=weekStart()).reduce((sum,e)=>sum+Number(e.value||0),0)),"◈")}
+      ${statCard("Itens cadastrados",db.products.length,"▦")}
     </div>
     <div class="grid two-col">
       <div class="card"><h2>Resumo dos orçamentos</h2>
@@ -559,7 +749,10 @@ function renderSettings(){
       <p class="muted small">Estas informações ajudam a personalizar o seu espaço de trabalho.</p>
       <div class="field"><label>Tipo de perfil</label><select class="select" id="setting-profile"><option value="empresa" ${s.profileType==="empresa"?"selected":""}>Empresa</option><option value="profissional" ${s.profileType==="profissional"?"selected":""}>Profissional</option></select></div>
       <div class="field"><label>Nome da empresa ou profissional</label><input class="input" id="setting-name" value="${esc(s.businessName)}" placeholder="Ex.: Minha empresa"></div>
-      <div class="field"><label>Segmento de atuação</label><input class="input" id="setting-sector" value="${esc(s.sector)}" placeholder="Ex.: Tecnologia"></div>
+      <div class="field"><label>Tipo de negócio (personaliza os módulos)</label><select class="select" id="setting-business-type">
+        ${businessTypeOptions(s.businessType)}
+      </select></div>
+      <div class="field"><label>Segmento de atuação / observações</label><input class="input" id="setting-sector" value="${esc(s.sector)}" placeholder="Ex.: Tecnologia, alimentação, moda"></div>
       <button class="btn btn-primary" data-action="save-profile">Salvar perfil</button>
       <hr>
       <h2>Serviços oferecidos</h2>
@@ -662,7 +855,7 @@ function formObject(form){
 /* SALVAR FORMULÁRIOS */
 document.addEventListener("submit",function(event){
   const form=event.target;
-  if(!["client-form","quote-form","ticket-form"].includes(form.id)) return;
+  if(!["client-form","quote-form","ticket-form","product-form","order-form","expense-form","project-form"].includes(form.id)) return;
   event.preventDefault();
   const data=formObject(form);
   const now=new Date().toISOString();
@@ -698,11 +891,60 @@ document.addEventListener("submit",function(event){
     notify("Atendimento salvo",item.title);
     saveState();closeModal();renderShell();toast(old?"Atendimento atualizado.":"Atendimento cadastrado.");
   }
+
+  if(form.id==="product-form"){
+    const old=editing?.type==="product"?db.products.find(x=>x.id===editing.id):null;
+    const item={...(old||{}),id:old?.id||id(),name:data.name.trim(),category:data.category.trim(),price:Number(data.price||0),stock:Number(data.stock||0),minStock:Number(data.minStock||0),createdAt:old?.createdAt||now,updatedAt:now};
+    if(old) db.products=db.products.map(x=>x.id===old.id?item:x); else db.products.unshift(item);
+    logActivity(old?"Item atualizado":"Novo item cadastrado",item.name);
+    notify("Cadastro de item",item.name);
+    saveState();closeModal();renderShell();toast(old?"Item atualizado.":"Item cadastrado.");
+  }
+  if(form.id==="order-form"){
+    const old=editing?.type==="order"?db.orders.find(x=>x.id===editing.id):null;
+    const client=db.clients.find(c=>c.id===data.clientId);
+    const quantity=Math.max(1,Number(data.quantity||1));
+    const productId=data.productId||"";
+    const previousProduct=old?.productId?db.products.find(p=>p.id===old.productId):null;
+    const nextProduct=productId?db.products.find(p=>p.id===productId):null;
+    if(nextProduct && data.status!=="Cancelado"){
+      const stockAvailable=Number(nextProduct.stock||0)+(previousProduct&&previousProduct.id===nextProduct.id?Number(old?.quantity||1):0);
+      if(stockAvailable<quantity){toast(`Estoque insuficiente para ${nextProduct.name}. Disponível: ${stockAvailable}.`);return;}
+    }
+    if(old && previousProduct && old.status!=="Cancelado"){
+      previousProduct.stock=Number(previousProduct.stock||0)+Number(old.quantity||1);
+    }
+    if(nextProduct && data.status!=="Cancelado"){
+      nextProduct.stock=Number(nextProduct.stock||0)-quantity;
+    }
+    const item={...(old||{}),id:old?.id||id(),title:data.title.trim(),clientId:data.clientId,clientName:client?.name||"",productId,quantity,value:Number(data.value||0),date:data.date||today(),status:data.status,notes:data.notes.trim(),createdAt:old?.createdAt||now,updatedAt:now};
+    if(old) db.orders=db.orders.map(x=>x.id===old.id?item:x); else db.orders.unshift(item);
+    logActivity(old?"Registro atualizado":labels().ordersOne+" registrado",item.title);
+    notify(labels().ordersOne+" salvo",`${item.title} · ${money(item.value)}`);
+    saveState();closeModal();renderShell();toast("Registro salvo.");
+  }
+  if(form.id==="expense-form"){
+    const old=editing?.type==="expense"?db.expenses.find(x=>x.id===editing.id):null;
+    const item={...(old||{}),id:old?.id||id(),title:data.title.trim(),category:data.category.trim(),value:Number(data.value||0),date:data.date||today(),notes:data.notes.trim(),createdAt:old?.createdAt||now,updatedAt:now};
+    if(old) db.expenses=db.expenses.map(x=>x.id===old.id?item:x); else db.expenses.unshift(item);
+    logActivity(old?"Despesa atualizada":"Nova despesa",item.title);
+    notify("Despesa salva",`${item.title} · ${money(item.value)}`);
+    saveState();closeModal();renderShell();toast("Despesa salva.");
+  }
+  if(form.id==="project-form"){
+    const old=editing?.type==="project"?db.projects.find(x=>x.id===editing.id):null;
+    const client=db.clients.find(c=>c.id===data.clientId);
+    const item={...(old||{}),id:old?.id||id(),title:data.title.trim(),clientId:data.clientId,clientName:client?.name||"",description:data.description.trim(),dueDate:data.dueDate,value:Number(data.value||0),status:data.status,createdAt:old?.createdAt||now,updatedAt:now};
+    if(old) db.projects=db.projects.map(x=>x.id===old.id?item:x); else db.projects.unshift(item);
+    logActivity(old?"Projeto/tarefa atualizado":"Novo projeto/tarefa",item.title);
+    notify("Projeto/tarefa salvo",item.title);
+    saveState();closeModal();renderShell();toast("Projeto/tarefa salvo.");
+  }
 });
 
 /* EXCLUSÃO E AÇÕES */
 function removeRecord(type,recordId){
-  const map={client:"clients",quote:"quotes",ticket:"tickets"};
+  const map={client:"clients",quote:"quotes",ticket:"tickets",product:"products",order:"orders",expense:"expenses",project:"projects"};
   const key=map[type];
   if(!key) return;
   const item=db[key].find(x=>x.id===recordId);
@@ -744,11 +986,15 @@ function exportAllCSV(){
     [
       ...db.clients.map(c=>["Cliente",c.name,c.company,c.email+" "+c.phone,"","",""+c.createdAt]),
       ...db.quotes.map(q=>["Orçamento",q.title,q.clientName,q.description,q.value,q.status,q.createdAt]),
-      ...db.tickets.map(t=>["Atendimento",t.title,t.clientName,t.description,"",t.status,t.createdAt])
+      ...db.tickets.map(t=>["Atendimento",t.title,t.clientName,t.description,"",t.status,t.createdAt]),
+      ...db.products.map(p=>["Produto/serviço",p.name,"",p.category,p.price,p.stock,""+p.createdAt]),
+      ...db.orders.map(o=>[labels().orders,o.title,o.clientName,o.notes,o.value,o.status,o.date]),
+      ...db.expenses.map(e=>["Despesa",e.title,"",e.category,e.value,"Pago",e.date]),
+      ...db.projects.map(p=>["Projeto",p.title,p.clientName,p.description,p.value,p.status,p.dueDate])
     ]);
 }
 function backupData(){
-  const payload={app:"VELTRONIX FLOW",version:3,exportedAt:new Date().toISOString(),data:db};
+  const payload={app:"VELTRONIX FLOW",version:4,exportedAt:new Date().toISOString(),data:db};
   downloadFile("veltronix-flow-backup-"+today()+".json",JSON.stringify(payload,null,2),"application/json;charset=utf-8");
   toast("Backup gerado.");
 }
@@ -770,6 +1016,10 @@ function restoreData(file){
         clients:incoming.clients,
         quotes:incoming.quotes,
         tickets:incoming.tickets,
+        products:Array.isArray(incoming.products)?incoming.products:[],
+        orders:Array.isArray(incoming.orders)?incoming.orders:[],
+        expenses:Array.isArray(incoming.expenses)?incoming.expenses:[],
+        projects:Array.isArray(incoming.projects)?incoming.projects:[],
         activities:Array.isArray(incoming.activities)?incoming.activities:[],
         notifications:Array.isArray(incoming.notifications)?incoming.notifications:[],
         readNotifications:Array.isArray(incoming.readNotifications)?incoming.readNotifications:[]
@@ -787,6 +1037,7 @@ function saveProfile(){
   db.settings.profileType=document.getElementById("setting-profile").value;
   db.settings.businessName=name;
   db.settings.sector=document.getElementById("setting-sector").value.trim();
+  db.settings.businessType=document.getElementById("setting-business-type").value;
   saveState();renderShell();toast("Perfil atualizado.");
 }
 function saveServices(){
@@ -816,6 +1067,7 @@ function renderSetup(){
     profileType:s.profileType||"empresa",
     businessName:s.businessName||"",
     sector:s.sector||"",
+    businessType:s.businessType||"technology",
     services:Array.isArray(s.services)?[...s.services]:[],
     customServices:s.customServices||""
   };
@@ -833,7 +1085,8 @@ function renderSetup(){
             <label class="choice"><input type="radio" name="setup-profile" value="profissional" ${draftSetup.profileType==="profissional"?"checked":""}><div class="choice-content"><div class="choice-icon">♙</div><strong>Profissional</strong><small>Para freelancers e pessoas que trabalham por conta própria.</small></div></label>
           </div>
           <div class="field"><label for="setup-name">Nome da empresa ou profissional *</label><input class="input" id="setup-name" required value="${esc(draftSetup.businessName)}" placeholder="Como você quer identificar seu espaço?"></div>
-          <div class="field"><label for="setup-sector">Segmento de atuação</label><input class="input" id="setup-sector" value="${esc(draftSetup.sector)}" placeholder="Ex.: Tecnologia, design, comércio..."></div>
+          <div class="field"><label for="setup-business-type">Qual é o tipo do seu negócio? *</label><select class="select" id="setup-business-type">${businessTypeOptions(draftSetup.businessType)}</select></div>
+          <div class="field"><label for="setup-sector">Detalhe do segmento (opcional)</label><input class="input" id="setup-sector" value="${esc(draftSetup.sector)}" placeholder="Ex.: hamburgueria, loja de roupas, web design..."></div>
         </div>
         <div class="setup-step" id="setup-step-2">
           <h2 class="setup-title">Quais serviços você oferece?</h2>
@@ -857,6 +1110,7 @@ function setupNext(){
     draftSetup.profileType=document.querySelector('input[name="setup-profile"]:checked')?.value||"empresa";
     draftSetup.businessName=name;
     draftSetup.sector=document.getElementById("setup-sector").value.trim();
+    draftSetup.businessType=document.getElementById("setup-business-type").value;
     setupStep=2;
     document.getElementById("setup-step-1").classList.remove("active");
     document.getElementById("setup-step-2").classList.add("active");
@@ -911,6 +1165,18 @@ document.addEventListener("click",function(event){
   if(action==="new-client") showClientForm();
   if(action==="new-quote") showQuoteForm();
   if(action==="new-ticket") showTicketForm();
+  if(action==="new-product") showProductForm();
+  if(action==="new-order") showOrderForm();
+  if(action==="new-expense") showExpenseForm();
+  if(action==="new-project") showProjectForm();
+  if(action==="edit-product") showProductForm(db.products.find(x=>x.id===recordId));
+  if(action==="edit-order") showOrderForm(db.orders.find(x=>x.id===recordId));
+  if(action==="edit-expense") showExpenseForm(db.expenses.find(x=>x.id===recordId));
+  if(action==="edit-project") showProjectForm(db.projects.find(x=>x.id===recordId));
+  if(action==="delete-product") removeRecord("product",recordId);
+  if(action==="delete-order") removeRecord("order",recordId);
+  if(action==="delete-expense") removeRecord("expense",recordId);
+  if(action==="delete-project") removeRecord("project",recordId);
   if(action==="edit-client") showClientForm(db.clients.find(x=>x.id===recordId));
   if(action==="edit-quote") showQuoteForm(db.quotes.find(x=>x.id===recordId));
   if(action==="edit-ticket") showTicketForm(db.tickets.find(x=>x.id===recordId));
@@ -922,6 +1188,10 @@ document.addEventListener("click",function(event){
   }
   if(action==="export-quotes") exportQuotes();
   if(action==="export-all-csv") exportAllCSV();
+  if(action==="export-products") exportCSV("veltronix-flow-itens.csv",["Nome","Categoria","Preço","Estoque","Mínimo"],db.products.map(p=>[p.name,p.category,p.price,p.stock,p.minStock]));
+  if(action==="export-orders") exportCSV("veltronix-flow-registros.csv",["Título","Cliente","Data","Valor","Status","Observações"],db.orders.map(o=>[o.title,o.clientName,o.date,o.value,o.status,o.notes]));
+  if(action==="export-expenses") exportCSV("veltronix-flow-despesas.csv",["Descrição","Categoria","Data","Valor","Observações"],db.expenses.map(e=>[e.title,e.category,e.date,e.value,e.notes]));
+  if(action==="export-projects") exportCSV("veltronix-flow-projetos.csv",["Título","Cliente","Prazo","Valor","Status","Descrição"],db.projects.map(p=>[p.title,p.clientName,p.dueDate,p.value,p.status,p.description]));
   if(action==="backup") backupData();
   if(action==="restore") document.getElementById("backup-file")?.click();
   if(action==="save-profile") saveProfile();
@@ -942,7 +1212,7 @@ document.addEventListener("click",function(event){
   if(action==="setup-next") setupNext();
   if(action==="setup-back") setupBack();
   if(action==="reset-data"){
-    if(confirm("Isso apagará clientes, orçamentos, atendimentos e configurações salvos neste navegador. Faça um backup antes. Continuar?")){
+    if(confirm("Isso apagará todos os dados e configurações salvos neste navegador. Faça um backup antes. Continuar?")){
       localStorage.removeItem(STORAGE_KEY);
       db=structuredClone(DEFAULT_STATE);
       applySettings();renderSetup();toast("Dados locais apagados.");
