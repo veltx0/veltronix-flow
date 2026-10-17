@@ -4,783 +4,985 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#08080c">
+<meta name="theme-color" content="#0a0910">
 <title>VELTRONIX FLOW | Gestão inteligente</title>
 <style>
-:root {
-  --bg:#08080c;
-  --panel:#111117;
-  --panel2:#171720;
-  --border:#292532;
-  --purple:#a855f7;
-  --purple2:#7928ca;
-  --light:#c084fc;
-  --text:#f5f3fa;
-  --muted:#9691a5;
-  --green:#4ade80;
-  --red:#fb7185;
-  --yellow:#fbbf24;
+:root{
+  --bg:#09080e;--panel:#12101b;--panel2:#191625;--border:#2a2439;
+  --purple:#a855f7;--purple2:#7928ca;--light:#c084fc;
+  --text:#f5f1fc;--muted:#a49ab8;--green:#34d399;--red:#fb7185;
+  --yellow:#fbbf24;--radius:16px
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif;font-size:14px}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif;min-height:100vh}
 button,input,select,textarea{font:inherit}
 button{cursor:pointer}
 button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--light);outline-offset:2px}
 .app{display:flex;min-height:100vh}
-.sidebar{width:245px;background:#0d0c12;border-right:1px solid var(--border);padding:24px 15px;position:fixed;inset:0 auto 0 0;z-index:10;display:flex;flex-direction:column;overflow-y:auto}
-.brand{display:flex;align-items:center;gap:12px;padding:0 9px 26px}
-.brand-logo{width:42px;height:42px;display:grid;place-items:center;border-radius:13px;background:linear-gradient(135deg,var(--purple),var(--purple2));font-size:21px;font-weight:900;box-shadow:0 0 22px #a855f72b}
-.brand strong{display:block;letter-spacing:1px;font-size:14px}
-.brand small{display:block;color:var(--light);font-size:10px;letter-spacing:3px;margin-top:5px}
-.nav-label{font-size:10px;color:var(--muted);letter-spacing:2px;padding:14px 11px 9px}
-.nav{display:flex;flex-direction:column;gap:5px}
-.nav button{background:transparent;border:0;color:var(--muted);text-align:left;border-radius:9px;padding:12px 13px;display:flex;align-items:center;gap:12px}
-.nav button:hover,.nav button.active{background:#a855f71b;color:var(--light)}
-.nav button.active{box-shadow:inset 3px 0 var(--purple)}
-.nav-icon{width:20px;text-align:center;font-size:17px}
-.nav .tag{margin-left:auto;font-size:9px;background:#292532;padding:4px 6px;border-radius:5px}
-.sidebar-bottom{margin-top:auto;padding-top:24px}
-.profile{display:flex;align-items:center;gap:10px;border-top:1px solid var(--border);padding:18px 5px 0}
-.avatar{width:36px;height:36px;background:#301b48;border-radius:50%;display:grid;place-items:center;color:var(--light);font-weight:bold}
-.profile small{color:var(--muted);display:block;margin-top:4px}
-.main{margin-left:245px;width:calc(100% - 245px);min-width:0}
-.topbar{height:75px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;border-bottom:1px solid var(--border);background:#0c0b11;position:sticky;top:0;z-index:5;gap:15px}
-.top-left{display:flex;align-items:center;gap:12px;min-width:0}
-.topbar h2{font-size:17px;margin:0}
-.topbar p{font-size:11px;color:var(--muted);margin:5px 0 0}
-.top-actions{display:flex;align-items:center;gap:9px}
-.content{padding:30px;max-width:1600px;margin:auto}
-.page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;margin-bottom:24px}
-h1{font-size:26px;letter-spacing:-.6px;margin:0 0 8px}
-.subtitle{color:var(--muted);margin:0;line-height:1.6}
-.btn{border:1px solid var(--border);border-radius:9px;padding:10px 14px;background:var(--panel2);color:var(--text);display:inline-flex;align-items:center;justify-content:center;gap:8px}
-.btn:hover{border-color:var(--purple);filter:brightness(1.1)}
-.btn.primary{background:linear-gradient(110deg,var(--purple2),var(--purple));border-color:transparent;color:white;font-weight:600}
-.btn.danger{color:var(--red)}
-.btn.small{padding:7px 10px;font-size:12px}
-.icon-btn{width:39px;height:39px;border:1px solid var(--border);border-radius:10px;background:var(--panel);color:var(--text);position:relative}
-.dot{position:absolute;right:8px;top:7px;width:7px;height:7px;background:var(--purple);border-radius:50%}
-.grid{display:grid;gap:16px}
+.sidebar{width:250px;background:#0e0c15;border-right:1px solid var(--border);padding:22px 14px;display:flex;flex-direction:column;gap:24px;flex-shrink:0}
+.brand{display:flex;align-items:center;gap:11px;padding:0 9px}
+.brand-mark{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,var(--purple),var(--purple2));display:grid;place-items:center;font-weight:900;font-size:20px;box-shadow:0 0 25px #a855f733}
+.brand strong{display:block;font-size:15px;letter-spacing:1px}
+.brand small{color:var(--muted);font-size:11px}
+.nav-title{color:#756b89;font-size:10px;font-weight:800;letter-spacing:1.5px;padding:0 12px;margin:8px 0}
+.nav{display:grid;gap:5px}
+.nav button{width:100%;display:flex;align-items:center;gap:12px;padding:12px;border:1px solid transparent;background:transparent;color:var(--muted);border-radius:11px;text-align:left;transition:.18s}
+.nav button:hover{background:var(--panel2);color:var(--text)}
+.nav button.active{background:#a855f719;color:var(--light);border-color:#a855f738}
+.nav .ico{width:22px;text-align:center;font-size:17px}
+.nav .soon{margin-left:auto;font-size:9px;color:var(--light);border:1px solid #a855f74d;padding:3px 5px;border-radius:5px}
+.sidebar-bottom{margin-top:auto;padding:13px;border:1px solid var(--border);border-radius:13px;background:var(--panel)}
+.sidebar-bottom small{color:var(--muted)}
+.sidebar-bottom strong{display:block;margin:7px 0;font-size:13px}
+.main{flex:1;min-width:0}
+.topbar{height:76px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:15px;padding:0 30px;background:#0b0911eF;position:sticky;top:0;z-index:5;backdrop-filter:blur(15px)}
+.top-left,.top-actions{display:flex;align-items:center;gap:12px}
+.page-heading{font-size:19px;font-weight:800}
+.page-subtitle{font-size:12px;color:var(--muted);margin-top:4px}
+.icon-btn{background:var(--panel);border:1px solid var(--border);color:var(--text);border-radius:10px;width:40px;height:40px}
+.avatar{width:38px;height:38px;display:grid;place-items:center;border-radius:50%;background:#a855f726;color:var(--light);font-weight:800}
+.menu-toggle{display:none}
+.content{padding:28px;max-width:1500px;margin:auto}
+.page-head{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+h1,h2,h3,p{margin-top:0}
+h1{font-size:25px;margin-bottom:6px}
+h2{font-size:18px}
+p{line-height:1.55}
+.muted{color:var(--muted)}
+.small{font-size:12px}
+.grid{display:grid;gap:17px}
 .stats{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:22px}
-.card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:20px;min-width:0}
-.stat-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.two-col{grid-template-columns:1.2fr .8fr}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:20px;min-width:0}
 .stat-label{color:var(--muted);font-size:12px}
-.stat-icon{width:37px;height:37px;border-radius:10px;background:#a855f71b;color:var(--light);display:grid;place-items:center;font-size:18px}
-.stat-number{font-size:29px;font-weight:750;letter-spacing:-1px;margin:18px 0 8px;overflow-wrap:anywhere}
+.stat-value{font-size:28px;font-weight:850;margin:12px 0 7px;letter-spacing:-1px;overflow-wrap:anywhere}
 .stat-foot{font-size:11px;color:var(--muted)}
-.stat-foot strong{color:var(--light)}
-.columns{grid-template-columns:minmax(0,1.3fr) minmax(260px,1fr)}
-.card-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:19px}
-.card-title h3{font-size:15px;margin:0}
-.card-title p{font-size:11px;color:var(--muted);margin:5px 0 0}
-.text-link{background:none;border:0;color:var(--light);font-size:12px}
-.empty{text-align:center;padding:32px 12px;color:var(--muted);line-height:1.8}
-.empty .big{font-size:30px;margin-bottom:8px}
-.activity{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
-.activity:last-child{border-bottom:0}
-.activity-dot{width:9px;height:9px;flex-shrink:0;background:var(--purple);border-radius:50%;margin-top:5px}
-.activity p{margin:0;line-height:1.5;overflow-wrap:anywhere}
-.activity small{color:var(--muted);display:block;margin-top:5px}
-.progress-row{margin:19px 0}
-.progress-info{display:flex;justify-content:space-between;gap:10px;font-size:12px;margin-bottom:9px}
-.progress-info span:last-child{color:var(--muted)}
-.progress{height:6px;background:#282431;border-radius:9px;overflow:hidden}
-.progress div{height:100%;background:linear-gradient(90deg,var(--purple2),var(--light));border-radius:9px}
-.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:17px}
-.search{flex:1;min-width:180px;position:relative}
-.search input{width:100%;padding-left:37px}
-.search:before{content:"⌕";position:absolute;left:13px;top:7px;font-size:23px;color:var(--muted)}
-input,select,textarea{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:11px 12px;border-radius:8px;min-width:0}
-input::placeholder,textarea::placeholder{color:#6f6a7b}
-select option{background:var(--panel)}
-textarea{resize:vertical;min-height:85px}
-.table-wrap{width:100%;overflow-x:auto}
+.stat-icon{float:right;width:39px;height:39px;border-radius:12px;background:#a855f71b;display:grid;place-items:center;font-size:18px}
+.btn{border:1px solid var(--border);background:var(--panel2);color:var(--text);padding:10px 14px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;gap:7px;font-weight:700;font-size:12px}
+.btn:hover{filter:brightness(1.15)}
+.btn-primary{background:linear-gradient(135deg,var(--purple),var(--purple2));border-color:transparent;color:white}
+.btn-danger{color:var(--red);border-color:#fb718533;background:#fb71850d}
+.btn-success{color:var(--green);border-color:#34d39933;background:#34d3990d}
+.btn-sm{padding:7px 10px;font-size:11px}
+.actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.field{display:grid;gap:7px;margin-bottom:14px}
+.field label{font-size:12px;color:var(--muted);font-weight:700}
+.input,.select,.textarea{width:100%;background:#0c0a12;border:1px solid var(--border);color:var(--text);border-radius:10px;padding:11px 12px;min-width:0}
+.textarea{resize:vertical;min-height:90px}
+.input::placeholder,.textarea::placeholder{color:#71677f}
+.search{flex:1;min-width:180px}
+.table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;white-space:nowrap}
-th{text-align:left;font-size:10px;color:var(--muted);font-weight:600;letter-spacing:1px;padding:13px 12px;border-bottom:1px solid var(--border)}
-td{padding:15px 12px;border-bottom:1px solid #25222d;font-size:12px}
+th,td{text-align:left;padding:13px 10px;border-bottom:1px solid var(--border);font-size:12px}
+th{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted)}
+td{color:#e9e2f4}
 tbody tr:last-child td{border-bottom:0}
 tbody tr:hover{background:#ffffff04}
-.person{display:flex;align-items:center;gap:10px}
-.mini-avatar{width:32px;height:32px;border-radius:9px;background:#301b48;color:var(--light);display:grid;place-items:center;font-weight:bold}
-.muted{color:var(--muted)}
-.badge{display:inline-flex;align-items:center;border-radius:6px;padding:5px 8px;font-size:10px;background:#a855f71b;color:var(--light);white-space:nowrap}
-.badge.green{background:#4ade8017;color:var(--green)}
+.badge{display:inline-flex;padding:5px 8px;border-radius:7px;font-size:10px;font-weight:800;background:#a855f71a;color:var(--light)}
+.badge.green{background:#34d39917;color:var(--green)}
 .badge.red{background:#fb718517;color:var(--red)}
 .badge.yellow{background:#fbbf2417;color:var(--yellow)}
-.row-actions{display:flex;gap:5px}
-.row-actions button{background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:6px 8px}
-.row-actions button:hover{color:var(--light);border-color:var(--purple)}
-.amount{font-weight:700}
-.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
-.field{display:flex;flex-direction:column;gap:7px;min-width:0}
-.field label{font-size:12px;color:#c5bfd1}
-.field.full{grid-column:1/-1}
-.form-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:23px}
-.section-note{border:1px solid #a855f744;background:#a855f70b;padding:14px;border-radius:10px;color:#cbb4e7;line-height:1.6;font-size:12px;margin-bottom:18px}
-.settings-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-.setting-row{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:15px 0;border-bottom:1px solid var(--border)}
-.setting-row:last-child{border:0}
-.setting-row p{margin:5px 0 0;color:var(--muted);font-size:12px;line-height:1.5}
-.switch{width:42px;height:24px;position:relative;flex-shrink:0}
-.switch input{opacity:0;width:0;height:0}
-.switch span{position:absolute;inset:0;border-radius:20px;background:#393441;cursor:pointer}
-.switch span:before{content:"";position:absolute;left:3px;top:3px;width:18px;height:18px;background:white;border-radius:50%;transition:.2s}
-.switch input:checked+span{background:var(--purple)}
-.switch input:checked+span:before{transform:translateX(18px)}
-.theme-options{display:flex;gap:10px;flex-wrap:wrap;margin-top:13px}
-.theme-swatch{border:2px solid transparent;border-radius:12px;padding:8px;background:#171720;color:white;min-width:100px}
-.theme-swatch.active{border-color:var(--light)}
-.swatch-color{height:35px;border-radius:6px;margin-bottom:8px}
-.notice-list{display:grid;gap:10px}
-.notice{padding:14px;border:1px solid var(--border);border-radius:10px;display:flex;gap:12px;align-items:flex-start}
-.notice p{margin:0;line-height:1.5}
-.notice small{display:block;color:var(--muted);margin-top:6px}
-.chart{display:flex;align-items:flex-end;gap:10px;height:200px;padding-top:20px}
-.chart-col{flex:1;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:8px}
-.chart-bar{width:min(42px,90%);min-height:3px;background:linear-gradient(0deg,var(--purple2),var(--light));border-radius:6px 6px 2px 2px}
-.chart-label{font-size:10px;color:var(--muted)}
-.chart-value{font-size:10px;color:var(--light)}
-.kpi{font-size:25px;font-weight:bold;margin:8px 0}
-.overlay{position:fixed;inset:0;background:#000b;z-index:30;display:flex;align-items:center;justify-content:center;padding:16px;overflow-y:auto}
-.modal{width:min(650px,100%);max-height:calc(100vh - 32px);overflow-y:auto;background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:24px}
-.modal-head{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:22px}
-.modal-head h3{font-size:19px;margin:0}
-.close{background:none;border:0;color:var(--muted);font-size:25px}
-.toast-stack{position:fixed;right:20px;bottom:20px;z-index:50;display:grid;gap:9px;width:min(360px,calc(100vw - 40px))}
-.toast{background:var(--panel2);border:1px solid var(--border);border-left:3px solid var(--purple);padding:14px;border-radius:10px;box-shadow:0 10px 35px #0008;line-height:1.5;animation:slide .2s ease}
-.toast.error{border-left-color:var(--red)}
-.toast.success{border-left-color:var(--green)}
-@keyframes slide{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.menu-toggle{display:none}
-.footer-note{font-size:11px;color:var(--muted);text-align:center;padding:24px 0 4px}
-@media(max-width:1100px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.content{padding:23px}.topbar{padding:0 22px}}
-@media(max-width:760px){
- .sidebar{transform:translateX(-100%);transition:transform .25s;width:260px;box-shadow:none}
- .sidebar.open{transform:translateX(0);box-shadow:20px 0 60px #0009}
- .main{margin-left:0;width:100%}
- .topbar{height:68px;padding:0 15px}
- .menu-toggle{display:inline-block}
- .content{padding:20px 14px}
- .page-head{flex-direction:column;align-items:stretch}
- .page-head>.btn{align-self:flex-start}
- .columns,.settings-grid{grid-template-columns:1fr}
- .stats{gap:10px}
- .card{padding:15px}
- .stat-number{font-size:24px}
- .topbar p{display:none}
- .form-grid{grid-template-columns:1fr}
- .field.full{grid-column:auto}
- .modal{padding:18px}
- .top-actions .hide-mobile{display:none}
+.empty{text-align:center;padding:35px 12px;color:var(--muted);font-size:13px}
+.empty-icon{font-size:28px;margin-bottom:10px}
+.activity{display:flex;gap:12px;padding:13px 0;border-bottom:1px solid var(--border)}
+.activity:last-child{border:0}
+.activity-dot{width:9px;height:9px;border-radius:50%;background:var(--purple);margin-top:5px;flex-shrink:0}
+.activity strong{font-size:12px;display:block;margin-bottom:5px}
+.activity small{font-size:11px;color:var(--muted)}
+.quick-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.quick{padding:16px;text-align:left;min-height:90px;display:block}
+.quick span{display:block;font-size:22px;margin-bottom:9px}
+.quick strong{font-size:12px}
+.bar-row{display:grid;grid-template-columns:100px 1fr 35px;align-items:center;gap:10px;margin:15px 0;font-size:11px}
+.bar-track{height:8px;border-radius:20px;background:#ffffff0c;overflow:hidden}
+.bar-fill{height:100%;background:linear-gradient(90deg,var(--purple2),var(--light));border-radius:20px}
+.check-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.check-item{display:flex;align-items:center;gap:9px;background:#0c0a12;border:1px solid var(--border);padding:11px;border-radius:10px;font-size:12px}
+.check-item input{accent-color:var(--purple)}
+.notice{padding:13px;border-radius:10px;border:1px solid #a855f73b;background:#a855f710;color:#d9b5ff;font-size:12px;line-height:1.5;margin-bottom:15px}
+hr{border:0;border-top:1px solid var(--border);margin:20px 0}
+.footer{padding:20px 28px;color:#71677f;font-size:11px;text-align:center}
+.hidden{display:none!important}
+.modal-backdrop{position:fixed;inset:0;background:#000b;z-index:20;display:grid;place-items:center;padding:18px}
+.modal{width:min(600px,100%);max-height:90vh;overflow:auto;background:var(--panel);border:1px solid var(--border);border-radius:18px;padding:24px;box-shadow:0 25px 90px #0008}
+.modal-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:18px}
+.modal-head h2{margin:0}
+.toast-area{position:fixed;right:20px;bottom:20px;z-index:50;display:grid;gap:8px;width:min(350px,calc(100vw - 40px))}
+.toast{background:#211a30;border:1px solid #a855f766;padding:13px 16px;border-radius:12px;font-size:12px;box-shadow:0 10px 30px #0007;animation:appear .2s ease}
+@keyframes appear{from{transform:translateY(8px);opacity:0}to{transform:translateY(0);opacity:1}}
+.setup-screen{min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(ellipse at top,#38175a55,transparent 55%),var(--bg)}
+.setup-card{width:min(780px,100%);background:var(--panel);border:1px solid var(--border);border-radius:24px;padding:clamp(20px,5vw,42px);box-shadow:0 30px 100px #0006}
+.setup-brand{display:flex;align-items:center;gap:12px;margin-bottom:30px}
+.setup-brand h1{font-size:16px;letter-spacing:1px;margin:0}
+.setup-title{font-size:clamp(25px,5vw,36px);letter-spacing:-1px;line-height:1.15;margin-bottom:12px}
+.setup-desc{color:var(--muted);font-size:13px;margin-bottom:25px}
+.choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:24px}
+.choice{display:block;position:relative}
+.choice input{position:absolute;opacity:0}
+.choice-content{height:100%;border:1px solid var(--border);border-radius:14px;padding:17px;background:#0c0a12;cursor:pointer;transition:.2s}
+.choice input:checked+.choice-content{border-color:var(--purple);background:#a855f718;box-shadow:0 0 0 1px var(--purple)}
+.choice-content .choice-icon{font-size:24px;margin-bottom:10px}
+.choice-content strong{display:block;margin-bottom:7px;font-size:14px}
+.choice-content small{color:var(--muted);font-size:11px;line-height:1.45;display:block}
+.setup-step{display:none}
+.setup-step.active{display:block}
+.step-indicator{color:var(--light);font-size:11px;font-weight:800;letter-spacing:1px;margin-bottom:15px}
+.setup-footer{display:flex;justify-content:space-between;gap:10px;margin-top:25px;flex-wrap:wrap}
+body.compact .card{padding:14px}
+body.compact th,body.compact td{padding:9px 8px}
+@media(max-width:1100px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.two-col{grid-template-columns:1fr}}
+@media(max-width:800px){
+ .sidebar{position:fixed;z-index:15;left:0;top:0;bottom:0;transform:translateX(-105%);transition:transform .22s;width:265px;box-shadow:15px 0 50px #0005}
+ .sidebar.open{transform:translateX(0)}
+ .menu-toggle{display:inline-grid;place-items:center}
+ .topbar{padding:0 16px;height:68px}
+ .content{padding:19px 15px}
+ .page-heading{font-size:16px}
+ .topbar .page-subtitle{display:none}
+ .quick-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
-@media(max-width:390px){.stats{grid-template-columns:1fr}.topbar h2{font-size:14px}}
+@media(max-width:480px){
+ .stats{gap:10px}.card{padding:15px}.stat-value{font-size:23px}
+ .choice-grid,.check-grid{grid-template-columns:1fr}
+ .setup-card{padding:22px 17px}
+ .top-actions{gap:6px}
+ .avatar{display:none}
+ .bar-row{grid-template-columns:78px 1fr 25px}
+}
 </style>
 </head>
 <body>
-<div class="app">
-<aside class="sidebar" id="sidebar">
-  <div class="brand">
-    <div class="brand-logo">V</div>
-    <div><strong>VELTRONIX</strong><small>F L O W</small></div>
-  </div>
-  <div class="nav-label">MENU PRINCIPAL</div>
-  <nav class="nav" id="nav">
-    <button class="active" data-page="dashboard"><span class="nav-icon">◫</span>Dashboard</button>
-    <button data-page="clientes"><span class="nav-icon">♙</span>Clientes</button>
-    <button data-page="orcamentos"><span class="nav-icon">▤</span>Orçamentos</button>
-    <button data-page="atendimentos"><span class="nav-icon">◉</span>Atendimentos</button>
-    <button data-page="assistente"><span class="nav-icon">✧</span>Assistente IA <span class="tag">EM BREVE</span></button>
-    <button data-page="relatorios"><span class="nav-icon">▥</span>Relatórios</button>
-  </nav>
-  <div class="nav-label">SISTEMA</div>
-  <nav class="nav">
-    <button data-page="notificacoes"><span class="nav-icon">♧</span>Notificações <span id="nav-badge" class="tag" hidden>0</span></button>
-    <button data-page="configuracoes"><span class="nav-icon">⚙</span>Configurações</button>
-  </nav>
-  <div class="sidebar-bottom">
-    <div class="profile">
-      <div class="avatar">VF</div>
-      <div><strong>Administrador</strong><small>Ambiente local</small></div>
-    </div>
-  </div>
-</aside>
-
-<main class="main">
-<header class="topbar">
-  <div class="top-left">
-    <button class="icon-btn menu-toggle" id="menu-toggle" aria-label="Abrir menu">☰</button>
-    <div><h2 id="top-title">Dashboard</h2><p id="top-subtitle">Visão geral da sua operação</p></div>
-  </div>
-  <div class="top-actions">
-    <button class="icon-btn" id="top-notifications" aria-label="Notificações">♧<span id="top-dot" class="dot" hidden></span></button>
-    <button class="btn primary hide-mobile" id="quick-quote">＋ Novo orçamento</button>
-  </div>
-</header>
-<div class="content" id="content"></div>
-</main>
-</div>
+<div id="app-root"></div>
 <div id="modal-root"></div>
-<div id="toast-stack" class="toast-stack" aria-live="polite"></div>
+<div class="toast-area" id="toast-area" aria-live="polite"></div>
 
 <script>
-(function(){
 "use strict";
 
-const $ = s => document.querySelector(s);
-const $$ = s => [...document.querySelectorAll(s)];
-const STORE = "veltronix_flow_v3";
-const pageInfo = {
- dashboard:["Dashboard","Visão geral da sua operação"],
- clientes:["Clientes","Gerencie seus relacionamentos comerciais"],
- orcamentos:["Orçamentos","Organize propostas e oportunidades"],
- atendimentos:["Atendimentos","Acompanhe solicitações e tarefas"],
- assistente:["Assistente IA","Central de assistência inteligente"],
- relatorios:["Relatórios","Acompanhe os dados da sua operação"],
- notificacoes:["Notificações","Avisos e atividades recentes"],
- configuracoes:["Configurações","Personalize sua experiência"]
-};
-const initial = {
- clients:[], quotes:[], tickets:[], activities:[], notifications:[],
- settings:{theme:"purple",compact:false,confirmDelete:true,notify:true},
- readNotifications:0
-};
-let db = load();
-let currentPage = "dashboard";
-let modalReturnPage = null;
+const STORAGE_KEY = "veltronix_flow_v3";
+const SERVICE_OPTIONS = [
+  "Criação de sites","Lojas virtuais","Landing pages","Sistemas web",
+  "Aplicativos","Design de interfaces","Identidade visual","Automação",
+  "Manutenção de sites","Consultoria tecnológica","Marketing digital",
+  "Integrações com APIs","Sistemas personalizados","Outros"
+];
 
-function load(){
- try{
-  const raw=localStorage.getItem(STORE);
-  if(!raw)return structuredClone(initial);
-  const saved=JSON.parse(raw);
-  return {...structuredClone(initial),...saved,
-   clients:Array.isArray(saved.clients)?saved.clients:[],
-   quotes:Array.isArray(saved.quotes)?saved.quotes:[],
-   tickets:Array.isArray(saved.tickets)?saved.tickets:[],
-   activities:Array.isArray(saved.activities)?saved.activities:[],
-   notifications:Array.isArray(saved.notifications)?saved.notifications:[],
-   settings:{...initial.settings,...saved.settings}};
- }catch(e){return structuredClone(initial)}
+const DEFAULT_STATE = {
+  clients: [],
+  quotes: [],
+  tickets: [],
+  activities: [],
+  notifications: [],
+  readNotifications: [],
+  settings: {
+    theme: "purple",
+    compact: false,
+    confirmDelete: true,
+    notify: true,
+    onboardingComplete: false,
+    profileType: "",
+    businessName: "",
+    sector: "",
+    services: [],
+    customServices: ""
+  }
+};
+
+function loadState(){
+  try{
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+    if(!saved) return structuredClone(DEFAULT_STATE);
+    return {
+      ...structuredClone(DEFAULT_STATE),
+      ...saved,
+      settings: {...DEFAULT_STATE.settings, ...(saved.settings || {})},
+      clients: Array.isArray(saved.clients) ? saved.clients : [],
+      quotes: Array.isArray(saved.quotes) ? saved.quotes : [],
+      tickets: Array.isArray(saved.tickets) ? saved.tickets : [],
+      activities: Array.isArray(saved.activities) ? saved.activities : [],
+      notifications: Array.isArray(saved.notifications) ? saved.notifications : [],
+      readNotifications: Array.isArray(saved.readNotifications) ? saved.readNotifications : []
+    };
+  }catch(error){
+    console.error("Não foi possível ler os dados locais:", error);
+    return structuredClone(DEFAULT_STATE);
+  }
 }
-function save(){
- try{
-  localStorage.setItem(STORE,JSON.stringify(db));
-  return true;
- }catch(e){
-  toast("Não foi possível salvar os dados. Verifique o armazenamento do navegador.","error");
-  return false;
- }
+
+let db = loadState();
+let currentPage = "dashboard";
+let searchTerm = "";
+let currentFilter = "Todos";
+let editing = null;
+let setupStep = 1;
+let draftSetup = {};
+let mobileMenuOpen = false;
+
+function saveState(){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+    return true;
+  }catch(error){
+    console.error(error);
+    toast("Não foi possível salvar. Verifique o espaço disponível no navegador.");
+    return false;
+  }
 }
-function esc(v){
- return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+function id(){
+  return (window.crypto && crypto.randomUUID)
+    ? crypto.randomUUID()
+    : Date.now().toString(36) + Math.random().toString(36).slice(2);
 }
-function money(n){
- return Number(n||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+function esc(value){
+  return String(value ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
 }
-function dateNow(){return new Date().toISOString()}
-function dateBR(v){
- if(!v)return "—";
- const d=new Date(v.length===10?v+"T12:00:00":v);
- return isNaN(d)?"—":d.toLocaleDateString("pt-BR");
+function money(value){
+  return Number(value || 0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
 }
-function shortDate(v){
- if(!v)return "";
- const d=new Date(v);
- return isNaN(d)?"":d.toLocaleDateString("pt-BR",{day:"2-digit",month:"short"});
+function dateText(value){
+  if(!value) return "—";
+  const d = new Date(value.length === 10 ? value+"T12:00:00" : value);
+  return Number.isNaN(d.getTime()) ? esc(value) : d.toLocaleDateString("pt-BR");
 }
-function id(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
-function initials(s){
- return String(s||"?").trim().split(/\s+/).slice(0,2).map(x=>x[0]||"").join("").toUpperCase();
+function dateTime(value){
+  if(!value) return "Agora";
+  return new Date(value).toLocaleString("pt-BR",{dateStyle:"short",timeStyle:"short"});
 }
-function toast(message,type="success"){
- const el=document.createElement("div");
- el.className="toast "+type;
- el.textContent=message;
- $("#toast-stack").append(el);
- setTimeout(()=>el.remove(),3600);
+function today(){
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 }
-function logActivity(message){
- db.activities.unshift({id:id(),message,at:dateNow()});
- db.activities=db.activities.slice(0,60);
+function toast(message){
+  const area = document.getElementById("toast-area");
+  if(!area) return;
+  const el = document.createElement("div");
+  el.className = "toast";
+  el.textContent = message;
+  area.appendChild(el);
+  setTimeout(()=>el.remove(),3500);
 }
-function notify(title,message){
- if(db.settings.notify){
-  db.notifications.unshift({id:id(),title,message,at:dateNow(),read:false});
-  db.notifications=db.notifications.slice(0,80);
- }
+function logActivity(title, detail=""){
+  db.activities.unshift({id:id(),title,detail,createdAt:new Date().toISOString()});
+  db.activities = db.activities.slice(0,50);
 }
-function commit(message,notice=true){
- logActivity(message);
- if(notice)notify("Atualização",message);
- save();
- render();
+function notify(title, message=""){
+  if(!db.settings.notify) return;
+  db.notifications.unshift({id:id(),title,message,createdAt:new Date().toISOString()});
+  db.notifications = db.notifications.slice(0,100);
 }
-function confirmAction(message){
- return !db.settings.confirmDelete||window.confirm(message);
+function applySettings(){
+  const colors = {
+    purple:["#a855f7","#7928ca","#c084fc"],
+    blue:["#38bdf8","#2563eb","#93c5fd"],
+    green:["#34d399","#059669","#6ee7b7"],
+    pink:["#f472b6","#be185d","#f9a8d4"]
+  };
+  const c = colors[db.settings.theme] || colors.purple;
+  document.documentElement.style.setProperty("--purple",c[0]);
+  document.documentElement.style.setProperty("--purple2",c[1]);
+  document.documentElement.style.setProperty("--light",c[2]);
+  document.body.classList.toggle("compact",!!db.settings.compact);
 }
-function statusBadge(status){
- const map={
-  "Novo":"yellow","Em negociação":"", "Aprovado":"green",
-  "Recusado":"red","Concluído":"green","Pendente":"yellow",
-  "Em andamento":"","Aguardando":"yellow","Resolvido":"green",
-  "Cancelado":"red","Enviado":""
- };
- return `<span class="badge ${map[status]||""}">${esc(status||"—")}</span>`;
+function profileName(){
+  return db.settings.businessName || "Minha organização";
 }
-function clientName(clientId){
- return db.clients.find(c=>c.id===clientId)?.name||"Cliente removido";
+function initials(){
+  return profileName().trim().split(/\s+/).slice(0,2).map(x=>x[0]||"").join("").toUpperCase() || "V";
 }
-function pageHead(title,subtitle,button=""){
- return `<div class="page-head"><div><h1>${title}</h1><p class="subtitle">${subtitle}</p></div>${button}</div>`;
+
+const PAGE_META = {
+  dashboard:["Dashboard","Visão geral da sua operação"],
+  clients:["Clientes","Organize os contatos e relacionamentos"],
+  quotes:["Orçamentos","Crie, acompanhe e gerencie propostas"],
+  tickets:["Atendimentos","Acompanhe solicitações e tarefas de clientes"],
+  ai:["Assistente IA","Área preparada para integração futura"],
+  reports:["Relatórios","Resumo dos dados cadastrados neste navegador"],
+  notifications:["Notificações","Acompanhe os avisos do sistema"],
+  settings:["Configurações","Personalize seu espaço de trabalho"]
+};
+const NAV_ITEMS = [
+  {id:"dashboard",icon:"◫",label:"Dashboard"},
+  {id:"clients",icon:"♙",label:"Clientes"},
+  {id:"quotes",icon:"▤",label:"Orçamentos"},
+  {id:"tickets",icon:"◷",label:"Atendimentos"},
+  {id:"ai",icon:"✧",label:"Assistente IA",soon:true},
+  {id:"reports",icon:"▥",label:"Relatórios"}
+];
+const NAV_MORE = [
+  {id:"notifications",icon:"♧",label:"Notificações"},
+  {id:"settings",icon:"⚙",label:"Configurações"}
+];
+
+function navButton(item){
+  return `<button type="button" data-page="${item.id}" class="${currentPage===item.id?"active":""}">
+    <span class="ico">${item.icon}</span><span>${item.label}</span>
+    ${item.soon?'<span class="soon">EM BREVE</span>':""}
+    ${item.id==="notifications" && unreadCount()?`<span class="soon">${unreadCount()}</span>`:""}
+  </button>`;
 }
-function stat(label,value,icon,foot){
- return `<div class="card"><div class="stat-top"><span class="stat-label">${label}</span><span class="stat-icon">${icon}</span></div><div class="stat-number">${value}</div><div class="stat-foot">${foot}</div></div>`;
+function renderShell(){
+  const meta = PAGE_META[currentPage] || PAGE_META.dashboard;
+  document.getElementById("app-root").innerHTML = `
+  <div class="app">
+    <aside class="sidebar ${mobileMenuOpen?"open":""}" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark">V</div>
+        <div><strong>VELTRONIX FLOW</strong><small>Gestão inteligente</small></div>
+      </div>
+      <div>
+        <div class="nav-title">MENU PRINCIPAL</div>
+        <nav class="nav" aria-label="Menu principal">${NAV_ITEMS.map(navButton).join("")}</nav>
+      </div>
+      <div>
+        <div class="nav-title">PREFERÊNCIAS</div>
+        <nav class="nav" aria-label="Preferências">${NAV_MORE.map(navButton).join("")}</nav>
+      </div>
+      <div class="sidebar-bottom">
+        <small>ESPAÇO DE TRABALHO</small>
+        <strong>${esc(profileName())}</strong>
+        <small>${db.settings.profileType==="empresa"?"Perfil empresa":"Perfil profissional"}</small>
+      </div>
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <div class="top-left">
+          <button class="icon-btn menu-toggle" type="button" data-action="toggle-menu" aria-label="Abrir menu">☰</button>
+          <div><div class="page-heading">${esc(meta[0])}</div><div class="page-subtitle">${esc(meta[1])}</div></div>
+        </div>
+        <div class="top-actions">
+          <button class="icon-btn" type="button" data-page="notifications" title="Notificações" aria-label="Notificações">♧${unreadCount()?`<sup style="color:var(--light)">${unreadCount()}</sup>`:""}</button>
+          <button class="icon-btn" type="button" data-page="settings" title="Configurações" aria-label="Configurações">⚙</button>
+          <div class="avatar" title="${esc(profileName())}">${esc(initials())}</div>
+        </div>
+      </header>
+      <section class="content" id="content"></section>
+      <div class="footer">VELTRONIX FLOW · Seus dados permanecem neste navegador nesta versão.</div>
+    </main>
+  </div>`;
+  renderPage();
 }
-function empty(icon,title,description,button=""){
- return `<div class="empty"><div class="big">${icon}</div><strong>${title}</strong><div>${description}</div>${button?`<div style="margin-top:17px">${button}</div>`:""}</div>`;
+function unreadCount(){
+  return db.notifications.filter(n=>!db.readNotifications.includes(n.id)).length;
 }
-function btn(label,action,kind=""){
- return `<button class="btn ${kind}" data-action="${action}">${label}</button>`;
+function navigate(page){
+  if(!PAGE_META[page]) return;
+  currentPage = page;
+  searchTerm = "";
+  currentFilter = "Todos";
+  mobileMenuOpen = false;
+  renderShell();
+  window.scrollTo({top:0,behavior:"smooth"});
 }
-function cardTitle(title,subtitle="",action="",label="Ver todos"){
- return `<div class="card-title"><div><h3>${title}</h3>${subtitle?`<p>${subtitle}</p>`:""}</div>${action?`<button class="text-link" data-action="${action}">${label} →</button>`:""}</div>`;
+function renderPage(){
+  const root = document.getElementById("content");
+  if(!root) return;
+  const pages = {
+    dashboard:renderDashboard,
+    clients:renderClients,
+    quotes:renderQuotes,
+    tickets:renderTickets,
+    ai:renderAI,
+    reports:renderReports,
+    notifications:renderNotifications,
+    settings:renderSettings
+  };
+  root.innerHTML = (pages[currentPage] || renderDashboard)();
 }
-function moneyTotalQuotes(){
- return db.quotes.filter(q=>!["Recusado","Cancelado"].includes(q.status)).reduce((s,q)=>s+Number(q.value||0),0);
+
+function pageHead(title,desc,button=""){
+  return `<div class="page-head"><div><h1>${title}</h1><div class="muted small">${desc}</div></div>${button}</div>`;
 }
-function approvedTotal(){
- return db.quotes.filter(q=>["Aprovado","Concluído"].includes(q.status)).reduce((s,q)=>s+Number(q.value||0),0);
+function statCard(label,value,icon,foot="Atualizado com os dados locais"){
+  return `<div class="card"><div class="stat-icon">${icon}</div><div class="stat-label">${label}</div><div class="stat-value">${value}</div><div class="stat-foot">${foot}</div></div>`;
+}
+function emptyState(icon,title,desc,action=""){
+  return `<div class="empty"><div class="empty-icon">${icon}</div><strong>${title}</strong><p>${desc}</p>${action}</div>`;
+}
+function getQuoteTotal(status){
+  return db.quotes.filter(q=>!status || q.status===status).reduce((s,q)=>s+Number(q.value||0),0);
 }
 function renderDashboard(){
- const recent=db.activities.slice(0,6);
- const latest=db.quotes.slice(0,5);
- const openTickets=db.tickets.filter(t=>!["Resolvido","Cancelado"].includes(t.status)).length;
- const recentActivity=recent.length?recent.map(a=>`<div class="activity"><div class="activity-dot"></div><div><p>${esc(a.message)}</p><small>${new Date(a.at).toLocaleString("pt-BR")}</small></div></div>`).join(""):empty("◷","Nenhuma atividade ainda","As suas ações aparecerão aqui.");
- const latestQuotes=latest.length?`<div class="table-wrap"><table><thead><tr><th>ORÇAMENTO</th><th>CLIENTE</th><th>VALOR</th><th>STATUS</th></tr></thead><tbody>${latest.map(q=>`<tr><td><strong>${esc(q.code)}</strong></td><td>${esc(clientName(q.clientId))}</td><td class="amount">${money(q.value)}</td><td>${statusBadge(q.status)}</td></tr>`).join("")}</tbody></table></div>`:empty("▤","Nenhum orçamento","Crie o primeiro orçamento para começar.",btn("＋ Criar orçamento","new-quote","primary"));
- const statuses=["Novo","Em negociação","Aprovado","Recusado","Concluído"];
- const bars=statuses.map(s=>{
-  const n=db.quotes.filter(q=>q.status===s).length;
-  const pct=db.quotes.length?Math.round(n/db.quotes.length*100):0;
-  return `<div class="progress-row"><div class="progress-info"><span>${s}</span><span>${n} (${pct}%)</span></div><div class="progress"><div style="width:${pct}%"></div></div></div>`;
- }).join("");
- return `${pageHead("Visão geral","Acompanhe os principais números do VELTRONIX FLOW.",btn("＋ Novo cliente","new-client")+" "+btn("＋ Novo orçamento","new-quote","primary"))}
- <div class="grid stats">
- ${stat("Total de clientes",db.clients.length,"♙","Clientes cadastrados")}
- ${stat("Orçamentos",db.quotes.length,"▤","Propostas registradas")}
- ${stat("Valor em propostas",money(moneyTotalQuotes()),"R$","Exceto recusadas e canceladas")}
- ${stat("Atendimentos abertos",openTickets,"◉","Solicitações não resolvidas")}
- </div>
- <div class="grid columns">
-  <div class="card">${cardTitle("Orçamentos recentes","Últimas propostas criadas","orcamentos")} ${latestQuotes}</div>
-  <div class="card">${cardTitle("Funil de orçamentos","Distribuição por status")} ${db.quotes.length?bars:empty("▥","Sem dados","Os status serão exibidos após cadastrar orçamentos.")}</div>
-  <div class="card">${cardTitle("Atividade recente","Ações registradas no sistema","relatorios")} ${recentActivity}</div>
-  <div class="card">${cardTitle("Resumo financeiro","Valores cadastrados")}<div class="progress-row"><div class="progress-info"><span>Valor aprovado</span><strong>${money(approvedTotal())}</strong></div></div><div class="progress-row"><div class="progress-info"><span>Valor em negociação</span><strong>${money(db.quotes.filter(q=>["Novo","Em negociação"].includes(q.status)).reduce((s,q)=>s+Number(q.value||0),0))}</strong></div></div><div class="progress-row"><div class="progress-info"><span>Atendimentos resolvidos</span><strong>${db.tickets.filter(t=>t.status==="Resolvido").length}</strong></div></div>${btn("Ver relatórios","relatorios")}</div>
- </div>`;
+  const pending = db.quotes.filter(q=>["Rascunho","Enviado","Em negociação"].includes(q.status)).length;
+  const openTickets = db.tickets.filter(t=>t.status!=="Concluído").length;
+  const recent = db.activities.slice(0,6);
+  const serviceList = db.settings.services || [];
+  return `
+  ${pageHead("Visão geral","Acompanhe os principais números da sua operação.",
+    `<button class="btn btn-primary" data-action="new-quote">＋ Novo orçamento</button>`)}
+  <div class="grid stats">
+    ${statCard("Total de clientes",db.clients.length,"♙","Contatos cadastrados")}
+    ${statCard("Orçamentos ativos",pending,"▤","Aguardando andamento")}
+    ${statCard("Valor aprovado",money(getQuoteTotal("Aprovado")),"↗","Soma dos orçamentos aprovados")}
+    ${statCard("Atendimentos abertos",openTickets,"◷","Solicitações não concluídas")}
+  </div>
+  <div class="grid two-col">
+    <div class="card">
+      <div class="page-head"><div><h2>Atalhos rápidos</h2><div class="muted small">Acesse as ações mais usadas</div></div></div>
+      <div class="grid quick-grid">
+        <button class="btn quick" data-action="new-client"><span>♙</span><strong>Novo cliente</strong></button>
+        <button class="btn quick" data-action="new-quote"><span>▤</span><strong>Novo orçamento</strong></button>
+        <button class="btn quick" data-action="new-ticket"><span>◷</span><strong>Novo atendimento</strong></button>
+      </div>
+      <hr>
+      <h2>Seus serviços</h2>
+      ${serviceList.length?`<div class="actions">${serviceList.map(s=>`<span class="badge">${esc(s)}</span>`).join("")}</div>`:`<p class="muted small">Você ainda não selecionou serviços. Configure seu perfil em Configurações.</p>`}
+    </div>
+    <div class="card">
+      <h2>Atividade recente</h2>
+      ${recent.length?recent.map(a=>`<div class="activity"><span class="activity-dot"></span><div><strong>${esc(a.title)}</strong><small>${esc(a.detail||"")}${a.detail?" · ":""}${dateTime(a.createdAt)}</small></div></div>`).join(""):emptyState("✧","Tudo tranquilo por aqui","As ações realizadas aparecerão nesta lista.")}
+    </div>
+  </div>
+  <div class="grid two-col" style="margin-top:17px">
+    <div class="card"><h2>Orçamentos por status</h2>${renderQuoteBars()}</div>
+    <div class="card"><h2>Comece por aqui</h2>
+      <div class="activity"><span class="activity-dot"></span><div><strong>Cadastre seus clientes</strong><small>Centralize os dados dos seus contatos.</small></div></div>
+      <div class="activity"><span class="activity-dot"></span><div><strong>Registre seus orçamentos</strong><small>Acompanhe valores e etapas da negociação.</small></div></div>
+      <div class="activity"><span class="activity-dot"></span><div><strong>Organize os atendimentos</strong><small>Não deixe solicitações sem acompanhamento.</small></div></div>
+    </div>
+  </div>`;
 }
-function toolbar(placeholder,filterOptions=[]){
- return `<div class="toolbar"><div class="search"><input id="table-search" placeholder="${placeholder}" autocomplete="off"></div>${filterOptions.length?`<select id="table-filter" style="width:auto;min-width:155px"><option value="">Todos os status</option>${filterOptions.map(s=>`<option>${esc(s)}</option>`).join("")}</select>`:""}</div>`;
+function renderQuoteBars(){
+  const statuses=["Rascunho","Enviado","Em negociação","Aprovado","Recusado"];
+  const max=Math.max(1,...statuses.map(s=>db.quotes.filter(q=>q.status===s).length));
+  return statuses.map(s=>{
+    const count=db.quotes.filter(q=>q.status===s).length;
+    return `<div class="bar-row"><span>${esc(s)}</span><div class="bar-track"><div class="bar-fill" style="width:${count/max*100}%"></div></div><strong>${count}</strong></div>`;
+  }).join("");
 }
+
 function renderClients(){
- const rows=db.clients.map(c=>`<tr data-search="${esc([c.name,c.email,c.phone,c.company,c.notes].join(" ").toLowerCase())}"><td><div class="person"><div class="mini-avatar">${esc(initials(c.name))}</div><div><strong>${esc(c.name)}</strong><div class="muted" style="margin-top:4px">${esc(c.company||"Pessoa física")}</div></div></div></td><td>${esc(c.email||"—")}</td><td>${esc(c.phone||"—")}</td><td>${dateBR(c.createdAt)}</td><td><div class="row-actions"><button data-action="edit-client" data-id="${c.id}" aria-label="Editar">✎</button><button data-action="delete-client" data-id="${c.id}" aria-label="Excluir">×</button></div></td></tr>`).join("");
- return `${pageHead("Clientes","Cadastre e gerencie os seus clientes.",btn("＋ Novo cliente","new-client","primary"))}
- ${toolbar("Buscar por nome, e-mail ou telefone")}
- <div class="card"><div class="card-title"><h3>Todos os clientes <span class="badge">${db.clients.length}</span></h3></div>
- ${rows?`<div class="table-wrap"><table id="data-table"><thead><tr><th>CLIENTE</th><th>E-MAIL</th><th>TELEFONE</th><th>CADASTRO</th><th>AÇÕES</th></tr></thead><tbody>${rows}</tbody></table></div><div id="no-results" class="empty" hidden>Nenhum resultado encontrado.</div>`:empty("♙","Nenhum cliente cadastrado","Adicione seu primeiro cliente para organizar seus contatos.",btn("＋ Cadastrar cliente","new-client","primary"))}
- </div>`;
+  const q=searchTerm.toLowerCase();
+  const list=db.clients.filter(c=>`${c.name} ${c.email} ${c.phone} ${c.company}`.toLowerCase().includes(q));
+  return `${pageHead("Clientes","Gerencie seus contatos em um só lugar.",
+    `<button class="btn btn-primary" data-action="new-client">＋ Novo cliente</button>`)}
+  <div class="card">
+    <div class="toolbar"><input class="input search" data-search placeholder="Buscar por nome, empresa, e-mail ou telefone..." value="${esc(searchTerm)}"><span class="muted small">${list.length} cliente(s)</span></div>
+    ${list.length?`<div class="table-wrap"><table><thead><tr><th>Nome</th><th>Empresa</th><th>Contato</th><th>Cadastro</th><th>Ações</th></tr></thead><tbody>
+      ${list.map(c=>`<tr><td><strong>${esc(c.name)}</strong><br><span class="muted">${esc(c.email||"Sem e-mail")}</span></td><td>${esc(c.company||"—")}</td><td>${esc(c.phone||"—")}</td><td>${dateText(c.createdAt)}</td><td><div class="actions"><button class="btn btn-sm" data-action="edit-client" data-id="${c.id}">Editar</button><button class="btn btn-sm btn-danger" data-action="delete-client" data-id="${c.id}">Excluir</button></div></td></tr>`).join("")}
+    </tbody></table></div>`:emptyState("♙","Nenhum cliente encontrado","Cadastre seu primeiro cliente ou ajuste a busca.",'<button class="btn btn-primary" data-action="new-client">＋ Cadastrar cliente</button>')}
+  </div>`;
 }
+
 function renderQuotes(){
- const statuses=["Novo","Em negociação","Aprovado","Recusado","Concluído"];
- const rows=db.quotes.map(q=>`<tr data-search="${esc([q.code,clientName(q.clientId),q.description,q.status].join(" ").toLowerCase())}" data-status="${esc(q.status)}"><td><strong>${esc(q.code)}</strong><div class="muted" style="margin-top:4px">${esc(q.description||"Sem descrição")}</div></td><td>${esc(clientName(q.clientId))}</td><td class="amount">${money(q.value)}</td><td>${statusBadge(q.status)}</td><td>${dateBR(q.date)}</td><td><div class="row-actions"><button data-action="edit-quote" data-id="${q.id}" aria-label="Editar">✎</button><button data-action="delete-quote" data-id="${q.id}" aria-label="Excluir">×</button></div></td></tr>`).join("");
- return `${pageHead("Orçamentos","Crie propostas e acompanhe o andamento comercial.",btn("＋ Novo orçamento","new-quote","primary"))}
- ${toolbar("Buscar por código, cliente ou descrição",statuses)}
- <div class="grid stats">
- ${stat("Total de propostas",db.quotes.length,"▤","Todas as propostas")}
- ${stat("Valor total",money(moneyTotalQuotes()),"R$","Propostas não recusadas")}
- ${stat("Aprovados",db.quotes.filter(q=>["Aprovado","Concluído"].includes(q.status)).length,"✓","Aprovados ou concluídos")}
- ${stat("Em negociação",db.quotes.filter(q=>["Novo","Em negociação"].includes(q.status)).length,"↗","Aguardando decisão")}
- </div>
- <div class="card"><div class="card-title"><h3>Lista de orçamentos</h3></div>
- ${rows?`<div class="table-wrap"><table id="data-table"><thead><tr><th>PROPOSTA</th><th>CLIENTE</th><th>VALOR</th><th>STATUS</th><th>DATA</th><th>AÇÕES</th></tr></thead><tbody>${rows}</tbody></table></div><div id="no-results" class="empty" hidden>Nenhum resultado encontrado.</div>`:empty("▤","Nenhum orçamento cadastrado","Crie uma proposta para começar.",btn("＋ Criar orçamento","new-quote","primary"))}
- </div>`;
+  const q=searchTerm.toLowerCase();
+  const list=db.quotes.filter(x=>(`${x.title} ${x.clientName} ${x.status}`.toLowerCase().includes(q))&&(currentFilter==="Todos"||x.status===currentFilter));
+  const statuses=["Todos","Rascunho","Enviado","Em negociação","Aprovado","Recusado"];
+  return `${pageHead("Orçamentos","Crie propostas e acompanhe cada negociação.",
+    `<button class="btn btn-primary" data-action="new-quote">＋ Novo orçamento</button>`)}
+  <div class="card">
+    <div class="toolbar"><input class="input search" data-search placeholder="Buscar orçamento ou cliente..." value="${esc(searchTerm)}">
+      <select class="select" style="max-width:200px" data-filter>${statuses.map(s=>`<option ${currentFilter===s?"selected":""}>${s}</option>`).join("")}</select>
+      <button class="btn" data-action="export-quotes">Exportar CSV</button>
+    </div>
+    ${list.length?`<div class="table-wrap"><table><thead><tr><th>Orçamento</th><th>Cliente</th><th>Valor</th><th>Prazo</th><th>Status</th><th>Ações</th></tr></thead><tbody>
+      ${list.map(x=>`<tr><td><strong>${esc(x.title)}</strong><br><span class="muted">${dateText(x.createdAt)}</span></td><td>${esc(x.clientName||"—")}</td><td><strong>${money(x.value)}</strong></td><td>${dateText(x.dueDate)}</td><td>${statusBadge(x.status)}</td><td><div class="actions"><button class="btn btn-sm" data-action="edit-quote" data-id="${x.id}">Editar</button><button class="btn btn-sm btn-danger" data-action="delete-quote" data-id="${x.id}">Excluir</button></div></td></tr>`).join("")}
+    </tbody></table></div>`:emptyState("▤","Nenhum orçamento encontrado","Crie um orçamento para começar a acompanhar suas propostas.",'<button class="btn btn-primary" data-action="new-quote">＋ Novo orçamento</button>')}
+  </div>`;
 }
+function statusBadge(status){
+  const cls=status==="Aprovado"||status==="Concluído"?"green":status==="Recusado"?"red":status==="Enviado"||status==="Em negociação"?"yellow":"";
+  return `<span class="badge ${cls}">${esc(status||"Rascunho")}</span>`;
+}
+
 function renderTickets(){
- const statuses=["Pendente","Em andamento","Aguardando","Resolvido","Cancelado"];
- const rows=db.tickets.map(t=>`<tr data-search="${esc([t.title,clientName(t.clientId),t.description,t.status,t.priority].join(" ").toLowerCase())}" data-status="${esc(t.status)}"><td><strong>${esc(t.title)}</strong><div class="muted" style="margin-top:4px">${esc(t.description||"Sem descrição")}</div></td><td>${esc(clientName(t.clientId))}</td><td>${statusBadge(t.status)}</td><td><span class="badge ${t.priority==="Alta"?"red":t.priority==="Média"?"yellow":""}">${esc(t.priority)}</span></td><td>${dateBR(t.date)}</td><td><div class="row-actions"><button data-action="edit-ticket" data-id="${t.id}" aria-label="Editar">✎</button><button data-action="delete-ticket" data-id="${t.id}" aria-label="Excluir">×</button></div></td></tr>`).join("");
- return `${pageHead("Atendimentos","Organize solicitações, tarefas e acompanhamentos.",btn("＋ Novo atendimento","new-ticket","primary"))}
- ${toolbar("Buscar por título, cliente ou descrição",statuses)}
- <div class="grid stats">
- ${stat("Total",db.tickets.length,"◉","Atendimentos registrados")}
- ${stat("Pendentes",db.tickets.filter(t=>t.status==="Pendente").length,"◷","Aguardando início")}
- ${stat("Em andamento",db.tickets.filter(t=>t.status==="Em andamento").length,"↗","Em execução")}
- ${stat("Resolvidos",db.tickets.filter(t=>t.status==="Resolvido").length,"✓","Atendimentos finalizados")}
- </div>
- <div class="card"><div class="card-title"><h3>Todos os atendimentos</h3></div>
- ${rows?`<div class="table-wrap"><table id="data-table"><thead><tr><th>ATENDIMENTO</th><th>CLIENTE</th><th>STATUS</th><th>PRIORIDADE</th><th>DATA</th><th>AÇÕES</th></tr></thead><tbody>${rows}</tbody></table></div><div id="no-results" class="empty" hidden>Nenhum resultado encontrado.</div>`:empty("◉","Nenhum atendimento registrado","Registre uma solicitação para acompanhar o progresso.",btn("＋ Novo atendimento","new-ticket","primary"))}
- </div>`;
+  const q=searchTerm.toLowerCase();
+  const list=db.tickets.filter(t=>`${t.title} ${t.clientName} ${t.description} ${t.status}`.toLowerCase().includes(q));
+  return `${pageHead("Atendimentos","Registre solicitações, tarefas e acompanhamentos.",
+    `<button class="btn btn-primary" data-action="new-ticket">＋ Novo atendimento</button>`)}
+  <div class="card">
+    <div class="toolbar"><input class="input search" data-search placeholder="Buscar atendimento..." value="${esc(searchTerm)}"><span class="muted small">${list.length} registro(s)</span></div>
+    ${list.length?`<div class="table-wrap"><table><thead><tr><th>Atendimento</th><th>Cliente</th><th>Prioridade</th><th>Status</th><th>Data</th><th>Ações</th></tr></thead><tbody>
+      ${list.map(t=>`<tr><td><strong>${esc(t.title)}</strong><br><span class="muted">${esc(t.description||"")}</span></td><td>${esc(t.clientName||"—")}</td><td>${statusBadge(t.priority||"Normal")}</td><td>${statusBadge(t.status)}</td><td>${dateText(t.createdAt)}</td><td><div class="actions"><button class="btn btn-sm" data-action="edit-ticket" data-id="${t.id}">Editar</button><button class="btn btn-sm btn-danger" data-action="delete-ticket" data-id="${t.id}">Excluir</button></div></td></tr>`).join("")}
+    </tbody></table></div>`:emptyState("◷","Nenhum atendimento cadastrado","Registre uma solicitação para organizar o acompanhamento.",'<button class="btn btn-primary" data-action="new-ticket">＋ Novo atendimento</button>')}
+  </div>`;
 }
+
+function renderAI(){
+  return `${pageHead("Assistente IA","Área reservada para uma integração futura.")}
+    <div class="card">
+      <div style="font-size:42px;margin-bottom:15px">✧</div>
+      <h2>Seu assistente inteligente está no planejamento</h2>
+      <p class="muted">A interface pode ser preparada agora, mas uma IA real precisa de integração com um serviço de IA e de uma configuração segura no backend. Isso ainda não está conectado nesta versão local.</p>
+      <div class="notice">Por enquanto, você já pode organizar clientes, orçamentos e atendimentos no FLOW. Os dados ficam salvos neste navegador.</div>
+      <button class="btn btn-primary" data-page="settings">Revisar configurações</button>
+    </div>`;
+}
+
 function renderReports(){
- const countStatus=s=>db.quotes.filter(q=>q.status===s).length;
- const months=[];
- const now=new Date();
- for(let i=5;i>=0;i--){
-  const d=new Date(now.getFullYear(),now.getMonth()-i,1);
-  months.push({label:d.toLocaleDateString("pt-BR",{month:"short"}).replace(".",""),year:d.getFullYear(),month:d.getMonth()});
- }
- const values=months.map(m=>db.quotes.filter(q=>{
-  if(!q.date)return false;
-  const d=new Date(q.date+"T12:00:00");
-  return d.getFullYear()===m.year&&d.getMonth()===m.month;
- }).reduce((s,q)=>s+Number(q.value||0),0));
- const max=Math.max(...values,1);
- const chart=months.map((m,i)=>`<div class="chart-col"><span class="chart-value">${values[i]>=1000?(values[i]/1000).toLocaleString("pt-BR",{maximumFractionDigits:1})+"k":Math.round(values[i])}</span><div class="chart-bar" style="height:${Math.max(3,values[i]/max*135)}px" title="${money(values[i])}"></div><span class="chart-label">${esc(m.label)}</span></div>`).join("");
- const distribution=["Novo","Em negociação","Aprovado","Recusado","Concluído"].map(s=>({s,n:countStatus(s)}));
- return `${pageHead("Relatórios","Resumo baseado nos registros locais do sistema.",btn("↓ Exportar CSV","export-csv"))}
- <div class="grid stats">
- ${stat("Clientes",db.clients.length,"♙","Base cadastrada")}
- ${stat("Orçamentos",db.quotes.length,"▤","Propostas criadas")}
- ${stat("Valor aprovado",money(approvedTotal()),"R$","Propostas aprovadas/concluídas")}
- ${stat("Atendimentos resolvidos",db.tickets.filter(t=>t.status==="Resolvido").length,"✓","Total finalizado")}
- </div>
- <div class="grid columns">
- <div class="card">${cardTitle("Valor de orçamentos por mês","Soma das propostas criadas nos últimos seis meses")}
- ${db.quotes.length?`<div class="chart">${chart}</div><p class="muted" style="font-size:11px">Os valores representam orçamentos cadastrados, não receita recebida.</p>`:empty("▥","Ainda não há dados","Cadastre orçamentos para gerar o gráfico.")}</div>
- <div class="card">${cardTitle("Status das propostas","Distribuição atual")}
- ${distribution.map(x=>`<div class="progress-row"><div class="progress-info"><span>${x.s}</span><span>${x.n}</span></div><div class="progress"><div style="width:${db.quotes.length?x.n/db.quotes.length*100:0}%"></div></div></div>`).join("")}
- </div>
- <div class="card">${cardTitle("Atendimentos","Distribuição por situação")}
- ${["Pendente","Em andamento","Aguardando","Resolvido","Cancelado"].map(s=>`<div class="progress-row"><div class="progress-info"><span>${s}</span><span>${db.tickets.filter(t=>t.status===s).length}</span></div><div class="progress"><div style="width:${db.tickets.length?db.tickets.filter(t=>t.status===s).length/db.tickets.length*100:0}%"></div></div></div>`).join("")}</div>
- <div class="card">${cardTitle("Resumo da operação","Visão geral")}
- <div class="setting-row"><div><strong>Clientes cadastrados</strong><p>Registros na base local</p></div><strong>${db.clients.length}</strong></div>
- <div class="setting-row"><div><strong>Ticket médio</strong><p>Média por orçamento</p></div><strong>${money(db.quotes.length?db.quotes.reduce((s,q)=>s+Number(q.value||0),0)/db.quotes.length:0)}</strong></div>
- <div class="setting-row"><div><strong>Taxa de aprovação</strong><p>Aprovados ou concluídos ÷ propostas</p></div><strong>${db.quotes.length?Math.round(db.quotes.filter(q=>["Aprovado","Concluído"].includes(q.status)).length/db.quotes.length*100):0}%</strong></div>
- </div></div>`;
+  const approved=db.quotes.filter(q=>q.status==="Aprovado");
+  const rejected=db.quotes.filter(q=>q.status==="Recusado");
+  const total=db.quotes.reduce((s,q)=>s+Number(q.value||0),0);
+  const avg=db.quotes.length?total/db.quotes.length:0;
+  const complete=db.tickets.filter(t=>t.status==="Concluído").length;
+  return `${pageHead("Relatórios","Resumo calculado a partir dos dados cadastrados.",
+    `<button class="btn" data-action="export-all-csv">Exportar dados CSV</button>`)}
+    <div class="grid stats">
+      ${statCard("Valor total orçado",money(total),"▤")}
+      ${statCard("Valor aprovado",money(approved.reduce((s,q)=>s+Number(q.value||0),0)),"↗")}
+      ${statCard("Ticket médio",money(avg),"◈")}
+      ${statCard("Atendimentos concluídos",complete,"✓")}
+    </div>
+    <div class="grid two-col">
+      <div class="card"><h2>Resumo dos orçamentos</h2>
+        ${["Rascunho","Enviado","Em negociação","Aprovado","Recusado"].map(s=>`<div class="activity"><span class="activity-dot"></span><div style="flex:1"><strong>${s}</strong><small>${db.quotes.filter(q=>q.status===s).length} orçamento(s)</small></div><strong>${money(getQuoteTotal(s))}</strong></div>`).join("")}
+      </div>
+      <div class="card"><h2>Visão geral</h2>
+        <div class="activity"><span class="activity-dot"></span><div><strong>${db.clients.length} clientes</strong><small>Total de contatos cadastrados</small></div></div>
+        <div class="activity"><span class="activity-dot"></span><div><strong>${db.quotes.length} orçamentos</strong><small>${approved.length} aprovados · ${rejected.length} recusados</small></div></div>
+        <div class="activity"><span class="activity-dot"></span><div><strong>${db.tickets.length} atendimentos</strong><small>${complete} concluídos</small></div></div>
+        <hr><p class="muted small">Este relatório reflete apenas os registros salvos neste navegador. Ainda não há sincronização entre dispositivos.</p>
+      </div>
+    </div>`;
 }
+
 function renderNotifications(){
- const rows=db.notifications;
- return `${pageHead("Notificações","Acompanhe as atividades e atualizações do sistema.",`<div style="display:flex;gap:8px;flex-wrap:wrap">${btn("Marcar todas como lidas","read-all")}${btn("Limpar notificações","clear-notifications")}</div>`)}
- <div class="card"><div class="card-title"><h3>Central de notificações</h3><span class="badge">${rows.filter(n=>!n.read).length} não lidas</span></div>
- ${rows.length?`<div class="notice-list">${rows.map(n=>`<div class="notice"><div class="stat-icon">${n.read?"✓":"♧"}</div><div style="flex:1"><p><strong>${esc(n.title)}</strong>${n.read?"":' <span class="badge">Nova</span>'}</p><p style="margin-top:5px">${esc(n.message)}</p><small>${new Date(n.at).toLocaleString("pt-BR")}</small></div>${!n.read?`<button class="btn small" data-action="read-notice" data-id="${n.id}">Marcar lida</button>`:""}</div>`).join("")}</div>`:empty("♧","Tudo tranquilo por aqui","As notificações de suas atividades aparecerão nesta página.")}
- </div>`;
+  const list=db.notifications;
+  return `${pageHead("Notificações","Veja os avisos gerados pelas ações do sistema.",
+    `<button class="btn" data-action="mark-all-read">Marcar todas como lidas</button>`)}
+    <div class="card">
+      ${list.length?list.map(n=>`<div class="activity"><span class="activity-dot" style="${db.readNotifications.includes(n.id)?"background:#71677f":""}"></span><div style="flex:1"><strong>${esc(n.title)}</strong><small>${esc(n.message||"")}${n.message?" · ":""}${dateTime(n.createdAt)}</small></div>${db.readNotifications.includes(n.id)?'<span class="badge">Lida</span>':`<button class="btn btn-sm" data-action="mark-read" data-id="${n.id}">Marcar lida</button>`}</div>`).join(""):emptyState("♧","Nenhuma notificação","Quando houver avisos, eles aparecerão aqui.")}
+      ${list.length?'<hr><button class="btn btn-danger" data-action="clear-notifications">Limpar notificações</button>':""}
+    </div>`;
 }
-function renderAssistant(){
- return `${pageHead("Assistente IA","Área preparada para uma futura integração inteligente.")}
- <div class="card" style="max-width:760px;margin:auto;padding:30px">
- <div style="width:64px;height:64px;border-radius:18px;background:#a855f722;color:var(--light);display:grid;place-items:center;font-size:32px;margin-bottom:20px">✧</div>
- <span class="badge">EM DESENVOLVIMENTO</span>
- <h2 style="font-size:24px;margin:16px 0 10px">Assistente VELTRONIX</h2>
- <p class="subtitle">Esta área está preparada visualmente, mas ainda não está conectada a um modelo de inteligência artificial. Não envia mensagens nem executa ações automáticas.</p>
- <div class="section-note" style="margin-top:22px">Próximas etapas: conectar um provedor de IA por meio de um backend seguro, definir as permissões e permitir que o assistente consulte somente os dados autorizados.</div>
- <h3>O que poderá fazer futuramente</h3>
- <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr));margin-top:16px">
- <div class="card"><strong>✧ Análise comercial</strong><p class="muted">Analisar oportunidades e orçamentos.</p></div>
- <div class="card"><strong>◉ Organização</strong><p class="muted">Ajudar a priorizar tarefas e atendimentos.</p></div>
- <div class="card"><strong>▥ Relatórios</strong><p class="muted">Resumir indicadores e resultados.</p></div>
- </div>
- ${btn("Entendi","assistant-info")}
- </div>`;
-}
+
 function renderSettings(){
- const s=db.settings;
- return `${pageHead("Configurações","Gerencie as preferências deste navegador.")}
- <div class="section-note">Estas configurações são locais. Ainda não há autenticação de usuários nem sincronização com outros dispositivos.</div>
- <div class="grid settings-grid">
- <div class="card">${cardTitle("Aparência","Personalize o visual do FLOW")}
- <strong>Cor de destaque</strong><p class="muted">Escolha a paleta do sistema.</p>
- <div class="theme-options">
- ${[["purple","Roxo neon","#a855f7","#7928ca"],["blue","Azul","#38bdf8","#2563eb"],["green","Verde","#4ade80","#15803d"],["pink","Rosa","#f472b6","#be185d"]].map(t=>`<button class="theme-swatch ${s.theme===t[0]?"active":""}" data-action="theme" data-theme="${t[0]}"><div class="swatch-color" style="background:linear-gradient(120deg,${t[2]},${t[3]})"></div>${t[1]}</button>`).join("")}
- </div>
- <div class="setting-row"><div><strong>Modo compacto</strong><p>Reduz o espaçamento visual das tabelas.</p></div><label class="switch"><input type="checkbox" data-setting="compact" ${s.compact?"checked":""}><span></span></label></div>
- </div>
- <div class="card">${cardTitle("Preferências","Comportamento do sistema")}
- <div class="setting-row"><div><strong>Confirmação de exclusão</strong><p>Perguntar antes de excluir registros.</p></div><label class="switch"><input type="checkbox" data-setting="confirmDelete" ${s.confirmDelete?"checked":""}><span></span></label></div>
- <div class="setting-row"><div><strong>Notificações internas</strong><p>Registrar avisos de novas atividades.</p></div><label class="switch"><input type="checkbox" data-setting="notify" ${s.notify?"checked":""}><span></span></label></div>
- <div class="setting-row"><div><strong>Armazenamento</strong><p>Dados salvos neste navegador.</p></div><span class="badge green">Local</span></div>
- </div>
- <div class="card">${cardTitle("Dados locais","Gerencie uma cópia dos seus registros")}
- <p class="muted" style="line-height:1.7">Exporte uma cópia de segurança ou importe um arquivo JSON previamente exportado.</p>
- <div class="toolbar" style="margin-top:18px"><button class="btn primary" data-action="backup">↓ Exportar backup</button><button class="btn" data-action="restore-prompt">↑ Importar backup</button><input type="file" id="backup-file" accept=".json,application/json" hidden></div>
- </div>
- <div class="card">${cardTitle("Zona de manutenção","Ações que afetam os dados")}
- <p class="muted" style="line-height:1.7">Restaurar as configurações altera somente as preferências. Apagar todos os dados remove clientes, orçamentos e atendimentos deste navegador.</p>
- <div class="toolbar" style="margin-top:18px"><button class="btn" data-action="reset-settings">Restaurar configurações</button><button class="btn danger" data-action="reset-data">Apagar todos os dados</button></div>
- </div>
- </div>`;
+  const s=db.settings;
+  return `${pageHead("Configurações","Personalize o FLOW para o seu jeito de trabalhar.",
+    `<button class="btn" data-action="edit-setup">Editar perfil e serviços</button>`)}
+  <div class="grid two-col">
+    <div class="card">
+      <h2>Perfil e organização</h2>
+      <p class="muted small">Estas informações ajudam a personalizar o seu espaço de trabalho.</p>
+      <div class="field"><label>Tipo de perfil</label><select class="select" id="setting-profile"><option value="empresa" ${s.profileType==="empresa"?"selected":""}>Empresa</option><option value="profissional" ${s.profileType==="profissional"?"selected":""}>Profissional</option></select></div>
+      <div class="field"><label>Nome da empresa ou profissional</label><input class="input" id="setting-name" value="${esc(s.businessName)}" placeholder="Ex.: Minha empresa"></div>
+      <div class="field"><label>Segmento de atuação</label><input class="input" id="setting-sector" value="${esc(s.sector)}" placeholder="Ex.: Tecnologia"></div>
+      <button class="btn btn-primary" data-action="save-profile">Salvar perfil</button>
+      <hr>
+      <h2>Serviços oferecidos</h2>
+      <p class="muted small">Marque os serviços que você oferece aos clientes. Você pode alterar essa lista quando quiser.</p>
+      <div class="check-grid">${SERVICE_OPTIONS.map(service=>`<label class="check-item"><input type="checkbox" name="settings-service" value="${esc(service)}" ${(s.services||[]).includes(service)?"checked":""}>${esc(service)}</label>`).join("")}</div>
+      <div class="field" style="margin-top:14px"><label>Outros serviços (separe por vírgula)</label><input class="input" id="setting-custom-services" value="${esc(s.customServices||"")}" placeholder="Ex.: Suporte técnico, treinamento"></div>
+      <button class="btn btn-primary" data-action="save-services">Salvar serviços</button>
+    </div>
+    <div class="card">
+      <h2>Aparência</h2>
+      <div class="field"><label>Cor de destaque</label><select class="select" id="setting-theme">
+        <option value="purple" ${s.theme==="purple"?"selected":""}>Roxo neon (padrão)</option>
+        <option value="blue" ${s.theme==="blue"?"selected":""}>Azul</option>
+        <option value="green" ${s.theme==="green"?"selected":""}>Verde</option>
+        <option value="pink" ${s.theme==="pink"?"selected":""}>Rosa</option>
+      </select></div>
+      <label class="check-item"><input type="checkbox" id="setting-compact" ${s.compact?"checked":""}> Modo compacto</label>
+      <div style="height:10px"></div>
+      <label class="check-item"><input type="checkbox" id="setting-confirm" ${s.confirmDelete?"checked":""}> Confirmar antes de excluir</label>
+      <div style="height:10px"></div>
+      <label class="check-item"><input type="checkbox" id="setting-notify" ${s.notify?"checked":""}> Gerar notificações locais</label>
+      <div style="height:15px"></div>
+      <button class="btn btn-primary" data-action="save-appearance">Salvar aparência</button>
+      <hr>
+      <h2>Backup dos dados</h2>
+      <p class="muted small">Exporte uma cópia para guardar seus dados. A restauração substitui os registros atuais.</p>
+      <div class="actions">
+        <button class="btn" data-action="backup">Baixar backup JSON</button>
+        <button class="btn" data-action="restore">Restaurar backup</button>
+        <input type="file" id="backup-file" accept=".json,application/json" class="hidden">
+      </div>
+      <hr>
+      <h2>Armazenamento</h2>
+      <div class="notice">Os dados são guardados localmente no navegador deste dispositivo. Limpar os dados do navegador pode apagá-los. Faça backups regularmente.</div>
+      <button class="btn btn-danger" data-action="reset-data">Apagar todos os dados locais</button>
+    </div>
+  </div>`;
 }
-function render(){
- const renderers={dashboard:renderDashboard,clientes:renderClients,orcamentos:renderQuotes,atendimentos:renderTickets,assistente:renderAssistant,relatorios:renderReports,notificacoes:renderNotifications,configuracoes:renderSettings};
- $("#content").innerHTML=renderers[currentPage]();
- $("#top-title").textContent=pageInfo[currentPage][0];
- $("#top-subtitle").textContent=pageInfo[currentPage][1];
- $$("#nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===currentPage));
- const unread=db.notifications.filter(n=>!n.read).length;
- $("#nav-badge").hidden=!unread;
- $("#nav-badge").textContent=unread;
- $("#top-dot").hidden=!unread;
- document.body.classList.toggle("compact",!!db.settings.compact);
- document.documentElement.style.setProperty("--purple",({purple:"#a855f7",blue:"#38bdf8",green:"#4ade80",pink:"#f472b6"})[db.settings.theme]||"#a855f7");
- document.documentElement.style.setProperty("--purple2",({purple:"#7928ca",blue:"#2563eb",green:"#15803d",pink:"#be185d"})[db.settings.theme]||"#7928ca");
- document.documentElement.style.setProperty("--light",({purple:"#c084fc",blue:"#7dd3fc",green:"#86efac",pink:"#f9a8d4"})[db.settings.theme]||"#c084fc");
- if(db.settings.compact)document.documentElement.style.setProperty("--table-pad","8px");
- else document.documentElement.style.setProperty("--table-pad","15px");
+
+/* FORMULÁRIOS */
+function clientOptions(selected=""){
+  return `<option value="">Selecione um cliente (opcional)</option>`+
+    db.clients.map(c=>`<option value="${c.id}" ${selected===c.id?"selected":""}>${esc(c.name)}</option>`).join("");
 }
-function openPage(p){
- if(!pageInfo[p])return;
- currentPage=p;
- $("#sidebar").classList.remove("open");
- render();
- window.scrollTo({top:0,behavior:"smooth"});
+function openModal(title,body){
+  document.getElementById("modal-root").innerHTML = `<div class="modal-backdrop" data-action="close-modal">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="${esc(title)}" data-modal-inner>
+      <div class="modal-head"><h2>${esc(title)}</h2><button class="icon-btn" type="button" data-action="close-modal" aria-label="Fechar">×</button></div>
+      ${body}
+    </div>
+  </div>`;
 }
-function modal(title,body){
- modalReturnPage=currentPage;
- $("#modal-root").innerHTML=`<div class="overlay" id="modal-overlay"><div class="modal" role="dialog" aria-modal="true" aria-label="${esc(title)}"><div class="modal-head"><h3>${title}</h3><button class="close" data-action="close-modal" aria-label="Fechar">×</button></div>${body}</div></div>`;
- $("#modal-overlay").addEventListener("click",e=>{if(e.target.id==="modal-overlay")closeModal()});
- const first=$("#modal-root input:not([type=hidden]),#modal-root select,#modal-root textarea");
- if(first)first.focus();
+function closeModal(){document.getElementById("modal-root").innerHTML="";editing=null;}
+
+function showClientForm(item=null){
+  editing=item?{type:"client",id:item.id}:null;
+  openModal(item?"Editar cliente":"Novo cliente",`
+    <form id="client-form">
+      <div class="field"><label>Nome *</label><input class="input" name="name" required value="${esc(item?.name||"")}" placeholder="Nome do cliente"></div>
+      <div class="field"><label>Empresa</label><input class="input" name="company" value="${esc(item?.company||"")}" placeholder="Empresa ou organização"></div>
+      <div class="field"><label>E-mail</label><input class="input" type="email" name="email" value="${esc(item?.email||"")}" placeholder="email@exemplo.com"></div>
+      <div class="field"><label>Telefone</label><input class="input" name="phone" value="${esc(item?.phone||"")}" placeholder="(00) 00000-0000"></div>
+      <div class="field"><label>Observações</label><textarea class="textarea" name="notes" placeholder="Informações adicionais">${esc(item?.notes||"")}</textarea></div>
+      <div class="actions"><button class="btn btn-primary" type="submit">Salvar cliente</button><button class="btn" type="button" data-action="close-modal">Cancelar</button></div>
+    </form>`);
 }
-function closeModal(){$("#modal-root").innerHTML=""}
-function field(label,name,opts={}){
- const {value="",type="text",placeholder="",required=false,full=false,options=null,step=null,min=null}=opts;
- let input;
- if(options){
-  input=`<select name="${name}" ${required?"required":""}>${options.map(o=>`<option value="${esc(o.value??o)}" ${String(o.value??o)===String(value)?"selected":""}>${esc(o.label??o)}</option>`).join("")}</select>`;
- }else if(type==="textarea"){
-  input=`<textarea name="${name}" placeholder="${esc(placeholder)}" ${required?"required":""}>${esc(value)}</textarea>`;
- }else{
-  input=`<input name="${name}" type="${type}" value="${esc(value)}" placeholder="${esc(placeholder)}" ${required?"required":""} ${step?`step="${step}"`:""} ${min!==null?`min="${min}"`:""}>`;
- }
- return `<div class="field ${full?"full":""}"><label>${label}${required?" *":""}</label>${input}</div>`;
+function showQuoteForm(item=null){
+  editing=item?{type:"quote",id:item.id}:null;
+  openModal(item?"Editar orçamento":"Novo orçamento",`
+    <form id="quote-form">
+      <div class="field"><label>Título do orçamento *</label><input class="input" name="title" required value="${esc(item?.title||"")}" placeholder="Ex.: Criação de site institucional"></div>
+      <div class="field"><label>Cliente</label><select class="select" name="clientId">${clientOptions(item?.clientId||"")}</select></div>
+      <div class="field"><label>Descrição</label><textarea class="textarea" name="description" placeholder="Detalhes do serviço ou proposta">${esc(item?.description||"")}</textarea></div>
+      <div class="grid" style="grid-template-columns:1fr 1fr">
+        <div class="field"><label>Valor (R$) *</label><input class="input" type="number" min="0" step="0.01" name="value" required value="${esc(item?.value??"")}" placeholder="0,00"></div>
+        <div class="field"><label>Prazo</label><input class="input" type="date" name="dueDate" value="${esc(item?.dueDate||"")}"></div>
+      </div>
+      <div class="field"><label>Status</label><select class="select" name="status">${["Rascunho","Enviado","Em negociação","Aprovado","Recusado"].map(s=>`<option ${((item?.status||"Rascunho")===s)?"selected":""}>${s}</option>`).join("")}</select></div>
+      <div class="actions"><button class="btn btn-primary" type="submit">Salvar orçamento</button><button class="btn" type="button" data-action="close-modal">Cancelar</button></div>
+    </form>`);
 }
-function formModal(title,fields,values,onSubmit,submitLabel="Salvar"){
- modal(title,`<form id="entity-form"><div class="form-grid">${fields(values)}</div><div class="form-actions"><button type="button" class="btn" data-action="close-modal">Cancelar</button><button type="submit" class="btn primary">${submitLabel}</button></div></form>`);
- $("#entity-form").addEventListener("submit",e=>{
-  e.preventDefault();
-  const fd=new FormData(e.currentTarget);
-  const data=Object.fromEntries(fd.entries());
-  onSubmit(data);
- });
+function showTicketForm(item=null){
+  editing=item?{type:"ticket",id:item.id}:null;
+  openModal(item?"Editar atendimento":"Novo atendimento",`
+    <form id="ticket-form">
+      <div class="field"><label>Título *</label><input class="input" name="title" required value="${esc(item?.title||"")}" placeholder="Ex.: Ajuste solicitado pelo cliente"></div>
+      <div class="field"><label>Cliente</label><select class="select" name="clientId">${clientOptions(item?.clientId||"")}</select></div>
+      <div class="field"><label>Descrição</label><textarea class="textarea" name="description" placeholder="Detalhes do atendimento">${esc(item?.description||"")}</textarea></div>
+      <div class="grid" style="grid-template-columns:1fr 1fr">
+        <div class="field"><label>Prioridade</label><select class="select" name="priority">${["Baixa","Normal","Alta","Urgente"].map(s=>`<option ${((item?.priority||"Normal")===s)?"selected":""}>${s}</option>`).join("")}</select></div>
+        <div class="field"><label>Status</label><select class="select" name="status">${["Aberto","Em andamento","Aguardando cliente","Concluído"].map(s=>`<option ${((item?.status||"Aberto")===s)?"selected":""}>${s}</option>`).join("")}</select></div>
+      </div>
+      <div class="actions"><button class="btn btn-primary" type="submit">Salvar atendimento</button><button class="btn" type="button" data-action="close-modal">Cancelar</button></div>
+    </form>`);
 }
-function clientFields(c){
- return field("Nome completo","name",{value:c.name||"",required:true,placeholder:"Nome do cliente"})+
- field("Empresa","company",{value:c.company||"",placeholder:"Nome da empresa"})+
- field("E-mail","email",{type:"email",value:c.email||"",placeholder:"email@exemplo.com"})+
- field("Telefone","phone",{value:c.phone||"",placeholder:"(21) 99999-9999"})+
- field("Observações","notes",{type:"textarea",value:c.notes||"",full:true,placeholder:"Informações adicionais"});
+function formObject(form){
+  return Object.fromEntries(new FormData(form).entries());
 }
-function openClientForm(existing=null){
- const c=existing||{};
- formModal(existing?"Editar cliente":"Novo cliente",clientFields,c,data=>{
-  const name=data.name.trim();
-  if(!name){toast("Informe o nome do cliente.","error");return}
-  if(existing)Object.assign(existing,data,{name});
-  else db.clients.unshift({id:id(),...data,name,createdAt:dateNow()});
-  closeModal();
-  commit(existing?"Cliente atualizado":"Cliente cadastrado");
- });
-}
-function quoteFields(q){
- const clients=db.clients.map(c=>({value:c.id,label:c.name}));
- const clientOptions=[{value:"",label:"Selecione um cliente"},...clients];
- const statuses=["Novo","Em negociação","Aprovado","Recusado","Concluído"];
- return field("Cliente","clientId",{value:q.clientId||"",options:clientOptions,required:true})+
- field("Valor (R$)","value",{type:"number",value:q.value??"",required:true,step:"0.01",min:0,placeholder:"0,00"})+
- field("Data","date",{type:"date",value:q.date||new Date().toISOString().slice(0,10),required:true})+
- field("Status","status",{value:q.status||"Novo",options:statuses})+
- field("Descrição da proposta","description",{value:q.description||"",type:"textarea",full:true,placeholder:"Descreva o serviço ou produto proposto"});
-}
-function openQuoteForm(existing=null){
- if(!db.clients.length){
-  toast("Cadastre um cliente antes de criar um orçamento.","error");
-  openClientForm();
-  return;
- }
- const q=existing||{};
- formModal(existing?"Editar orçamento":"Novo orçamento",quoteFields,q,data=>{
-  if(!db.clients.some(c=>c.id===data.clientId)){toast("Selecione um cliente válido.","error");return}
-  const value=Number(data.value);
-  if(!Number.isFinite(value)||value<0){toast("Informe um valor válido.","error");return}
-  const extra={...data,value};
-  if(existing)Object.assign(existing,extra);
-  else{
-   const seq=db.quotes.length+1;
-   extra.id=id();
-   extra.code="ORC-"+new Date().getFullYear()+"-"+String(seq).padStart(4,"0");
-   extra.createdAt=dateNow();
-   db.quotes.unshift(extra);
+
+/* SALVAR FORMULÁRIOS */
+document.addEventListener("submit",function(event){
+  const form=event.target;
+  if(!["client-form","quote-form","ticket-form"].includes(form.id)) return;
+  event.preventDefault();
+  const data=formObject(form);
+  const now=new Date().toISOString();
+
+  if(form.id==="client-form"){
+    const old=editing?.type==="client"?db.clients.find(x=>x.id===editing.id):null;
+    const item={...(old||{}),id:old?.id||id(),name:data.name.trim(),company:data.company.trim(),email:data.email.trim(),phone:data.phone.trim(),notes:data.notes.trim(),createdAt:old?.createdAt||now,updatedAt:now};
+    if(old) db.clients=db.clients.map(x=>x.id===old.id?item:x);
+    else db.clients.unshift(item);
+    logActivity(old?"Cliente atualizado":"Novo cliente",item.name);
+    notify(old?"Cliente atualizado":"Novo cliente cadastrado",item.name);
+    saveState();closeModal();renderShell();toast(old?"Cliente atualizado.":"Cliente cadastrado.");
   }
-  closeModal();
-  commit(existing?"Orçamento atualizado":"Orçamento criado");
- });
-}
-function ticketFields(t){
- const clients=[{value:"",label:"Sem cliente vinculado"},...db.clients.map(c=>({value:c.id,label:c.name}))];
- return field("Título","title",{value:t.title||"",required:true,placeholder:"Ex.: Atualizar site"})+
- field("Cliente","clientId",{value:t.clientId||"",options:clients})+
- field("Status","status",{value:t.status||"Pendente",options:["Pendente","Em andamento","Aguardando","Resolvido","Cancelado"]})+
- field("Prioridade","priority",{value:t.priority||"Média",options:["Baixa","Média","Alta"]})+
- field("Data","date",{type:"date",value:t.date||new Date().toISOString().slice(0,10),required:true})+
- field("Descrição","description",{value:t.description||"",type:"textarea",full:true,placeholder:"Detalhes do atendimento"});
-}
-function openTicketForm(existing=null){
- const t=existing||{};
- formModal(existing?"Editar atendimento":"Novo atendimento",ticketFields,t,data=>{
-  if(data.clientId&&!db.clients.some(c=>c.id===data.clientId)){toast("Cliente inválido.","error");return}
-  if(existing)Object.assign(existing,data);
-  else db.tickets.unshift({id:id(),...data,createdAt:dateNow()});
-  closeModal();
-  commit(existing?"Atendimento atualizado":"Atendimento registrado");
- });
-}
-function findById(list,idValue){return list.find(x=>x.id===idValue)}
-function removeRecord(list,idValue,label){
- const item=findById(list,idValue);
- if(!item)return;
- if(!confirmAction(`Deseja realmente excluir ${label}? Essa ação não pode ser desfeita.`))return;
- const i=list.indexOf(item);
- list.splice(i,1);
- commit(`${label.charAt(0).toUpperCase()+label.slice(1)} excluído`);
-}
-function downloadFile(name,content,type){
- const blob=new Blob([content],{type});
- const url=URL.createObjectURL(blob);
- const a=document.createElement("a");
- a.href=url;a.download=name;document.body.append(a);a.click();a.remove();
- setTimeout(()=>URL.revokeObjectURL(url),1000);
-}
-function exportCSV(){
- const records=[
-  ["Clientes",db.clients],
-  ["Orçamentos",db.quotes],
-  ["Atendimentos",db.tickets]
- ];
- const lines=[];
- records.forEach(([label,items])=>{
-  lines.push(label);
-  if(!items.length){lines.push("Sem registros","");return}
-  const keys=[...new Set(items.flatMap(o=>Object.keys(o)))];
-  lines.push(keys.map(k=>`"${k.replace(/"/g,'""')}"`).join(";"));
-  items.forEach(o=>lines.push(keys.map(k=>`"${String(o[k]??"").replace(/"/g,'""')}"`).join(";")));
-  lines.push("");
- });
- downloadFile("veltronix-flow-relatorios.csv","\uFEFF"+lines.join("\r\n"),"text/csv;charset=utf-8");
- toast("Relatório CSV exportado.");
-}
-function backup(){
- downloadFile("veltronix-flow-backup.json",JSON.stringify({version:3,exportedAt:dateNow(),data:db},null,2),"application/json");
- toast("Backup exportado.");
-}
-function importBackup(file){
- if(!file)return;
- const reader=new FileReader();
- reader.onload=()=>{
-  try{
-   const parsed=JSON.parse(reader.result);
-   const d=parsed.data||parsed;
-   if(!d||!Array.isArray(d.clients)||!Array.isArray(d.quotes)||!Array.isArray(d.tickets))throw new Error("Formato inválido");
-   if(!confirmAction("Importar este backup substituirá os dados atuais deste navegador. Continuar?"))return;
-   db={...structuredClone(initial),...d,settings:{...initial.settings,...d.settings}};
-   save();closeModal();openPage("dashboard");toast("Backup importado com sucesso.");
-  }catch(e){toast("Arquivo inválido. Selecione um backup JSON do VELTRONIX FLOW.","error")}
- };
- reader.readAsText(file);
-}
-function readAll(){
- db.notifications.forEach(n=>n.read=true);
- db.readNotifications=db.notifications.length;
- save();render();toast("Notificações marcadas como lidas.");
-}
-function exportCsvWithCurrent(){
- if(currentPage==="relatorios")exportCSV();
-}
-function action(actionName,el){
- const recordId=el?.dataset.id;
- switch(actionName){
- case "dashboard":case "clientes":case "orcamentos":case "atendimentos":case "assistente":case "relatorios":case "notificacoes":case "configuracoes":openPage(actionName);break;
- case "new-client":openClientForm();break;
- case "new-quote":openQuoteForm();break;
- case "new-ticket":openTicketForm();break;
- case "edit-client":{const c=findById(db.clients,recordId);if(c)openClientForm(c);break}
- case "edit-quote":{const q=findById(db.quotes,recordId);if(q)openQuoteForm(q);break}
- case "edit-ticket":{const t=findById(db.tickets,recordId);if(t)openTicketForm(t);break}
- case "delete-client":{
-  const c=findById(db.clients,recordId);if(!c)break;
-  const related=db.quotes.filter(q=>q.clientId===recordId).length+db.tickets.filter(t=>t.clientId===recordId).length;
-  if(related&&!confirmAction(`Este cliente possui ${related} orçamento(s)/atendimento(s) relacionado(s). Excluir o cliente? Os registros relacionados serão mantidos, mas ficarão sem nome de cliente.`))break;
-  if(!related&&!confirmAction("Excluir este cliente?"))break;
-  db.clients=db.clients.filter(x=>x.id!==recordId);commit("Cliente excluído");break;
- }
- case "delete-quote":removeRecord(db.quotes,recordId,"orçamento");break;
- case "delete-ticket":removeRecord(db.tickets,recordId,"atendimento");break;
- case "close-modal":closeModal();break;
- case "assistant-info":toast("A integração de IA será adicionada em uma etapa futura.");break;
- case "read-all":readAll();break;
- case "read-notice":{const n=findById(db.notifications,recordId);if(n){n.read=true;save();render()}break}
- case "clear-notifications":
-  if(confirmAction("Apagar todas as notificações?")){db.notifications=[];save();render();toast("Notificações apagadas.")}break;
- case "export-csv":exportCSV();break;
- case "backup":backup();break;
- case "restore-prompt":$("#backup-file").click();break;
- case "reset-settings":
-  if(confirmAction("Restaurar as configurações padrão?")){db.settings={...initial.settings};save();render();toast("Configurações restauradas.")}break;
- case "reset-data":
-  if(confirmAction("ATENÇÃO: apagar todos os clientes, orçamentos, atendimentos, atividades e notificações deste navegador? Exporte um backup antes se precisar dos dados.")){
-   const settings={...db.settings};db=structuredClone(initial);db.settings=settings;save();openPage("dashboard");toast("Dados locais apagados.");
-  }break;
- case "theme":
-  db.settings.theme=el.dataset.theme;save();render();toast("Tema atualizado.");break;
- default:break;
- }
-}
-$("#nav").addEventListener("click",e=>{
- const b=e.target.closest("[data-page]");
- if(b)openPage(b.dataset.page);
+
+  if(form.id==="quote-form"){
+    const old=editing?.type==="quote"?db.quotes.find(x=>x.id===editing.id):null;
+    const client=db.clients.find(c=>c.id===data.clientId);
+    const item={...(old||{}),id:old?.id||id(),title:data.title.trim(),clientId:data.clientId,clientName:client?.name||"",description:data.description.trim(),value:Number(data.value),dueDate:data.dueDate,status:data.status,createdAt:old?.createdAt||now,updatedAt:now};
+    if(old) db.quotes=db.quotes.map(x=>x.id===old.id?item:x);
+    else db.quotes.unshift(item);
+    logActivity(old?"Orçamento atualizado":"Novo orçamento",item.title);
+    notify("Orçamento salvo",`${item.title} · ${money(item.value)}`);
+    saveState();closeModal();renderShell();toast(old?"Orçamento atualizado.":"Orçamento cadastrado.");
+  }
+
+  if(form.id==="ticket-form"){
+    const old=editing?.type==="ticket"?db.tickets.find(x=>x.id===editing.id):null;
+    const client=db.clients.find(c=>c.id===data.clientId);
+    const item={...(old||{}),id:old?.id||id(),title:data.title.trim(),clientId:data.clientId,clientName:client?.name||"",description:data.description.trim(),priority:data.priority,status:data.status,createdAt:old?.createdAt||now,updatedAt:now};
+    if(old) db.tickets=db.tickets.map(x=>x.id===old.id?item:x);
+    else db.tickets.unshift(item);
+    logActivity(old?"Atendimento atualizado":"Novo atendimento",item.title);
+    notify("Atendimento salvo",item.title);
+    saveState();closeModal();renderShell();toast(old?"Atendimento atualizado.":"Atendimento cadastrado.");
+  }
 });
-document.addEventListener("click",e=>{
- const b=e.target.closest("[data-action]");
- if(b){action(b.dataset.action,b);return}
- if(e.target.closest("#quick-quote")){openQuoteForm();return}
- if(e.target.closest("#top-notifications")){openPage("notificacoes");return}
- if(e.target.closest("#menu-toggle")){$("#sidebar").classList.toggle("open");return}
-});
-$("#content").addEventListener("input",e=>{
- if(e.target.id!=="table-search")return;
- filterTable();
-});
-$("#content").addEventListener("change",e=>{
- if(e.target.id==="table-filter")filterTable();
- if(e.target.dataset.setting){
-  db.settings[e.target.dataset.setting]=e.target.checked;
-  save();render();toast("Preferência atualizada.");
- }
-});
-function filterTable(){
- const query=($("#table-search")?.value||"").toLowerCase().trim();
- const status=$("#table-filter")?.value||"";
- const rows=$$("#data-table tbody tr");
- let visible=0;
- rows.forEach(row=>{
-  const matchesQuery=(row.dataset.search||"").includes(query);
-  const matchesStatus=!status||row.dataset.status===status;
-  const show=matchesQuery&&matchesStatus;
-  row.hidden=!show;
-  if(show)visible++;
- });
- const emptyEl=$("#no-results");
- if(emptyEl)emptyEl.hidden=visible>0;
+
+/* EXCLUSÃO E AÇÕES */
+function removeRecord(type,recordId){
+  const map={client:"clients",quote:"quotes",ticket:"tickets"};
+  const key=map[type];
+  if(!key) return;
+  const item=db[key].find(x=>x.id===recordId);
+  if(!item) return;
+  if(db.settings.confirmDelete && !confirm(`Deseja realmente excluir "${item.name||item.title}"?`)) return;
+  db[key]=db[key].filter(x=>x.id!==recordId);
+  if(type==="client"){
+    db.quotes=db.quotes.map(q=>q.clientId===recordId?{...q,clientId:"",clientName:""}:q);
+    db.tickets=db.tickets.map(t=>t.clientId===recordId?{...t,clientId:"",clientName:""}:t);
+  }
+  logActivity("Registro excluído",item.name||item.title);
+  saveState();renderShell();toast("Registro excluído.");
 }
-$("#content").addEventListener("change",e=>{
- if(e.target.id==="backup-file"&&e.target.files[0])importBackup(e.target.files[0]);
+function downloadFile(filename,content,type="text/plain;charset=utf-8"){
+  const blob=new Blob([content],{type});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function csvEscape(value){
+  let s=String(value??"");
+  if(/^[=+\-@]/.test(s)) s="'"+s;
+  return '"'+s.replace(/"/g,'""')+'"';
+}
+function exportCSV(filename,headers,rows){
+  const csv=[headers,...rows].map(row=>row.map(csvEscape).join(";")).join("\r\n");
+  downloadFile(filename,"\uFEFF"+csv,"text/csv;charset=utf-8");
+  toast("Arquivo CSV exportado.");
+}
+function exportQuotes(){
+  exportCSV("veltronix-flow-orcamentos.csv",
+    ["Título","Cliente","Descrição","Valor","Prazo","Status","Criado em"],
+    db.quotes.map(q=>[q.title,q.clientName,q.description,q.value,q.dueDate,q.status,q.createdAt]));
+}
+function exportAllCSV(){
+  exportCSV("veltronix-flow-resumo.csv",
+    ["Tipo","Nome/Título","Cliente/Empresa","Contato/Descrição","Valor","Status","Data"],
+    [
+      ...db.clients.map(c=>["Cliente",c.name,c.company,c.email+" "+c.phone,"","",""+c.createdAt]),
+      ...db.quotes.map(q=>["Orçamento",q.title,q.clientName,q.description,q.value,q.status,q.createdAt]),
+      ...db.tickets.map(t=>["Atendimento",t.title,t.clientName,t.description,"",t.status,t.createdAt])
+    ]);
+}
+function backupData(){
+  const payload={app:"VELTRONIX FLOW",version:3,exportedAt:new Date().toISOString(),data:db};
+  downloadFile("veltronix-flow-backup-"+today()+".json",JSON.stringify(payload,null,2),"application/json;charset=utf-8");
+  toast("Backup gerado.");
+}
+function restoreData(file){
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const parsed=JSON.parse(reader.result);
+      const incoming=parsed.data||parsed;
+      if(!incoming || !Array.isArray(incoming.clients) || !Array.isArray(incoming.quotes) || !Array.isArray(incoming.tickets)){
+        throw new Error("Formato inválido");
+      }
+      if(!confirm("A restauração substituirá os dados atuais deste navegador. Você já tem um backup dos dados atuais?")) return;
+      db={
+        ...structuredClone(DEFAULT_STATE),
+        ...incoming,
+        settings:{...DEFAULT_STATE.settings,...(incoming.settings||{})},
+        clients:incoming.clients,
+        quotes:incoming.quotes,
+        tickets:incoming.tickets,
+        activities:Array.isArray(incoming.activities)?incoming.activities:[],
+        notifications:Array.isArray(incoming.notifications)?incoming.notifications:[],
+        readNotifications:Array.isArray(incoming.readNotifications)?incoming.readNotifications:[]
+      };
+      saveState();applySettings();renderShell();toast("Backup restaurado.");
+    }catch(error){
+      console.error(error);toast("Arquivo inválido. Selecione um backup JSON do FLOW.");
+    }
+  };
+  reader.readAsText(file);
+}
+function saveProfile(){
+  const name=document.getElementById("setting-name").value.trim();
+  if(!name){toast("Informe o nome da empresa ou profissional.");return;}
+  db.settings.profileType=document.getElementById("setting-profile").value;
+  db.settings.businessName=name;
+  db.settings.sector=document.getElementById("setting-sector").value.trim();
+  saveState();renderShell();toast("Perfil atualizado.");
+}
+function saveServices(){
+  const selected=[...document.querySelectorAll('input[name="settings-service"]:checked')].map(x=>x.value);
+  const custom=document.getElementById("setting-custom-services").value.trim();
+  const extras=custom.split(",").map(x=>x.trim()).filter(Boolean);
+  db.settings.services=[...new Set([...selected,...extras])];
+  db.settings.customServices=custom;
+  saveState();renderShell();toast("Serviços atualizados.");
+}
+function saveAppearance(){
+  db.settings.theme=document.getElementById("setting-theme").value;
+  db.settings.compact=document.getElementById("setting-compact").checked;
+  db.settings.confirmDelete=document.getElementById("setting-confirm").checked;
+  db.settings.notify=document.getElementById("setting-notify").checked;
+  saveState();applySettings();renderShell();toast("Aparência e preferências salvas.");
+}
+function markRead(recordId){
+  if(!db.readNotifications.includes(recordId)) db.readNotifications.push(recordId);
+  saveState();renderShell();
+}
+
+/* CONFIGURAÇÃO INICIAL */
+function renderSetup(){
+  const s=db.settings;
+  draftSetup={
+    profileType:s.profileType||"empresa",
+    businessName:s.businessName||"",
+    sector:s.sector||"",
+    services:Array.isArray(s.services)?[...s.services]:[],
+    customServices:s.customServices||""
+  };
+  setupStep=1;
+  document.getElementById("app-root").innerHTML=`
+    <main class="setup-screen">
+      <div class="setup-card">
+        <div class="setup-brand"><div class="brand-mark">V</div><div><h1>VELTRONIX FLOW</h1><small class="muted">Gestão inteligente</small></div></div>
+        <div class="step-indicator" id="setup-indicator">CONFIGURAÇÃO INICIAL · ETAPA 1 DE 2</div>
+        <div class="setup-step active" id="setup-step-1">
+          <h2 class="setup-title">Vamos configurar seu espaço de trabalho.</h2>
+          <p class="setup-desc">Primeiro, conte como você trabalha. Vamos adaptar o FLOW ao seu perfil.</p>
+          <div class="choice-grid">
+            <label class="choice"><input type="radio" name="setup-profile" value="empresa" ${draftSetup.profileType==="empresa"?"checked":""}><div class="choice-content"><div class="choice-icon">▦</div><strong>Empresa</strong><small>Para negócios, equipes, lojas e organizações.</small></div></label>
+            <label class="choice"><input type="radio" name="setup-profile" value="profissional" ${draftSetup.profileType==="profissional"?"checked":""}><div class="choice-content"><div class="choice-icon">♙</div><strong>Profissional</strong><small>Para freelancers e pessoas que trabalham por conta própria.</small></div></label>
+          </div>
+          <div class="field"><label for="setup-name">Nome da empresa ou profissional *</label><input class="input" id="setup-name" required value="${esc(draftSetup.businessName)}" placeholder="Como você quer identificar seu espaço?"></div>
+          <div class="field"><label for="setup-sector">Segmento de atuação</label><input class="input" id="setup-sector" value="${esc(draftSetup.sector)}" placeholder="Ex.: Tecnologia, design, comércio..."></div>
+        </div>
+        <div class="setup-step" id="setup-step-2">
+          <h2 class="setup-title">Quais serviços você oferece?</h2>
+          <p class="setup-desc">Selecione todos os serviços que oferece aos seus clientes. Você poderá editar essa lista depois.</p>
+          <div class="check-grid">${SERVICE_OPTIONS.map(service=>`<label class="check-item"><input type="checkbox" name="setup-service" value="${esc(service)}" ${draftSetup.services.includes(service)?"checked":""}>${esc(service)}</label>`).join("")}</div>
+          <div class="field" style="margin-top:17px"><label for="setup-custom">Outros serviços (separe por vírgula)</label><input class="input" id="setup-custom" value="${esc(draftSetup.customServices)}" placeholder="Ex.: Suporte técnico, treinamento"></div>
+          <div class="notice">Não precisa escolher tudo agora. Você pode atualizar seus serviços em Configurações quando quiser.</div>
+        </div>
+        <div class="setup-footer">
+          <button class="btn" id="setup-back" type="button" data-action="setup-back" disabled>← Voltar</button>
+          <button class="btn btn-primary" id="setup-next" type="button" data-action="setup-next">Continuar →</button>
+        </div>
+        <p class="muted small" style="margin:20px 0 0">Seus dados ficam salvos neste navegador nesta versão. A integração com Supabase será feita depois.</p>
+      </div>
+    </main>`;
+}
+function setupNext(){
+  if(setupStep===1){
+    const name=document.getElementById("setup-name").value.trim();
+    if(!name){toast("Informe o nome da empresa ou profissional.");document.getElementById("setup-name").focus();return;}
+    draftSetup.profileType=document.querySelector('input[name="setup-profile"]:checked')?.value||"empresa";
+    draftSetup.businessName=name;
+    draftSetup.sector=document.getElementById("setup-sector").value.trim();
+    setupStep=2;
+    document.getElementById("setup-step-1").classList.remove("active");
+    document.getElementById("setup-step-2").classList.add("active");
+    document.getElementById("setup-indicator").textContent="CONFIGURAÇÃO INICIAL · ETAPA 2 DE 2";
+    document.getElementById("setup-back").disabled=false;
+    document.getElementById("setup-next").textContent="Concluir configuração ✓";
+    return;
+  }
+  draftSetup.services=[...document.querySelectorAll('input[name="setup-service"]:checked')].map(x=>x.value);
+  draftSetup.customServices=document.getElementById("setup-custom").value.trim();
+  const extras=draftSetup.customServices.split(",").map(x=>x.trim()).filter(Boolean);
+  db.settings={
+    ...db.settings,
+    ...draftSetup,
+    services:[...new Set([...draftSetup.services,...extras])],
+    onboardingComplete:true
+  };
+  logActivity("Configuração inicial concluída",profileName());
+  notify("Bem-vindo ao VELTRONIX FLOW","Seu espaço de trabalho está pronto.");
+  saveState();applySettings();renderShell();toast("Seu espaço de trabalho está pronto!");
+}
+function setupBack(){
+  if(setupStep!==2) return;
+  draftSetup.services=[...document.querySelectorAll('input[name="setup-service"]:checked')].map(x=>x.value);
+  draftSetup.customServices=document.getElementById("setup-custom").value;
+  setupStep=1;
+  document.getElementById("setup-step-2").classList.remove("active");
+  document.getElementById("setup-step-1").classList.add("active");
+  document.getElementById("setup-indicator").textContent="CONFIGURAÇÃO INICIAL · ETAPA 1 DE 2";
+  document.getElementById("setup-back").disabled=true;
+  document.getElementById("setup-next").textContent="Continuar →";
+}
+
+/* EVENTOS CENTRALIZADOS: FUNCIONAM NOS DOIS MENUS */
+document.addEventListener("click",function(event){
+  const pageEl=event.target.closest("[data-page]");
+  if(pageEl){
+    event.preventDefault();
+    navigate(pageEl.dataset.page);
+    return;
+  }
+
+  const actionEl=event.target.closest("[data-action]");
+  if(!actionEl) return;
+  const action=actionEl.dataset.action;
+  const recordId=actionEl.dataset.id;
+
+  if(action==="toggle-menu"){
+    mobileMenuOpen=!mobileMenuOpen;
+    document.getElementById("sidebar")?.classList.toggle("open",mobileMenuOpen);
+  }
+  if(action==="new-client") showClientForm();
+  if(action==="new-quote") showQuoteForm();
+  if(action==="new-ticket") showTicketForm();
+  if(action==="edit-client") showClientForm(db.clients.find(x=>x.id===recordId));
+  if(action==="edit-quote") showQuoteForm(db.quotes.find(x=>x.id===recordId));
+  if(action==="edit-ticket") showTicketForm(db.tickets.find(x=>x.id===recordId));
+  if(action==="delete-client") removeRecord("client",recordId);
+  if(action==="delete-quote") removeRecord("quote",recordId);
+  if(action==="delete-ticket") removeRecord("ticket",recordId);
+  if(action==="close-modal"){
+    if(actionEl.closest("[data-modal-inner]") || actionEl.classList.contains("modal-backdrop")) closeModal();
+  }
+  if(action==="export-quotes") exportQuotes();
+  if(action==="export-all-csv") exportAllCSV();
+  if(action==="backup") backupData();
+  if(action==="restore") document.getElementById("backup-file")?.click();
+  if(action==="save-profile") saveProfile();
+  if(action==="save-services") saveServices();
+  if(action==="save-appearance") saveAppearance();
+  if(action==="mark-read") markRead(recordId);
+  if(action==="mark-all-read"){
+    db.readNotifications=[...new Set([...db.readNotifications,...db.notifications.map(n=>n.id)])];
+    saveState();renderShell();toast("Notificações marcadas como lidas.");
+  }
+  if(action==="clear-notifications"){
+    if(confirm("Deseja limpar todas as notificações?")){
+      db.notifications=[];db.readNotifications=[];
+      saveState();renderShell();toast("Notificações limpas.");
+    }
+  }
+  if(action==="edit-setup") renderSetup();
+  if(action==="setup-next") setupNext();
+  if(action==="setup-back") setupBack();
+  if(action==="reset-data"){
+    if(confirm("Isso apagará clientes, orçamentos, atendimentos e configurações salvos neste navegador. Faça um backup antes. Continuar?")){
+      localStorage.removeItem(STORAGE_KEY);
+      db=structuredClone(DEFAULT_STATE);
+      applySettings();renderSetup();toast("Dados locais apagados.");
+    }
+  }
 });
-$("#modal-root").addEventListener("change",e=>{
- if(e.target.id==="backup-file"&&e.target.files[0])importBackup(e.target.files[0]);
+
+document.addEventListener("input",function(event){
+  if(event.target.matches("[data-search]")){
+    searchTerm=event.target.value;
+    const pos=event.target.selectionStart;
+    renderPage();
+    const newSearch=document.querySelector("[data-search]");
+    if(newSearch){newSearch.focus();newSearch.setSelectionRange(pos,pos);}
+  }
 });
-document.addEventListener("keydown",e=>{
- if(e.key==="Escape"){closeModal();$("#sidebar").classList.remove("open")}
+document.addEventListener("change",function(event){
+  if(event.target.matches("[data-filter]")){
+    currentFilter=event.target.value;
+    renderPage();
+  }
+  if(event.target.id==="backup-file"){
+    const file=event.target.files?.[0];
+    restoreData(file);
+    event.target.value="";
+  }
 });
-window.addEventListener("storage",e=>{
- if(e.key===STORE){db=load();render()}
+document.addEventListener("click",function(event){
+  if(event.target.classList.contains("modal-backdrop")) closeModal();
 });
-render();
-})();
+
+function init(){
+  applySettings();
+  if(!db.settings.onboardingComplete || !db.settings.businessName){
+    renderSetup();
+  }else{
+    renderShell();
+  }
+}
+init();
 </script>
 </body>
 </html>
