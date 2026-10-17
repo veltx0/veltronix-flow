@@ -176,6 +176,8 @@ const DEFAULT_STATE = {
   orders: [],
   expenses: [],
   projects: [],
+  suppliers: [],
+  appointments: [],
   activities: [],
   notifications: [],
   readNotifications: [],
@@ -209,6 +211,8 @@ function loadState(){
       orders: Array.isArray(saved.orders) ? saved.orders : [],
       expenses: Array.isArray(saved.expenses) ? saved.expenses : [],
       projects: Array.isArray(saved.projects) ? saved.projects : [],
+      suppliers: Array.isArray(saved.suppliers) ? saved.suppliers : [],
+      appointments: Array.isArray(saved.appointments) ? saved.appointments : [],
       activities: Array.isArray(saved.activities) ? saved.activities : [],
       notifications: Array.isArray(saved.notifications) ? saved.notifications : [],
       readNotifications: Array.isArray(saved.readNotifications) ? saved.readNotifications : []
@@ -340,6 +344,8 @@ const PAGE_META = {
   orders:["Pedidos e vendas","Registre movimentações e acompanhe a receita"],
   expenses:["Despesas","Controle os custos da operação"],
   projects:["Projetos e tarefas","Organize etapas, prazos e entregas"],
+  suppliers:["Fornecedores","Organize seus fornecedores e contatos"],
+  appointments:["Agenda e agendamentos","Acompanhe horários, clientes e serviços"],
   quotes:["Orçamentos","Crie, acompanhe e gerencie propostas"],
   tickets:["Atendimentos","Acompanhe solicitações e tarefas de clientes"],
   ai:["Assistente IA","Área preparada para integração futura"],
@@ -352,82 +358,85 @@ const NAV_ITEMS = [
   {id:"clients",icon:"♙",label:"Clientes"},
   {id:"products",icon:"▦",label:"Produtos e estoque"},
   {id:"orders",icon:"🧾",label:"Pedidos e vendas"},
-  {id:"projects",icon:"◷",label:"Projetos e tarefas"},
   {id:"expenses",icon:"↘",label:"Despesas"},
+  {id:"projects",icon:"✓",label:"Projetos e tarefas"},
+  {id:"suppliers",icon:"♧",label:"Fornecedores"},
+  {id:"appointments",icon:"◷",label:"Agenda"},
   {id:"quotes",icon:"▤",label:"Orçamentos"},
-  {id:"tickets",icon:"◴",label:"Atendimentos"},
-  {id:"ai",icon:"✧",label:"Assistente IA",soon:true},
-  {id:"reports",icon:"▥",label:"Relatórios"}
+  {id:"tickets",icon:"◉",label:"Atendimentos"},
+  {id:"ai",icon:"✧",label:"Assistente IA",soon:true}
 ];
-
+const NAV_MORE = [
+  {id:"reports",icon:"▥",label:"Relatórios"},
+  {id:"notifications",icon:"♢",label:"Notificações"},
+  {id:"settings",icon:"⚙",label:"Configurações"}
+];
 function navButton(item){
-  const dynamicLabels=labels();
-  const shownLabel=item.id==="products"?dynamicLabels.products:item.id==="orders"?dynamicLabels.orders:item.id==="projects"?dynamicLabels.projects:item.id==="expenses"?dynamicLabels.expense:item.label;
-  return `<button type="button" data-page="${item.id}" class="${currentPage===item.id?"active":""}">
-    <span class="ico">${item.icon}</span><span>${shownLabel}</span>
+  return `<button class="${currentPage===item.id?"active":""}" data-nav="${item.id}">
+    <span class="ico">${item.icon}</span><span>${item.label}</span>
     ${item.soon?'<span class="soon">EM BREVE</span>':""}
-    ${item.id==="notifications" && unreadCount()?`<span class="soon">${unreadCount()}</span>`:""}
   </button>`;
 }
 function renderShell(){
-  const meta = PAGE_META[currentPage] || PAGE_META.dashboard;
-  document.getElementById("app-root").innerHTML = `
-  <div class="app">
-    <aside class="sidebar ${mobileMenuOpen?"open":""}" id="sidebar">
-      <div class="brand">
-        <div class="brand-mark">V</div>
-        <div><strong>VELTRONIX FLOW</strong><small>Gestão inteligente</small></div>
-      </div>
-      <div>
-        <div class="nav-title">MENU PRINCIPAL</div>
-        <nav class="nav" aria-label="Menu principal">${NAV_ITEMS.map(navButton).join("")}</nav>
-      </div>
-      <div>
-        <div class="nav-title">PREFERÊNCIAS</div>
-        <nav class="nav" aria-label="Preferências">${NAV_MORE.map(navButton).join("")}</nav>
-      </div>
-      <div class="sidebar-bottom">
-        <small>ESPAÇO DE TRABALHO</small>
-        <strong>${esc(profileName())}</strong>
-        <small>${db.settings.profileType==="empresa"?"Perfil empresa":"Perfil profissional"}</small>
-      </div>
-    </aside>
-    <main class="main">
-      <header class="topbar">
-        <div class="top-left">
-          <button class="icon-btn menu-toggle" type="button" data-action="toggle-menu" aria-label="Abrir menu">☰</button>
-          <div><div class="page-heading">${esc(meta[0])}</div><div class="page-subtitle">${esc(meta[1])}</div></div>
+  const meta=PAGE_META[currentPage]||PAGE_META.dashboard;
+  document.getElementById("app-root").innerHTML=`
+    <div class="app">
+      <aside class="sidebar ${mobileMenuOpen?"open":""}" id="sidebar">
+        <div class="brand">
+          <div class="brand-mark">V</div>
+          <div><strong>VELTRONIX FLOW</strong><small>Gestão inteligente</small></div>
         </div>
-        <div class="top-actions">
-          <button class="icon-btn" type="button" data-page="notifications" title="Notificações" aria-label="Notificações">♧${unreadCount()?`<sup style="color:var(--light)">${unreadCount()}</sup>`:""}</button>
-          <button class="icon-btn" type="button" data-page="settings" title="Configurações" aria-label="Configurações">⚙</button>
-          <div class="avatar" title="${esc(profileName())}">${esc(initials())}</div>
+        <div>
+          <div class="nav-title">MENU PRINCIPAL</div>
+          <nav class="nav">${NAV_ITEMS.map(navButton).join("")}</nav>
         </div>
-      </header>
-      <section class="content" id="content"></section>
-      <div class="footer">VELTRONIX FLOW · Seus dados permanecem neste navegador nesta versão.</div>
-    </main>
-  </div>`;
-  renderPage();
+        <div>
+          <div class="nav-title">GESTÃO</div>
+          <nav class="nav">${NAV_MORE.map(navButton).join("")}</nav>
+        </div>
+        <div class="sidebar-bottom">
+          <small>ESPAÇO DE TRABALHO</small>
+          <strong>${esc(profileName())}</strong>
+          <small>Versão inicial · Dados locais</small>
+        </div>
+      </aside>
+      <main class="main">
+        <header class="topbar">
+          <div class="top-left">
+            <button class="icon-btn menu-toggle" data-action="toggle-menu" aria-label="Abrir menu">☰</button>
+            <div><div class="page-heading">${meta[0]}</div><div class="page-subtitle">${meta[1]}</div></div>
+          </div>
+          <div class="top-actions">
+            <button class="icon-btn" data-nav="notifications" title="Notificações">♢${unreadCount()?`<sup>${unreadCount()}</sup>`:""}</button>
+            <div class="avatar" title="${esc(profileName())}">${initials()}</div>
+          </div>
+        </header>
+        <section class="content" id="page-content">${renderPage()}</section>
+        <footer class="footer">VELTRONIX FLOW · Tecnologia que impulsiona negócios.</footer>
+      </main>
+    </div>`;
 }
 function unreadCount(){
   return db.notifications.filter(n=>!db.readNotifications.includes(n.id)).length;
 }
 function navigate(page){
   if(!PAGE_META[page]) return;
-  currentPage = page;
-  searchTerm = "";
-  currentFilter = "Todos";
-  mobileMenuOpen = false;
+  currentPage=page; searchTerm=""; currentFilter="Todos"; mobileMenuOpen=false;
   renderShell();
-  window.scrollTo({top:0,behavior:"smooth"});
 }
+
 function renderPage(){
   const root = document.getElementById("content");
   if(!root) return;
   const pages = {
     dashboard:renderDashboard,
     clients:renderClients,
+    products:renderProducts,
+    orders:renderOrders,
+    expenses:renderExpenses,
+    projects:renderProjects,
+    suppliers:renderSuppliers,
+    appointments:renderAppointments,
     quotes:renderQuotes,
     tickets:renderTickets,
     ai:renderAI,
@@ -469,6 +478,12 @@ function renderDashboard(){
     ${statCard(labels().orders,db.orders.filter(o=>o.status!=="Cancelado").length,"🧾","Registros ativos")}
     ${statCard(labels().revenue,money(db.orders.filter(o=>o.status!=="Cancelado" && (o.date||"").slice(0,10)>=weekStart()).reduce((sum,o)=>sum+Number(o.value||0),0)),"↗","Total registrado nesta semana")}
     ${statCard("Despesas da semana",money(db.expenses.filter(e=>(e.date||"").slice(0,10)>=weekStart()).reduce((sum,e)=>sum+Number(e.value||0),0)),"↘","Custos registrados")}
+  </div>
+  <div class="grid stats">
+    ${statCard("Faturamento de hoje",money(db.orders.filter(o=>o.status!=="Cancelado"&&(o.date||"").slice(0,10)===today()).reduce((sum,o)=>sum+Number(o.value||0),0)),"☀","Registros de hoje")}
+    ${statCard("Faturamento do mês",money(db.orders.filter(o=>o.status!=="Cancelado"&&(o.date||"").slice(0,7)===today().slice(0,7)).reduce((sum,o)=>sum+Number(o.value||0),0)),"▥","Mês atual")}
+    ${statCard("Lucro estimado semanal",money(db.orders.filter(o=>o.status!=="Cancelado"&&(o.date||"").slice(0,10)>=weekStart()).reduce((sum,o)=>sum+Number(o.value||0),0)-db.expenses.filter(e=>(e.date||"").slice(0,10)>=weekStart()).reduce((sum,e)=>sum+Number(e.value||0),0)),"↗","Faturamento menos despesas")}
+    ${statCard("Agendamentos",db.appointments.filter(a=>a.date===today()&&a.status!=="Cancelado").length,"▦","Para hoje")}
   </div>
   <div class="grid two-col">
     <div class="card">
@@ -555,15 +570,6 @@ function renderTickets(){
   </div>`;
 }
 
-
-/* MÓDULOS DE GESTÃO POR TIPO DE NEGÓCIO */
-function renderProducts(){
-  const term=searchTerm.toLowerCase();
-  const list=db.products.filter(p=>`${p.name} ${p.category||""}`.toLowerCase().includes(term));
-  const low=list.filter(p=>Number(p.stock||0)<=Number(p.minStock||0));
-  return `${pageHead(labels().products, businessType()==="restaurant"?"Controle ingredientes, produtos e alertas de estoque.":"Cadastre itens, preços e quantidades.",
-    `<button class="btn btn-primary" data-action="new-product">＋ Novo item</button>`)}
-    <div class="grid stats">
       ${statCard("Itens cadastrados",db.products.length,"▦")}
       ${statCard("Estoque baixo",db.products.filter(p=>Number(p.stock||0)<=Number(p.minStock||0)).length,"⚠","Itens no limite mínimo")}
       ${statCard("Valor do estoque",money(db.products.reduce((sum,p)=>sum+Number(p.price||0)*Number(p.stock||0),0)),"◈","Preço de venda × quantidade")}
@@ -626,6 +632,30 @@ function renderProjects(){
     ${list.map(p=>`<tr><td><strong>${esc(p.title)}</strong><br><span class="muted">${esc(p.description||"")}</span></td><td>${esc(p.clientName||"—")}</td><td>${dateText(p.dueDate)}</td><td>${money(p.value)}</td><td>${statusBadge(p.status)}</td><td><div class="actions"><button class="btn btn-sm" data-action="edit-project" data-id="${p.id}">Editar</button><button class="btn btn-sm btn-danger" data-action="delete-project" data-id="${p.id}">Excluir</button></div></td></tr>`).join("")}
     </tbody></table></div>`:emptyState("◷","Nenhum projeto ou tarefa","Crie um registro para organizar as próximas etapas.",'<button class="btn btn-primary" data-action="new-project">＋ Criar projeto/tarefa</button>')}</div>`;
 }
+function renderSuppliers(){
+  const term=searchTerm.toLowerCase();
+  const list=db.suppliers.filter(x=>`${x.name} ${x.contact||""} ${x.phone||""} ${x.email||""}`.toLowerCase().includes(term));
+  return `${pageHead("Fornecedores","Cadastre contatos de quem fornece produtos, ingredientes ou materiais.",`<button class="btn btn-primary" data-action="new-supplier">＋ Novo fornecedor</button>`)}
+  <div class="card"><div class="toolbar"><input class="input search" data-search placeholder="Buscar fornecedor..." value="${esc(searchTerm)}"><span class="muted small">${list.length} fornecedor(es)</span></div>
+  ${list.length?`<div class="table-wrap"><table><thead><tr><th>Fornecedor</th><th>Contato</th><th>Telefone</th><th>E-mail</th><th>Observações</th><th>Ações</th></tr></thead><tbody>${list.map(x=>`<tr><td><strong>${esc(x.name)}</strong></td><td>${esc(x.contact||"—")}</td><td>${esc(x.phone||"—")}</td><td>${esc(x.email||"—")}</td><td>${esc(x.notes||"—")}</td><td><div class="actions"><button class="btn btn-sm" data-action="edit-supplier" data-id="${x.id}">Editar</button><button class="btn btn-sm btn-danger" data-action="delete-supplier" data-id="${x.id}">Excluir</button></div></td></tr>`).join("")}</tbody></table></div>`:emptyState("♧","Nenhum fornecedor cadastrado","Guarde aqui os contatos dos seus fornecedores.",'<button class="btn btn-primary" data-action="new-supplier">＋ Cadastrar fornecedor</button>')}</div>`;
+}
+function renderAppointments(){
+  const term=searchTerm.toLowerCase();
+  const list=db.appointments.filter(a=>`${a.title} ${a.clientName||""} ${a.service||""} ${a.status} ${a.notes||""}`.toLowerCase().includes(term)).sort((a,b)=>`${a.date||""} ${a.time||""}`.localeCompare(`${b.date||""} ${b.time||""}`));
+  return `${pageHead("Agenda e agendamentos","Organize atendimentos, horários, serviços e pagamentos previstos.",`<button class="btn btn-primary" data-action="new-appointment">＋ Novo agendamento</button>`)}
+  <div class="grid stats">${statCard("Agendamentos",db.appointments.length,"▦")}${statCard("Hoje",db.appointments.filter(a=>a.date===today()&&a.status!=="Cancelado").length,"☀")}${statCard("Concluídos",db.appointments.filter(a=>a.status==="Concluído").length,"✓")}${statCard("Valor previsto",money(db.appointments.filter(a=>a.status!=="Cancelado").reduce((sum,a)=>sum+Number(a.value||0),0)),"↗")}</div>
+  <div class="card"><div class="toolbar"><input class="input search" data-search placeholder="Buscar agendamento, cliente ou serviço..." value="${esc(searchTerm)}"><span class="muted small">${list.length} registro(s)</span></div>
+  ${list.length?`<div class="table-wrap"><table><thead><tr><th>Agendamento</th><th>Cliente</th><th>Data e hora</th><th>Valor</th><th>Status</th><th>Ações</th></tr></thead><tbody>${list.map(a=>`<tr><td><strong>${esc(a.title)}</strong><br><span class="muted">${esc(a.service||"")}</span></td><td>${esc(a.clientName||"—")}</td><td>${dateText(a.date)} ${esc(a.time||"")}</td><td>${money(a.value)}</td><td>${statusBadge(a.status)}</td><td><div class="actions"><button class="btn btn-sm" data-action="edit-appointment" data-id="${a.id}">Editar</button><button class="btn btn-sm btn-danger" data-action="delete-appointment" data-id="${a.id}">Excluir</button></div></td></tr>`).join("")}</tbody></table></div>`:emptyState("▦","Agenda vazia","Cadastre um horário para organizar seus atendimentos.",'<button class="btn btn-primary" data-action="new-appointment">＋ Novo agendamento</button>')}</div>`;
+}
+function showSupplierForm(item=null){
+  editing=item?{type:"supplier",id:item.id}:null;
+  openModal(item?"Editar fornecedor":"Novo fornecedor",`<form id="supplier-form"><div class="field"><label>Nome do fornecedor *</label><input class="input" name="name" required value="${esc(item?.name||"")}" placeholder="Nome da empresa ou pessoa"></div><div class="field"><label>Nome do contato</label><input class="input" name="contact" value="${esc(item?.contact||"")}" placeholder="Pessoa de contato"></div><div class="grid" style="grid-template-columns:1fr 1fr"><div class="field"><label>Telefone</label><input class="input" name="phone" value="${esc(item?.phone||"")}" placeholder="Telefone"></div><div class="field"><label>E-mail</label><input class="input" name="email" type="email" value="${esc(item?.email||"")}" placeholder="E-mail"></div></div><div class="field"><label>Observações</label><textarea class="textarea" name="notes">${esc(item?.notes||"")}</textarea></div><div class="actions"><button class="btn btn-primary" type="submit">Salvar fornecedor</button><button class="btn" type="button" data-action="close-modal">Cancelar</button></div></form>`);
+}
+function showAppointmentForm(item=null){
+  editing=item?{type:"appointment",id:item.id}:null;
+  openModal(item?"Editar agendamento":"Novo agendamento",`<form id="appointment-form"><div class="field"><label>Atendimento / título *</label><input class="input" name="title" required value="${esc(item?.title||"")}" placeholder="Ex.: Reunião inicial"></div><div class="field"><label>Cliente</label><select class="select" name="clientId">${clientOptions(item?.clientId||"")}</select></div><div class="field"><label>Serviço</label><input class="input" name="service" value="${esc(item?.service||"")}" placeholder="Serviço a realizar"></div><div class="grid" style="grid-template-columns:1fr 1fr"><div class="field"><label>Data *</label><input class="input" name="date" type="date" required value="${esc(item?.date||today())}"></div><div class="field"><label>Horário</label><input class="input" name="time" type="time" value="${esc(item?.time||"")}"></div></div><div class="grid" style="grid-template-columns:1fr 1fr"><div class="field"><label>Valor previsto (R$)</label><input class="input" name="value" type="number" min="0" step="0.01" value="${Number(item?.value||0)}"></div><div class="field"><label>Status</label><select class="select" name="status">${["Agendado","Confirmado","Em andamento","Concluído","Cancelado"].map(x=>`<option ${((item?.status||"Agendado")===x)?"selected":""}>${x}</option>`).join("")}</select></div></div><div class="field"><label>Observações</label><textarea class="textarea" name="notes">${esc(item?.notes||"")}</textarea></div><div class="actions"><button class="btn btn-primary" type="submit">Salvar agendamento</button><button class="btn" type="button" data-action="close-modal">Cancelar</button></div></form>`);
+}
+
 function showProductForm(item=null){
   editing=item?{type:"product",id:item.id}:null;
   openModal(item?"Editar item":"Novo produto, ingrediente ou serviço",`<form id="product-form">
@@ -650,6 +680,7 @@ function showOrderForm(item=null){
     </div>
     <div class="grid" style="grid-template-columns:1fr 1fr">
       <div class="field"><label>Valor (R$) *</label><input class="input" type="number" min="0" step="0.01" name="value" required value="${esc(item?.value??"")}"></div>
+
       <div class="field"><label>Data</label><input class="input" type="date" name="date" value="${esc((item?.date||today()).slice(0,10))}"></div>
     </div>
     <div class="field"><label>Status</label><select class="select" name="status">${(businessType()==="restaurant"?["Recebido","Preparando","Pronto","Saiu para entrega","Entregue","Pago","Cancelado"]:["Recebido","Em andamento","Pronto","Concluído","Pago","Cancelado"]).map(x=>`<option ${((item?.status||"Recebido")===x)?"selected":""}>${x}</option>`).join("")}</select></div>
@@ -800,6 +831,7 @@ function clientOptions(selected=""){
 function openModal(title,body){
   document.getElementById("modal-root").innerHTML = `<div class="modal-backdrop" data-action="close-modal">
     <div class="modal" role="dialog" aria-modal="true" aria-label="${esc(title)}" data-modal-inner>
+
       <div class="modal-head"><h2>${esc(title)}</h2><button class="icon-btn" type="button" data-action="close-modal" aria-label="Fechar">×</button></div>
       ${body}
     </div>
@@ -855,7 +887,7 @@ function formObject(form){
 /* SALVAR FORMULÁRIOS */
 document.addEventListener("submit",function(event){
   const form=event.target;
-  if(!["client-form","quote-form","ticket-form","product-form","order-form","expense-form","project-form"].includes(form.id)) return;
+  if(!["client-form","quote-form","ticket-form","product-form","order-form","expense-form","project-form","supplier-form","appointment-form"].includes(form.id)) return;
   event.preventDefault();
   const data=formObject(form);
   const now=new Date().toISOString();
@@ -940,11 +972,26 @@ document.addEventListener("submit",function(event){
     notify("Projeto/tarefa salvo",item.title);
     saveState();closeModal();renderShell();toast("Projeto/tarefa salvo.");
   }
+
+  if(form.id==="supplier-form"){
+    const old=editing?.type==="supplier"?db.suppliers.find(x=>x.id===editing.id):null;
+    const item={...(old||{}),id:old?.id||id(),name:data.name.trim(),contact:data.contact.trim(),phone:data.phone.trim(),email:data.email.trim(),notes:data.notes.trim(),createdAt:old?.createdAt||now,updatedAt:now};
+    if(old) db.suppliers=db.suppliers.map(x=>x.id===old.id?item:x); else db.suppliers.unshift(item);
+    logActivity(old?"Fornecedor atualizado":"Novo fornecedor",item.name);saveState();closeModal();renderShell();toast("Fornecedor salvo.");
+  }
+  if(form.id==="appointment-form"){
+    const old=editing?.type==="appointment"?db.appointments.find(x=>x.id===editing.id):null;
+    const client=db.clients.find(c=>c.id===data.clientId);
+
+    const item={...(old||{}),id:old?.id||id(),title:data.title.trim(),clientId:data.clientId,clientName:client?.name||"",service:data.service.trim(),date:data.date,time:data.time,value:Number(data.value||0),status:data.status,notes:data.notes.trim(),createdAt:old?.createdAt||now,updatedAt:now};
+    if(old) db.appointments=db.appointments.map(x=>x.id===old.id?item:x); else db.appointments.unshift(item);
+    logActivity(old?"Agendamento atualizado":"Novo agendamento",item.title);notify("Agendamento salvo",`${item.title} · ${dateText(item.date)} ${item.time||""}`);saveState();closeModal();renderShell();toast("Agendamento salvo.");
+  }
 });
 
 /* EXCLUSÃO E AÇÕES */
 function removeRecord(type,recordId){
-  const map={client:"clients",quote:"quotes",ticket:"tickets",product:"products",order:"orders",expense:"expenses",project:"projects"};
+  const map={client:"clients",quote:"quotes",ticket:"tickets",product:"products",order:"orders",expense:"expenses",project:"projects",supplier:"suppliers",appointment:"appointments"};
   const key=map[type];
   if(!key) return;
   const item=db[key].find(x=>x.id===recordId);
@@ -990,7 +1037,9 @@ function exportAllCSV(){
       ...db.products.map(p=>["Produto/serviço",p.name,"",p.category,p.price,p.stock,""+p.createdAt]),
       ...db.orders.map(o=>[labels().orders,o.title,o.clientName,o.notes,o.value,o.status,o.date]),
       ...db.expenses.map(e=>["Despesa",e.title,"",e.category,e.value,"Pago",e.date]),
-      ...db.projects.map(p=>["Projeto",p.title,p.clientName,p.description,p.value,p.status,p.dueDate])
+      ...db.projects.map(p=>["Projeto",p.title,p.clientName,p.description,p.value,p.status,p.dueDate]),
+      ...db.suppliers.map(x=>["Fornecedor",x.name,x.contact,x.phone+" "+x.email,x.notes,"","" ]),
+      ...db.appointments.map(a=>["Agendamento",a.title,a.clientName,a.service,a.value,a.status,`${a.date||""} ${a.time||""}`])
     ]);
 }
 function backupData(){
@@ -1020,6 +1069,8 @@ function restoreData(file){
         orders:Array.isArray(incoming.orders)?incoming.orders:[],
         expenses:Array.isArray(incoming.expenses)?incoming.expenses:[],
         projects:Array.isArray(incoming.projects)?incoming.projects:[],
+        suppliers:Array.isArray(incoming.suppliers)?incoming.suppliers:[],
+        appointments:Array.isArray(incoming.appointments)?incoming.appointments:[],
         activities:Array.isArray(incoming.activities)?incoming.activities:[],
         notifications:Array.isArray(incoming.notifications)?incoming.notifications:[],
         readNotifications:Array.isArray(incoming.readNotifications)?incoming.readNotifications:[]
@@ -1082,6 +1133,7 @@ function renderSetup(){
           <p class="setup-desc">Primeiro, conte como você trabalha. Vamos adaptar o FLOW ao seu perfil.</p>
           <div class="choice-grid">
             <label class="choice"><input type="radio" name="setup-profile" value="empresa" ${draftSetup.profileType==="empresa"?"checked":""}><div class="choice-content"><div class="choice-icon">▦</div><strong>Empresa</strong><small>Para negócios, equipes, lojas e organizações.</small></div></label>
+            
             <label class="choice"><input type="radio" name="setup-profile" value="profissional" ${draftSetup.profileType==="profissional"?"checked":""}><div class="choice-content"><div class="choice-icon">♙</div><strong>Profissional</strong><small>Para freelancers e pessoas que trabalham por conta própria.</small></div></label>
           </div>
           <div class="field"><label for="setup-name">Nome da empresa ou profissional *</label><input class="input" id="setup-name" required value="${esc(draftSetup.businessName)}" placeholder="Como você quer identificar seu espaço?"></div>
@@ -1169,14 +1221,20 @@ document.addEventListener("click",function(event){
   if(action==="new-order") showOrderForm();
   if(action==="new-expense") showExpenseForm();
   if(action==="new-project") showProjectForm();
+  if(action==="new-supplier") showSupplierForm();
+  if(action==="new-appointment") showAppointmentForm();
   if(action==="edit-product") showProductForm(db.products.find(x=>x.id===recordId));
   if(action==="edit-order") showOrderForm(db.orders.find(x=>x.id===recordId));
   if(action==="edit-expense") showExpenseForm(db.expenses.find(x=>x.id===recordId));
   if(action==="edit-project") showProjectForm(db.projects.find(x=>x.id===recordId));
+  if(action==="edit-supplier") showSupplierForm(db.suppliers.find(x=>x.id===recordId));
+  if(action==="edit-appointment") showAppointmentForm(db.appointments.find(x=>x.id===recordId));
   if(action==="delete-product") removeRecord("product",recordId);
   if(action==="delete-order") removeRecord("order",recordId);
   if(action==="delete-expense") removeRecord("expense",recordId);
   if(action==="delete-project") removeRecord("project",recordId);
+  if(action==="delete-supplier") removeRecord("supplier",recordId);
+  if(action==="delete-appointment") removeRecord("appointment",recordId);
   if(action==="edit-client") showClientForm(db.clients.find(x=>x.id===recordId));
   if(action==="edit-quote") showQuoteForm(db.quotes.find(x=>x.id===recordId));
   if(action==="edit-ticket") showTicketForm(db.tickets.find(x=>x.id===recordId));
