@@ -3,285 +3,784 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#070711">
-<meta name="description" content="VELTRONIX FLOW — Plataforma inteligente de gestão empresarial.">
-<title>VELTRONIX FLOW | Plataforma de gestão</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#08080c">
+<title>VELTRONIX FLOW | Gestão inteligente</title>
 <style>
-:root{--bg:#070711;--sidebar:#080814;--panel:#0b1022;--panel2:#0d1228;--line:#1c2445;--purple:#7900ff;--purple2:#a100ff;--violet:#c24cff;--text:#f4f2ff;--muted:#9ba3c8;--soft:#c9c9f2;--green:#2ce5b5;--red:#ff4f8b;--amber:#ffc857;--radius:15px}
+:root {
+  --bg:#08080c;
+  --panel:#111117;
+  --panel2:#171720;
+  --border:#292532;
+  --purple:#a855f7;
+  --purple2:#7928ca;
+  --light:#c084fc;
+  --text:#f5f3fa;
+  --muted:#9691a5;
+  --green:#4ade80;
+  --red:#fb7185;
+  --yellow:#fbbf24;
+}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--text);font:14px Inter,system-ui,-apple-system,Segoe UI,sans-serif}
-button,input,select{font:inherit}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif;font-size:14px}
+button,input,select,textarea{font:inherit}
 button{cursor:pointer}
-button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid #bd7cff;outline-offset:3px}
-.app{min-height:100vh}
-.sidebar{position:fixed;inset:0 auto 0 0;width:280px;background:linear-gradient(180deg,#080813,#080815 70%,#090819);border-right:1px solid #1a1c3b;padding:23px 15px 17px;display:flex;flex-direction:column;z-index:20;overflow-y:auto}
-.brand{display:flex;align-items:center;gap:13px;padding:0 8px 28px}
-.brand-logo{width:51px;height:49px;display:grid;place-items:center;position:relative;flex:none}
-.brand-logo svg{width:49px;height:49px;filter:drop-shadow(0 0 10px #8c26ff66)}
-.brand-name{font-size:16px;line-height:1.2;font-weight:800;letter-spacing:.4px}
-.brand-name span{color:#a72dff}
-.brand-sub{font-size:9px;color:#c0b8e9;margin-top:7px;letter-spacing:.1px}
-.nav-label{color:#777fa8;font-size:10px;font-weight:700;letter-spacing:1.5px;padding:0 12px 12px}
-.nav{display:grid;gap:5px}
-.nav button{height:48px;border:1px solid transparent;background:transparent;color:#b8bfdc;border-radius:11px;display:flex;align-items:center;gap:13px;padding:0 13px;text-align:left;transition:.18s}
-.nav button:hover{background:#17142e;color:white}
-.nav button.active{background:linear-gradient(100deg,#5100ce,#240b72 95%);border-color:#6922ff;box-shadow:0 0 25px #5c00f522;color:white}
-.nav-icon{width:20px;height:20px;display:grid;place-items:center;color:#aab1e6;font-size:18px;flex:none}
-.nav button.active .nav-icon{color:white}
-.nav-label.system{margin-top:25px}
-.sidebar-bottom{margin-top:auto;padding-top:22px}
-.promo{border:1px solid #292052;background:linear-gradient(145deg,#171038,#0c0b1d);border-radius:13px;padding:14px 14px 15px;margin-bottom:14px}
-.promo-title{display:flex;align-items:center;gap:10px;font-weight:750;color:#d8a8ff}
-.mini-v{width:35px;height:35px;display:grid;place-items:center}
-.mini-v svg{width:34px;height:34px}
-.promo p{font-size:11px;line-height:1.65;color:#b3afd2;margin:10px 0 14px}
-.small-btn{border:1px solid #4c19c6;border-radius:9px;background:#290b70;color:#fff;padding:9px 13px;font-size:11px;font-weight:650}
-.profile{display:flex;align-items:center;gap:11px;border-top:1px solid #1d203e;padding:16px 6px 0}
-.avatar{width:42px;height:42px;display:grid;place-items:center;border-radius:13px;background:linear-gradient(135deg,#4b20a0,#210d63);color:#eee3ff;font-weight:750}
-.profile-name{font-size:12px;font-weight:650}
-.profile-role{font-size:10px;color:var(--muted);margin-top:5px}
-.profile-gear{margin-left:auto;border:0;background:transparent;color:#aeb3d6;font-size:18px}
-.main{margin-left:280px;min-height:100vh;max-width:1900px}
-.topbar{height:72px;border-bottom:1px solid #1a1d3a;display:flex;align-items:center;justify-content:space-between;padding:0 34px;gap:18px;background:#080817d9}
-.searchbox{height:39px;width:min(575px,60%);display:flex;align-items:center;gap:11px;border:1px solid #24264b;background:#0d1024;border-radius:10px;padding:0 12px;color:#aeb5d9}
-.searchbox input{border:0;outline:0;background:transparent;color:white;width:100%;min-width:0;font-size:12px}
-.searchbox input::placeholder{color:#858dbb}
-.shortcut{font-size:10px;border:1px solid #292d54;padding:3px 6px;border-radius:5px;white-space:nowrap;color:#929bc2}
-.top-actions{display:flex;align-items:center;gap:14px}
-.top-icon{width:36px;height:36px;display:grid;place-items:center;border:0;background:transparent;color:#e1e2ff;font-size:20px;position:relative}
-.notify-dot{position:absolute;right:3px;top:2px;width:14px;height:14px;border-radius:50%;background:#7b19ff;color:white;font-size:8px;display:grid;place-items:center}
-.theme-btn{width:36px;height:36px;border:1px solid #1e2347;border-radius:50%;background:#0d1024;color:#e5ddff;font-size:17px}
-.account{display:flex;align-items:center;gap:10px;min-width:145px}
-.account .avatar{width:36px;height:36px;border-radius:50%;font-size:12px}
-.account-name{font-size:12px;font-weight:600}
-.account-sub{font-size:10px;color:var(--muted);margin-top:4px}
-.chevron{color:#adb4d6;margin-left:4px}
-.content{padding:28px 38px 27px;max-width:1600px;margin:auto}
-.welcome{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:22px}
-.welcome-kicker{font-size:13px;color:#d3d1f2;margin-bottom:8px}
-.welcome h1{font-size:27px;letter-spacing:-.8px;margin:0;font-weight:750}
-.welcome p{font-size:13px;color:#aeb5db;margin:9px 0 0}
-.welcome-actions{display:flex;gap:12px;align-items:center}
-.select-control{height:45px;border:1px solid #1e2448;border-radius:10px;background:#0d1126;color:#d5d8f5;padding:0 13px;font-size:11px;min-width:180px}
-.primary{height:45px;border:0;border-radius:10px;background:linear-gradient(110deg,#8b10ff,#5d00df);color:white;padding:0 21px;font-weight:650;box-shadow:0 7px 24px #6d00e92b;white-space:nowrap}
-.primary:hover{filter:brightness(1.15)}
-.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-bottom:18px}
-.metric{min-height:132px;border:1px solid #1c2446;border-radius:14px;background:linear-gradient(135deg,#0d1329,#090d1e);padding:17px 18px;position:relative;overflow:hidden}
-.metric:after{content:"";position:absolute;width:100px;height:100px;border-radius:50%;right:-45px;top:-55px;background:#7227ff0b;filter:blur(5px)}
-.metric-top{display:flex;align-items:center;gap:12px}
-.metric-icon{width:48px;height:48px;border-radius:13px;display:grid;place-items:center;font-size:21px;background:#39207a;color:#cdb5ff;flex:none}
-.metric:nth-child(2) .metric-icon{background:#351078;color:#d7b4ff}
-.metric:nth-child(3) .metric-icon{background:#4b1654;color:#f5a6ff}
-.metric:nth-child(4) .metric-icon{background:#152a75;color:#8de6ff}
-.metric-label{font-size:12px;color:#d1d4f3}
-.metric-value{font-size:23px;font-weight:750;letter-spacing:-.4px;margin:8px 0 6px 60px}
-.metric-bottom{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-left:60px;font-size:10px;color:#969fc8}
-.trend{font-size:10px;border-radius:6px;padding:4px 6px;background:#063c3a;color:#42f2c7;white-space:nowrap}
-.trend.down{background:#46142d;color:#ff7ca9}
-.mid-grid{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(290px,.9fr);gap:18px;margin-bottom:17px}
-.panel{background:linear-gradient(145deg,#0b1022,#090d1d);border:1px solid #1d2547;border-radius:15px;padding:20px;min-width:0}
-.panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:18px}
-.panel h2{font-size:15px;margin:0;font-weight:700}
-.panel-sub{font-size:12px;color:#a4add2;margin-top:8px}
-.panel-select{height:36px;max-width:145px;min-width:125px;border:1px solid #20264a;background:#0e1328;border-radius:9px;color:#d0d5f5;font-size:10px;padding:0 10px}
-.chart-wrap{height:245px;position:relative}
-.chart-wrap svg{width:100%;height:100%;overflow:visible}
-.gridline{stroke:#202746;stroke-width:1}
-.axis-label{fill:#a4add0;font-size:10px}
-.line-chart{fill:none;stroke:#c144ff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 5px #a500ff70)}
-.area-chart{fill:url(#areaFill)}
-.chart-legend{display:flex;align-items:center;gap:9px;color:#b5b9da;font-size:11px;margin-top:5px}
-.legend-dot{width:10px;height:10px;border-radius:50%;background:#a120ff}
-.tooltip{position:absolute;left:52%;top:4px;background:#10152c;border:1px solid #2b315c;border-radius:9px;padding:8px 11px;font-size:10px;line-height:1.7;box-shadow:0 8px 25px #0005}
-.activity-list{display:grid}
-.activity{display:flex;align-items:flex-start;gap:11px;padding:11px 0;border-bottom:1px solid #1c2341}
-.activity:first-child{padding-top:0}
-.activity:last-child{border:0;padding-bottom:0}
-.activity-icon{width:35px;height:35px;border-radius:50%;display:grid;place-items:center;flex:none;background:#351274;color:#d9b8ff;font-size:14px}
-.activity:nth-child(2) .activity-icon{background:#06443f;color:#8df8df}
-.activity:nth-child(3) .activity-icon{background:#251477;color:#c6b3ff}
-.activity:nth-child(4) .activity-icon{background:#132f7a;color:#9fdcff}
-.activity:nth-child(5) .activity-icon{background:#07423e;color:#9ff8e3}
-.activity-copy{min-width:0;flex:1}
-.activity-title{font-size:11px;font-weight:600;line-height:1.5}
-.activity-detail{font-size:10px;color:#9da7d0;line-height:1.5;margin-top:2px}
-.activity-time{font-size:10px;color:#8d96c2;white-space:nowrap;margin-top:5px}
-.bottom-grid{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(290px,.9fr);gap:18px}
-.table-panel{padding:17px 19px}
-.table-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}
-.view-all{border:0;background:transparent;color:#b84dff;font-size:11px;white-space:nowrap}
-.table-scroll{overflow:auto}
-table{border-collapse:collapse;width:100%;text-align:left;white-space:nowrap}
-thead{background:#10142a}
-th{padding:12px 10px;font-size:10px;font-weight:500;color:#aeb6da;border-top:1px solid #1b2242;border-bottom:1px solid #1b2242}
-td{padding:11px 10px;font-size:10px;color:#d8dcf5;border-bottom:1px solid #1a2140}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--light);outline-offset:2px}
+.app{display:flex;min-height:100vh}
+.sidebar{width:245px;background:#0d0c12;border-right:1px solid var(--border);padding:24px 15px;position:fixed;inset:0 auto 0 0;z-index:10;display:flex;flex-direction:column;overflow-y:auto}
+.brand{display:flex;align-items:center;gap:12px;padding:0 9px 26px}
+.brand-logo{width:42px;height:42px;display:grid;place-items:center;border-radius:13px;background:linear-gradient(135deg,var(--purple),var(--purple2));font-size:21px;font-weight:900;box-shadow:0 0 22px #a855f72b}
+.brand strong{display:block;letter-spacing:1px;font-size:14px}
+.brand small{display:block;color:var(--light);font-size:10px;letter-spacing:3px;margin-top:5px}
+.nav-label{font-size:10px;color:var(--muted);letter-spacing:2px;padding:14px 11px 9px}
+.nav{display:flex;flex-direction:column;gap:5px}
+.nav button{background:transparent;border:0;color:var(--muted);text-align:left;border-radius:9px;padding:12px 13px;display:flex;align-items:center;gap:12px}
+.nav button:hover,.nav button.active{background:#a855f71b;color:var(--light)}
+.nav button.active{box-shadow:inset 3px 0 var(--purple)}
+.nav-icon{width:20px;text-align:center;font-size:17px}
+.nav .tag{margin-left:auto;font-size:9px;background:#292532;padding:4px 6px;border-radius:5px}
+.sidebar-bottom{margin-top:auto;padding-top:24px}
+.profile{display:flex;align-items:center;gap:10px;border-top:1px solid var(--border);padding:18px 5px 0}
+.avatar{width:36px;height:36px;background:#301b48;border-radius:50%;display:grid;place-items:center;color:var(--light);font-weight:bold}
+.profile small{color:var(--muted);display:block;margin-top:4px}
+.main{margin-left:245px;width:calc(100% - 245px);min-width:0}
+.topbar{height:75px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;border-bottom:1px solid var(--border);background:#0c0b11;position:sticky;top:0;z-index:5;gap:15px}
+.top-left{display:flex;align-items:center;gap:12px;min-width:0}
+.topbar h2{font-size:17px;margin:0}
+.topbar p{font-size:11px;color:var(--muted);margin:5px 0 0}
+.top-actions{display:flex;align-items:center;gap:9px}
+.content{padding:30px;max-width:1600px;margin:auto}
+.page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;margin-bottom:24px}
+h1{font-size:26px;letter-spacing:-.6px;margin:0 0 8px}
+.subtitle{color:var(--muted);margin:0;line-height:1.6}
+.btn{border:1px solid var(--border);border-radius:9px;padding:10px 14px;background:var(--panel2);color:var(--text);display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn:hover{border-color:var(--purple);filter:brightness(1.1)}
+.btn.primary{background:linear-gradient(110deg,var(--purple2),var(--purple));border-color:transparent;color:white;font-weight:600}
+.btn.danger{color:var(--red)}
+.btn.small{padding:7px 10px;font-size:12px}
+.icon-btn{width:39px;height:39px;border:1px solid var(--border);border-radius:10px;background:var(--panel);color:var(--text);position:relative}
+.dot{position:absolute;right:8px;top:7px;width:7px;height:7px;background:var(--purple);border-radius:50%}
+.grid{display:grid;gap:16px}
+.stats{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:22px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:20px;min-width:0}
+.stat-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.stat-label{color:var(--muted);font-size:12px}
+.stat-icon{width:37px;height:37px;border-radius:10px;background:#a855f71b;color:var(--light);display:grid;place-items:center;font-size:18px}
+.stat-number{font-size:29px;font-weight:750;letter-spacing:-1px;margin:18px 0 8px;overflow-wrap:anywhere}
+.stat-foot{font-size:11px;color:var(--muted)}
+.stat-foot strong{color:var(--light)}
+.columns{grid-template-columns:minmax(0,1.3fr) minmax(260px,1fr)}
+.card-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:19px}
+.card-title h3{font-size:15px;margin:0}
+.card-title p{font-size:11px;color:var(--muted);margin:5px 0 0}
+.text-link{background:none;border:0;color:var(--light);font-size:12px}
+.empty{text-align:center;padding:32px 12px;color:var(--muted);line-height:1.8}
+.empty .big{font-size:30px;margin-bottom:8px}
+.activity{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.activity:last-child{border-bottom:0}
+.activity-dot{width:9px;height:9px;flex-shrink:0;background:var(--purple);border-radius:50%;margin-top:5px}
+.activity p{margin:0;line-height:1.5;overflow-wrap:anywhere}
+.activity small{color:var(--muted);display:block;margin-top:5px}
+.progress-row{margin:19px 0}
+.progress-info{display:flex;justify-content:space-between;gap:10px;font-size:12px;margin-bottom:9px}
+.progress-info span:last-child{color:var(--muted)}
+.progress{height:6px;background:#282431;border-radius:9px;overflow:hidden}
+.progress div{height:100%;background:linear-gradient(90deg,var(--purple2),var(--light));border-radius:9px}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:17px}
+.search{flex:1;min-width:180px;position:relative}
+.search input{width:100%;padding-left:37px}
+.search:before{content:"⌕";position:absolute;left:13px;top:7px;font-size:23px;color:var(--muted)}
+input,select,textarea{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:11px 12px;border-radius:8px;min-width:0}
+input::placeholder,textarea::placeholder{color:#6f6a7b}
+select option{background:var(--panel)}
+textarea{resize:vertical;min-height:85px}
+.table-wrap{width:100%;overflow-x:auto}
+table{width:100%;border-collapse:collapse;white-space:nowrap}
+th{text-align:left;font-size:10px;color:var(--muted);font-weight:600;letter-spacing:1px;padding:13px 12px;border-bottom:1px solid var(--border)}
+td{padding:15px 12px;border-bottom:1px solid #25222d;font-size:12px}
 tbody tr:last-child td{border-bottom:0}
-tbody tr:hover{background:#ffffff05}
-.client{display:flex;align-items:center;gap:9px}
-.client-avatar{width:30px;height:30px;display:grid;place-items:center;border-radius:9px;background:#2a1859;color:#d9c3ff;font-weight:700}
-.client-name{font-size:11px;font-weight:600}
-.client-email{font-size:9px;color:#929bc2;margin-top:4px}
-.status{display:inline-flex;align-items:center;gap:6px;padding:6px 8px;border-radius:7px;font-size:9px}
-.status:before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
-.status.pending{background:#493817;color:#ffd779}
-.status.review{background:#2e1b61;color:#d5b3ff}
-.status.approved{background:#073d36;color:#69edcf}
-.status.rejected{background:#48172d;color:#ff8db3}
+tbody tr:hover{background:#ffffff04}
+.person{display:flex;align-items:center;gap:10px}
+.mini-avatar{width:32px;height:32px;border-radius:9px;background:#301b48;color:var(--light);display:grid;place-items:center;font-weight:bold}
+.muted{color:var(--muted)}
+.badge{display:inline-flex;align-items:center;border-radius:6px;padding:5px 8px;font-size:10px;background:#a855f71b;color:var(--light);white-space:nowrap}
+.badge.green{background:#4ade8017;color:var(--green)}
+.badge.red{background:#fb718517;color:var(--red)}
+.badge.yellow{background:#fbbf2417;color:var(--yellow)}
 .row-actions{display:flex;gap:5px}
-.row-actions button{border:1px solid #25294e;background:#11152b;color:#bdc2e6;border-radius:7px;padding:6px 8px;font-size:10px}
-.quick-list{display:grid;gap:11px}
-.quick-item{display:flex;align-items:center;gap:12px;border:1px solid #20264a;border-radius:11px;padding:12px;background:#0c1124}
-.quick-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:11px;background:#2c155e;color:#d6b7ff;font-size:17px}
-.quick-copy{flex:1;min-width:0}
-.quick-title{font-size:11px;font-weight:650}
-.quick-detail{font-size:10px;color:#a0a8ce;margin-top:4px}
-.quick-arrow{color:#bcb6e9;font-size:17px}
-footer{padding:22px 38px 30px;text-align:center;color:#747da5;font-size:10px}
-footer strong{color:#bca3f8}
-.dialog{width:min(540px,calc(100% - 28px));max-height:88vh;overflow:auto;border:1px solid #2b2a55;border-radius:17px;padding:0;background:#0b0e20;color:#f4f2ff;box-shadow:0 25px 90px #0009}
-.dialog::backdrop{background:#02020bc9;backdrop-filter:blur(5px)}
-.dialog-head{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;padding:21px 22px;border-bottom:1px solid #252749}
-.dialog-head h2{font-size:17px;margin:0}
-.dialog-head p{font-size:11px;color:#9ea7cf;margin:7px 0 0;line-height:1.5}
-.close-dialog{border:1px solid #2b3054;background:#11152b;color:#c7c9e8;border-radius:8px;width:31px;height:31px}
-.dialog-body{padding:21px 22px}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.field{display:grid;gap:7px;min-width:0}
+.row-actions button{background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:6px;padding:6px 8px}
+.row-actions button:hover{color:var(--light);border-color:var(--purple)}
+.amount{font-weight:700}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.field{display:flex;flex-direction:column;gap:7px;min-width:0}
+.field label{font-size:12px;color:#c5bfd1}
 .field.full{grid-column:1/-1}
-.field label{font-size:11px;color:#c7c9e8;font-weight:600}
-.field input,.field select{width:100%;height:42px;border:1px solid #292e55;border-radius:9px;background:#090d1e;color:#f4f2ff;padding:0 11px;min-width:0}
-.dialog-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
-.secondary{height:41px;border:1px solid #292e55;border-radius:9px;background:#10142a;color:#c9cbed;padding:0 15px}
-.dialog .primary{height:41px}
-.module-list{display:grid;gap:10px}
-.module-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px;border:1px solid #25294d;border-radius:10px;background:#0e1226}
-.module-row strong{font-size:12px;display:block}
-.module-row small{font-size:10px;color:#9da6cc;display:block;margin-top:5px;line-height:1.5}
-.module-row button{border:1px solid #37315e;background:#1a1435;color:#dfc9ff;border-radius:8px;padding:7px 10px;font-size:10px;white-space:nowrap}
-.toast{position:fixed;bottom:22px;right:22px;z-index:99;background:#17132b;border:1px solid #5933a2;border-radius:11px;color:#f6edff;padding:13px 16px;box-shadow:0 12px 40px #0007;max-width:min(400px,calc(100% - 32px));font-size:12px;opacity:0;transform:translateY(10px);pointer-events:none;transition:.2s}
-.toast.show{opacity:1;transform:translateY(0)}
+.form-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:23px}
+.section-note{border:1px solid #a855f744;background:#a855f70b;padding:14px;border-radius:10px;color:#cbb4e7;line-height:1.6;font-size:12px;margin-bottom:18px}
+.settings-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.setting-row{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:15px 0;border-bottom:1px solid var(--border)}
+.setting-row:last-child{border:0}
+.setting-row p{margin:5px 0 0;color:var(--muted);font-size:12px;line-height:1.5}
+.switch{width:42px;height:24px;position:relative;flex-shrink:0}
+.switch input{opacity:0;width:0;height:0}
+.switch span{position:absolute;inset:0;border-radius:20px;background:#393441;cursor:pointer}
+.switch span:before{content:"";position:absolute;left:3px;top:3px;width:18px;height:18px;background:white;border-radius:50%;transition:.2s}
+.switch input:checked+span{background:var(--purple)}
+.switch input:checked+span:before{transform:translateX(18px)}
+.theme-options{display:flex;gap:10px;flex-wrap:wrap;margin-top:13px}
+.theme-swatch{border:2px solid transparent;border-radius:12px;padding:8px;background:#171720;color:white;min-width:100px}
+.theme-swatch.active{border-color:var(--light)}
+.swatch-color{height:35px;border-radius:6px;margin-bottom:8px}
+.notice-list{display:grid;gap:10px}
+.notice{padding:14px;border:1px solid var(--border);border-radius:10px;display:flex;gap:12px;align-items:flex-start}
+.notice p{margin:0;line-height:1.5}
+.notice small{display:block;color:var(--muted);margin-top:6px}
+.chart{display:flex;align-items:flex-end;gap:10px;height:200px;padding-top:20px}
+.chart-col{flex:1;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:8px}
+.chart-bar{width:min(42px,90%);min-height:3px;background:linear-gradient(0deg,var(--purple2),var(--light));border-radius:6px 6px 2px 2px}
+.chart-label{font-size:10px;color:var(--muted)}
+.chart-value{font-size:10px;color:var(--light)}
+.kpi{font-size:25px;font-weight:bold;margin:8px 0}
+.overlay{position:fixed;inset:0;background:#000b;z-index:30;display:flex;align-items:center;justify-content:center;padding:16px;overflow-y:auto}
+.modal{width:min(650px,100%);max-height:calc(100vh - 32px);overflow-y:auto;background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:24px}
+.modal-head{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:22px}
+.modal-head h3{font-size:19px;margin:0}
+.close{background:none;border:0;color:var(--muted);font-size:25px}
+.toast-stack{position:fixed;right:20px;bottom:20px;z-index:50;display:grid;gap:9px;width:min(360px,calc(100vw - 40px))}
+.toast{background:var(--panel2);border:1px solid var(--border);border-left:3px solid var(--purple);padding:14px;border-radius:10px;box-shadow:0 10px 35px #0008;line-height:1.5;animation:slide .2s ease}
+.toast.error{border-left-color:var(--red)}
+.toast.success{border-left-color:var(--green)}
+@keyframes slide{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .menu-toggle{display:none}
-.overlay{display:none}
-.empty-state{padding:25px 12px;text-align:center;color:#9ca5cd;font-size:12px}
-@media(max-width:1200px){.sidebar{width:245px}.main{margin-left:245px}.content{padding:25px 23px}.topbar{padding:0 23px}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.mid-grid,.bottom-grid{grid-template-columns:minmax(0,1fr)}}
-@media(max-width:760px){.sidebar{width:280px;transform:translateX(-102%);transition:transform .22s;box-shadow:none}.sidebar.open{transform:translateX(0);box-shadow:20px 0 60px #0008}.main{margin-left:0}.topbar{height:65px;padding:0 15px;gap:10px}.menu-toggle{display:grid;width:35px;height:35px;place-items:center;background:#11132a;border:1px solid #28264d;color:white;border-radius:9px;flex:none}.searchbox{width:auto;flex:1;min-width:0}.shortcut{display:none}.top-actions{gap:4px}.account{display:none}.content{padding:22px 14px}.welcome{align-items:flex-start;flex-direction:column}.welcome h1{font-size:24px}.welcome-actions{width:100%;flex-wrap:wrap}.select-control{flex:1;min-width:140px}.metrics{gap:10px}.metric{padding:13px;min-height:125px}.metric-value{font-size:20px;margin-left:0}.metric-bottom{margin-left:0;flex-wrap:wrap}.metric-top{align-items:flex-start;flex-direction:column;gap:7px}.metric-icon{width:36px;height:36px;font-size:17px;border-radius:10px}.metric-label{font-size:11px}.panel{padding:15px}.panel-head{flex-wrap:wrap}.chart-wrap{height:200px}.bottom-grid{gap:12px}.table-panel{padding:13px}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.dialog-head,.dialog-body{padding:17px}.overlay.show{display:block;position:fixed;inset:0;background:#02020bc9;z-index:19}footer{padding:20px 12px}.toast{right:12px;bottom:12px}}
-@media(max-width:380px){.metrics{grid-template-columns:1fr}.metric{min-height:100px}.metric-top{flex-direction:row;align-items:center}.metric-value{margin-left:48px}.metric-bottom{margin-left:48px}.welcome-actions .primary{flex:1}}
+.footer-note{font-size:11px;color:var(--muted);text-align:center;padding:24px 0 4px}
+@media(max-width:1100px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.content{padding:23px}.topbar{padding:0 22px}}
+@media(max-width:760px){
+ .sidebar{transform:translateX(-100%);transition:transform .25s;width:260px;box-shadow:none}
+ .sidebar.open{transform:translateX(0);box-shadow:20px 0 60px #0009}
+ .main{margin-left:0;width:100%}
+ .topbar{height:68px;padding:0 15px}
+ .menu-toggle{display:inline-block}
+ .content{padding:20px 14px}
+ .page-head{flex-direction:column;align-items:stretch}
+ .page-head>.btn{align-self:flex-start}
+ .columns,.settings-grid{grid-template-columns:1fr}
+ .stats{gap:10px}
+ .card{padding:15px}
+ .stat-number{font-size:24px}
+ .topbar p{display:none}
+ .form-grid{grid-template-columns:1fr}
+ .field.full{grid-column:auto}
+ .modal{padding:18px}
+ .top-actions .hide-mobile{display:none}
+}
+@media(max-width:390px){.stats{grid-template-columns:1fr}.topbar h2{font-size:14px}}
 </style>
 </head>
 <body>
 <div class="app">
 <aside class="sidebar" id="sidebar">
   <div class="brand">
-    <div class="brand-logo" aria-hidden="true">
-      <svg viewBox="0 0 60 60" fill="none">
-        <path d="M30 3 54 16.5V43.5L30 57 6 43.5V16.5L30 3Z" stroke="#9A38FF" stroke-width="2"/>
-        <path d="M17 18H43L28 31H42L20 45L28 34H17L32 22H17V18Z" fill="#C77BFF"/>
-      </svg>
-    </div>
-    <div>
-      <div class="brand-name">VELTRONIX <span>FLOW</span></div>
-      <div class="brand-sub">GESTÃO INTELIGENTE</div>
-    </div>
+    <div class="brand-logo">V</div>
+    <div><strong>VELTRONIX</strong><small>F L O W</small></div>
   </div>
   <div class="nav-label">MENU PRINCIPAL</div>
-  <nav class="nav" aria-label="Menu principal">
-    <button class="active" data-page="dashboard"><span class="nav-icon">◈</span>Dashboard</button>
-    <button data-page="clients"><span class="nav-icon">♙</span>Clientes</button>
-    <button data-page="quotes"><span class="nav-icon">▤</span>Orçamentos</button>
-    <button data-page="attendances"><span class="nav-icon">◷</span>Atendimentos</button>
-    <button data-page="assistant"><span class="nav-icon">✧</span>Assistente IA <span style="margin-left:auto;font-size:9px;color:#d1a7ff">MANUTENÇÃO</span></button>
-    <button data-page="reports"><span class="nav-icon">▥</span>Relatórios</button>
+  <nav class="nav" id="nav">
+    <button class="active" data-page="dashboard"><span class="nav-icon">◫</span>Dashboard</button>
+    <button data-page="clientes"><span class="nav-icon">♙</span>Clientes</button>
+    <button data-page="orcamentos"><span class="nav-icon">▤</span>Orçamentos</button>
+    <button data-page="atendimentos"><span class="nav-icon">◉</span>Atendimentos</button>
+    <button data-page="assistente"><span class="nav-icon">✧</span>Assistente IA <span class="tag">EM BREVE</span></button>
+    <button data-page="relatorios"><span class="nav-icon">▥</span>Relatórios</button>
   </nav>
-  <div class="nav-label system">SISTEMA</div>
-  <nav class="nav" aria-label="Configurações">
-    <button data-page="settings"><span class="nav-icon">⚙</span>Configurações</button>
+  <div class="nav-label">SISTEMA</div>
+  <nav class="nav">
+    <button data-page="notificacoes"><span class="nav-icon">♧</span>Notificações <span id="nav-badge" class="tag" hidden>0</span></button>
+    <button data-page="configuracoes"><span class="nav-icon">⚙</span>Configurações</button>
   </nav>
   <div class="sidebar-bottom">
-    <div class="promo">
-      <div class="promo-title">
-        <div class="mini-v">
-          <svg viewBox="0 0 40 40" fill="none"><path d="M20 2 37 11.5V28.5L20 38 3 28.5V11.5L20 2Z" stroke="#A855F7" stroke-width="1.5"/><path d="M12 12H29L18 21H28L13 30L19 23H11L22 15H12V12Z" fill="#D6B4FF"/></svg>
-        </div>
-        <span>Seu negócio, em fluxo.</span>
-      </div>
-      <p>Organize clientes, acompanhe orçamentos e mantenha os atendimentos em ordem.</p>
-      <button class="small-btn" data-page="settings">Personalizar painel ↗</button>
-    </div>
     <div class="profile">
       <div class="avatar">VF</div>
-      <div><div class="profile-name" id="sidebarBusiness">Meu negócio</div><div class="profile-role">Administrador local</div></div>
-      <button class="profile-gear" data-page="settings" aria-label="Configurações">⚙</button>
+      <div><strong>Administrador</strong><small>Ambiente local</small></div>
     </div>
   </div>
 </aside>
-<div class="overlay" id="overlay"></div>
+
 <main class="main">
-  <header class="topbar">
-    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
-    <label class="searchbox"><span>⌕</span><input id="globalSearch" type="search" placeholder="Pesquisar orçamentos..." aria-label="Pesquisar"></label>
-    <div class="top-actions">
-      <button class="top-icon" id="notifications" aria-label="Notificações">♧<span class="notify-dot" id="notifyCount">0</span></button>
-      <button class="theme-btn" id="themeButton" aria-label="Personalizar tema">◐</button>
-      <div class="account"><div class="avatar">VF</div><div><div class="account-name" id="topBusiness">Meu negócio</div><div class="account-sub">Plano inicial</div></div><span class="chevron">⌄</span></div>
-    </div>
-  </header>
-  <section class="content">
-    <div class="welcome">
-      <div><div class="welcome-kicker">PAINEL DE CONTROLE / <span style="color:#bd69ff">VISÃO GERAL</span></div><h1>Visão geral do negócio</h1><p>Acompanhe as informações e mantenha tudo organizado em um só lugar.</p></div>
-      <div class="welcome-actions">
-        <select class="select-control" id="dateRange" aria-label="Período do painel"><option value="7">▦ Últimos 7 dias</option><option value="30" selected>▦ Últimos 30 dias</option><option value="90">▦ Últimos 90 dias</option></select>
-        <button class="primary" id="newQuote">＋ Novo orçamento</button>
-      </div>
-    </div>
-    <div class="metrics">
-      <article class="metric"><div class="metric-top"><div class="metric-icon">▤</div><div class="metric-label">Orçamentos cadastrados</div></div><div class="metric-value" id="metricQuotes">0</div><div class="metric-bottom"><span>Total registrado</span><span class="trend">Atualizado</span></div></article>
-      <article class="metric"><div class="metric-top"><div class="metric-icon">♙</div><div class="metric-label">Clientes cadastrados</div></div><div class="metric-value" id="metricClients">0</div><div class="metric-bottom"><span>Registros locais</span><span class="trend">Atualizado</span></div></article>
-      <article class="metric"><div class="metric-top"><div class="metric-icon">◷</div><div class="metric-label">Em acompanhamento</div></div><div class="metric-value" id="metricPending">0</div><div class="metric-bottom"><span>Orçamentos não aprovados</span><span class="trend down">Acompanhar</span></div></article>
-      <article class="metric"><div class="metric-top"><div class="metric-icon">R$</div><div class="metric-label">Valor aprovado</div></div><div class="metric-value" id="metricRevenue">R$ 0,00</div><div class="metric-bottom"><span>Soma dos aprovados</span><span class="trend">Atualizado</span></div></article>
-    </div>
-    <div class="mid-grid">
-      <section class="panel">
-        <div class="panel-head"><div><h2>Visão financeira</h2><div class="panel-sub">Valores dos orçamentos cadastrados</div></div><select class="panel-select" id="chartRange" aria-label="Período do gráfico"><option value="7">Últimos 7 dias</option><option value="30" selected>Últimos 30 dias</option><option value="90">Últimos 90 dias</option></select></div>
-        <div class="chart-wrap">
-          <svg viewBox="0 0 620 230" role="img" aria-label="Gráfico ilustrativo de acompanhamento">
-            <defs><linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#a120ff" stop-opacity=".3"/><stop offset="100%" stop-color="#a120ff" stop-opacity="0"/></linearGradient></defs>
-            <line class="gridline" x1="40" y1="25" x2="610" y2="25"/><line class="gridline" x1="40" y1="70" x2="610" y2="70"/><line class="gridline" x1="40" y1="115" x2="610" y2="115"/><line class="gridline" x1="40" y1="160" x2="610" y2="160"/><line class="gridline" x1="40" y1="205" x2="610" y2="205"/>
-            <text class="axis-label" x="3" y="29">100%</text><text class="axis-label" x="9" y="74">75%</text><text class="axis-label" x="9" y="119">50%</text><text class="axis-label" x="9" y="164">25%</text><text class="axis-label" x="17" y="209">0%</text>
-            <path class="area-chart" d="M40 175 C75 165 85 130 120 140 S175 160 205 120 S260 135 290 100 S345 125 380 80 S440 105 470 68 S530 95 560 48 S590 62 610 35 L610 205 L40 205Z"/>
-            <path class="line-chart" d="M40 175 C75 165 85 130 120 140 S175 160 205 120 S260 135 290 100 S345 125 380 80 S440 105 470 68 S530 95 560 48 S590 62 610 35"/>
-            <text class="axis-label" id="axisStart" x="40" y="225">01/01</text><text class="axis-label" id="axisMid1" x="210" y="225">08/01</text><text class="axis-label" id="axisMid2" x="365" y="225">15/01</text><text class="axis-label" id="axisMid3" x="480" y="225">22/01</text><text class="axis-label" id="axisEnd" x="575" y="225">30/01</text>
-          </svg>
-        </div>
-        <div class="chart-legend"><span class="legend-dot"></span><span>Indicador visual de período</span></div>
-      </section>
-      <section class="panel">
-        <div class="panel-head"><div><h2>Atividade recente</h2><div class="panel-sub">Últimos registros do painel</div></div></div>
-        <div class="activity-list" id="activityList"><div class="empty-state">Nenhuma atividade registrada.</div></div>
-      </section>
-    </div>
-    <div class="bottom-grid">
-      <section class="panel table-panel">
-        <div class="table-head"><div><h2>Orçamentos recentes</h2><div class="panel-sub">Acompanhe os registros e seus status.</div></div><button class="view-all" data-page="quotes">Ver todos ↗</button></div>
-        <div class="table-scroll"><table><thead><tr><th>CLIENTE</th><th>SERVIÇO</th><th>VALOR</th><th>STATUS</th><th>AÇÕES</th></tr></thead><tbody id="quotesTable"><tr><td colspan="5" class="empty-state">Nenhum orçamento cadastrado.</td></tr></tbody></table></div>
-      </section>
-      <section class="panel">
-        <div class="panel-head"><div><h2>Acesso rápido</h2><div class="panel-sub">Gerencie suas atividades</div></div></div>
-        <div class="quick-list">
-          <button class="quick-item" data-page="clients"><span class="quick-icon">♙</span><span class="quick-copy"><span class="quick-title">Clientes</span><span class="quick-detail">Cadastrar e organizar contatos</span></span><span class="quick-arrow">›</span></button>
-          <button class="quick-item" data-page="quotes"><span class="quick-icon">▤</span><span class="quick-copy"><span class="quick-title">Orçamentos</span><span class="quick-detail">Criar e acompanhar propostas</span></span><span class="quick-arrow">›</span></button>
-          <button class="quick-item" data-page="attendances"><span class="quick-icon">◷</span><span class="quick-copy"><span class="quick-title">Atendimentos</span><span class="quick-detail">Organizar solicitações</span></span><span class="quick-arrow">›</span></button>
-          <button class="quick-item" data-page="reports"><span class="quick-icon">▥</span><span class="quick-copy"><span class="quick-title">Relatórios</span><span class="quick-detail">Consultar os dados registrados</span></span><span class="quick-arrow">›</span></button>
-        </div>
-      </section>
-    </div>
-  </section>
-  <footer>Desenvolvido com <strong>VELTRONIX FLOW</strong> · Seus dados ficam neste navegador nesta versão.</footer>
+<header class="topbar">
+  <div class="top-left">
+    <button class="icon-btn menu-toggle" id="menu-toggle" aria-label="Abrir menu">☰</button>
+    <div><h2 id="top-title">Dashboard</h2><p id="top-subtitle">Visão geral da sua operação</p></div>
+  </div>
+  <div class="top-actions">
+    <button class="icon-btn" id="top-notifications" aria-label="Notificações">♧<span id="top-dot" class="dot" hidden></span></button>
+    <button class="btn primary hide-mobile" id="quick-quote">＋ Novo orçamento</button>
+  </div>
+</header>
+<div class="content" id="content"></div>
 </main>
 </div>
+<div id="modal-root"></div>
+<div id="toast-stack" class="toast-stack" aria-live="polite"></div>
 
-  
+<script>
+(function(){
+"use strict";
+
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const STORE = "veltronix_flow_v3";
+const pageInfo = {
+ dashboard:["Dashboard","Visão geral da sua operação"],
+ clientes:["Clientes","Gerencie seus relacionamentos comerciais"],
+ orcamentos:["Orçamentos","Organize propostas e oportunidades"],
+ atendimentos:["Atendimentos","Acompanhe solicitações e tarefas"],
+ assistente:["Assistente IA","Central de assistência inteligente"],
+ relatorios:["Relatórios","Acompanhe os dados da sua operação"],
+ notificacoes:["Notificações","Avisos e atividades recentes"],
+ configuracoes:["Configurações","Personalize sua experiência"]
+};
+const initial = {
+ clients:[], quotes:[], tickets:[], activities:[], notifications:[],
+ settings:{theme:"purple",compact:false,confirmDelete:true,notify:true},
+ readNotifications:0
+};
+let db = load();
+let currentPage = "dashboard";
+let modalReturnPage = null;
+
+function load(){
+ try{
+  const raw=localStorage.getItem(STORE);
+  if(!raw)return structuredClone(initial);
+  const saved=JSON.parse(raw);
+  return {...structuredClone(initial),...saved,
+   clients:Array.isArray(saved.clients)?saved.clients:[],
+   quotes:Array.isArray(saved.quotes)?saved.quotes:[],
+   tickets:Array.isArray(saved.tickets)?saved.tickets:[],
+   activities:Array.isArray(saved.activities)?saved.activities:[],
+   notifications:Array.isArray(saved.notifications)?saved.notifications:[],
+   settings:{...initial.settings,...saved.settings}};
+ }catch(e){return structuredClone(initial)}
+}
+function save(){
+ try{
+  localStorage.setItem(STORE,JSON.stringify(db));
+  return true;
+ }catch(e){
+  toast("Não foi possível salvar os dados. Verifique o armazenamento do navegador.","error");
+  return false;
+ }
+}
+function esc(v){
+ return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function money(n){
+ return Number(n||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+}
+function dateNow(){return new Date().toISOString()}
+function dateBR(v){
+ if(!v)return "—";
+ const d=new Date(v.length===10?v+"T12:00:00":v);
+ return isNaN(d)?"—":d.toLocaleDateString("pt-BR");
+}
+function shortDate(v){
+ if(!v)return "";
+ const d=new Date(v);
+ return isNaN(d)?"":d.toLocaleDateString("pt-BR",{day:"2-digit",month:"short"});
+}
+function id(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function initials(s){
+ return String(s||"?").trim().split(/\s+/).slice(0,2).map(x=>x[0]||"").join("").toUpperCase();
+}
+function toast(message,type="success"){
+ const el=document.createElement("div");
+ el.className="toast "+type;
+ el.textContent=message;
+ $("#toast-stack").append(el);
+ setTimeout(()=>el.remove(),3600);
+}
+function logActivity(message){
+ db.activities.unshift({id:id(),message,at:dateNow()});
+ db.activities=db.activities.slice(0,60);
+}
+function notify(title,message){
+ if(db.settings.notify){
+  db.notifications.unshift({id:id(),title,message,at:dateNow(),read:false});
+  db.notifications=db.notifications.slice(0,80);
+ }
+}
+function commit(message,notice=true){
+ logActivity(message);
+ if(notice)notify("Atualização",message);
+ save();
+ render();
+}
+function confirmAction(message){
+ return !db.settings.confirmDelete||window.confirm(message);
+}
+function statusBadge(status){
+ const map={
+  "Novo":"yellow","Em negociação":"", "Aprovado":"green",
+  "Recusado":"red","Concluído":"green","Pendente":"yellow",
+  "Em andamento":"","Aguardando":"yellow","Resolvido":"green",
+  "Cancelado":"red","Enviado":""
+ };
+ return `<span class="badge ${map[status]||""}">${esc(status||"—")}</span>`;
+}
+function clientName(clientId){
+ return db.clients.find(c=>c.id===clientId)?.name||"Cliente removido";
+}
+function pageHead(title,subtitle,button=""){
+ return `<div class="page-head"><div><h1>${title}</h1><p class="subtitle">${subtitle}</p></div>${button}</div>`;
+}
+function stat(label,value,icon,foot){
+ return `<div class="card"><div class="stat-top"><span class="stat-label">${label}</span><span class="stat-icon">${icon}</span></div><div class="stat-number">${value}</div><div class="stat-foot">${foot}</div></div>`;
+}
+function empty(icon,title,description,button=""){
+ return `<div class="empty"><div class="big">${icon}</div><strong>${title}</strong><div>${description}</div>${button?`<div style="margin-top:17px">${button}</div>`:""}</div>`;
+}
+function btn(label,action,kind=""){
+ return `<button class="btn ${kind}" data-action="${action}">${label}</button>`;
+}
+function cardTitle(title,subtitle="",action="",label="Ver todos"){
+ return `<div class="card-title"><div><h3>${title}</h3>${subtitle?`<p>${subtitle}</p>`:""}</div>${action?`<button class="text-link" data-action="${action}">${label} →</button>`:""}</div>`;
+}
+function moneyTotalQuotes(){
+ return db.quotes.filter(q=>!["Recusado","Cancelado"].includes(q.status)).reduce((s,q)=>s+Number(q.value||0),0);
+}
+function approvedTotal(){
+ return db.quotes.filter(q=>["Aprovado","Concluído"].includes(q.status)).reduce((s,q)=>s+Number(q.value||0),0);
+}
+function renderDashboard(){
+ const recent=db.activities.slice(0,6);
+ const latest=db.quotes.slice(0,5);
+ const openTickets=db.tickets.filter(t=>!["Resolvido","Cancelado"].includes(t.status)).length;
+ const recentActivity=recent.length?recent.map(a=>`<div class="activity"><div class="activity-dot"></div><div><p>${esc(a.message)}</p><small>${new Date(a.at).toLocaleString("pt-BR")}</small></div></div>`).join(""):empty("◷","Nenhuma atividade ainda","As suas ações aparecerão aqui.");
+ const latestQuotes=latest.length?`<div class="table-wrap"><table><thead><tr><th>ORÇAMENTO</th><th>CLIENTE</th><th>VALOR</th><th>STATUS</th></tr></thead><tbody>${latest.map(q=>`<tr><td><strong>${esc(q.code)}</strong></td><td>${esc(clientName(q.clientId))}</td><td class="amount">${money(q.value)}</td><td>${statusBadge(q.status)}</td></tr>`).join("")}</tbody></table></div>`:empty("▤","Nenhum orçamento","Crie o primeiro orçamento para começar.",btn("＋ Criar orçamento","new-quote","primary"));
+ const statuses=["Novo","Em negociação","Aprovado","Recusado","Concluído"];
+ const bars=statuses.map(s=>{
+  const n=db.quotes.filter(q=>q.status===s).length;
+  const pct=db.quotes.length?Math.round(n/db.quotes.length*100):0;
+  return `<div class="progress-row"><div class="progress-info"><span>${s}</span><span>${n} (${pct}%)</span></div><div class="progress"><div style="width:${pct}%"></div></div></div>`;
+ }).join("");
+ return `${pageHead("Visão geral","Acompanhe os principais números do VELTRONIX FLOW.",btn("＋ Novo cliente","new-client")+" "+btn("＋ Novo orçamento","new-quote","primary"))}
+ <div class="grid stats">
+ ${stat("Total de clientes",db.clients.length,"♙","Clientes cadastrados")}
+ ${stat("Orçamentos",db.quotes.length,"▤","Propostas registradas")}
+ ${stat("Valor em propostas",money(moneyTotalQuotes()),"R$","Exceto recusadas e canceladas")}
+ ${stat("Atendimentos abertos",openTickets,"◉","Solicitações não resolvidas")}
+ </div>
+ <div class="grid columns">
+  <div class="card">${cardTitle("Orçamentos recentes","Últimas propostas criadas","orcamentos")} ${latestQuotes}</div>
+  <div class="card">${cardTitle("Funil de orçamentos","Distribuição por status")} ${db.quotes.length?bars:empty("▥","Sem dados","Os status serão exibidos após cadastrar orçamentos.")}</div>
+  <div class="card">${cardTitle("Atividade recente","Ações registradas no sistema","relatorios")} ${recentActivity}</div>
+  <div class="card">${cardTitle("Resumo financeiro","Valores cadastrados")}<div class="progress-row"><div class="progress-info"><span>Valor aprovado</span><strong>${money(approvedTotal())}</strong></div></div><div class="progress-row"><div class="progress-info"><span>Valor em negociação</span><strong>${money(db.quotes.filter(q=>["Novo","Em negociação"].includes(q.status)).reduce((s,q)=>s+Number(q.value||0),0))}</strong></div></div><div class="progress-row"><div class="progress-info"><span>Atendimentos resolvidos</span><strong>${db.tickets.filter(t=>t.status==="Resolvido").length}</strong></div></div>${btn("Ver relatórios","relatorios")}</div>
+ </div>`;
+}
+function toolbar(placeholder,filterOptions=[]){
+ return `<div class="toolbar"><div class="search"><input id="table-search" placeholder="${placeholder}" autocomplete="off"></div>${filterOptions.length?`<select id="table-filter" style="width:auto;min-width:155px"><option value="">Todos os status</option>${filterOptions.map(s=>`<option>${esc(s)}</option>`).join("")}</select>`:""}</div>`;
+}
+function renderClients(){
+ const rows=db.clients.map(c=>`<tr data-search="${esc([c.name,c.email,c.phone,c.company,c.notes].join(" ").toLowerCase())}"><td><div class="person"><div class="mini-avatar">${esc(initials(c.name))}</div><div><strong>${esc(c.name)}</strong><div class="muted" style="margin-top:4px">${esc(c.company||"Pessoa física")}</div></div></div></td><td>${esc(c.email||"—")}</td><td>${esc(c.phone||"—")}</td><td>${dateBR(c.createdAt)}</td><td><div class="row-actions"><button data-action="edit-client" data-id="${c.id}" aria-label="Editar">✎</button><button data-action="delete-client" data-id="${c.id}" aria-label="Excluir">×</button></div></td></tr>`).join("");
+ return `${pageHead("Clientes","Cadastre e gerencie os seus clientes.",btn("＋ Novo cliente","new-client","primary"))}
+ ${toolbar("Buscar por nome, e-mail ou telefone")}
+ <div class="card"><div class="card-title"><h3>Todos os clientes <span class="badge">${db.clients.length}</span></h3></div>
+ ${rows?`<div class="table-wrap"><table id="data-table"><thead><tr><th>CLIENTE</th><th>E-MAIL</th><th>TELEFONE</th><th>CADASTRO</th><th>AÇÕES</th></tr></thead><tbody>${rows}</tbody></table></div><div id="no-results" class="empty" hidden>Nenhum resultado encontrado.</div>`:empty("♙","Nenhum cliente cadastrado","Adicione seu primeiro cliente para organizar seus contatos.",btn("＋ Cadastrar cliente","new-client","primary"))}
+ </div>`;
+}
+function renderQuotes(){
+ const statuses=["Novo","Em negociação","Aprovado","Recusado","Concluído"];
+ const rows=db.quotes.map(q=>`<tr data-search="${esc([q.code,clientName(q.clientId),q.description,q.status].join(" ").toLowerCase())}" data-status="${esc(q.status)}"><td><strong>${esc(q.code)}</strong><div class="muted" style="margin-top:4px">${esc(q.description||"Sem descrição")}</div></td><td>${esc(clientName(q.clientId))}</td><td class="amount">${money(q.value)}</td><td>${statusBadge(q.status)}</td><td>${dateBR(q.date)}</td><td><div class="row-actions"><button data-action="edit-quote" data-id="${q.id}" aria-label="Editar">✎</button><button data-action="delete-quote" data-id="${q.id}" aria-label="Excluir">×</button></div></td></tr>`).join("");
+ return `${pageHead("Orçamentos","Crie propostas e acompanhe o andamento comercial.",btn("＋ Novo orçamento","new-quote","primary"))}
+ ${toolbar("Buscar por código, cliente ou descrição",statuses)}
+ <div class="grid stats">
+ ${stat("Total de propostas",db.quotes.length,"▤","Todas as propostas")}
+ ${stat("Valor total",money(moneyTotalQuotes()),"R$","Propostas não recusadas")}
+ ${stat("Aprovados",db.quotes.filter(q=>["Aprovado","Concluído"].includes(q.status)).length,"✓","Aprovados ou concluídos")}
+ ${stat("Em negociação",db.quotes.filter(q=>["Novo","Em negociação"].includes(q.status)).length,"↗","Aguardando decisão")}
+ </div>
+ <div class="card"><div class="card-title"><h3>Lista de orçamentos</h3></div>
+ ${rows?`<div class="table-wrap"><table id="data-table"><thead><tr><th>PROPOSTA</th><th>CLIENTE</th><th>VALOR</th><th>STATUS</th><th>DATA</th><th>AÇÕES</th></tr></thead><tbody>${rows}</tbody></table></div><div id="no-results" class="empty" hidden>Nenhum resultado encontrado.</div>`:empty("▤","Nenhum orçamento cadastrado","Crie uma proposta para começar.",btn("＋ Criar orçamento","new-quote","primary"))}
+ </div>`;
+}
+function renderTickets(){
+ const statuses=["Pendente","Em andamento","Aguardando","Resolvido","Cancelado"];
+ const rows=db.tickets.map(t=>`<tr data-search="${esc([t.title,clientName(t.clientId),t.description,t.status,t.priority].join(" ").toLowerCase())}" data-status="${esc(t.status)}"><td><strong>${esc(t.title)}</strong><div class="muted" style="margin-top:4px">${esc(t.description||"Sem descrição")}</div></td><td>${esc(clientName(t.clientId))}</td><td>${statusBadge(t.status)}</td><td><span class="badge ${t.priority==="Alta"?"red":t.priority==="Média"?"yellow":""}">${esc(t.priority)}</span></td><td>${dateBR(t.date)}</td><td><div class="row-actions"><button data-action="edit-ticket" data-id="${t.id}" aria-label="Editar">✎</button><button data-action="delete-ticket" data-id="${t.id}" aria-label="Excluir">×</button></div></td></tr>`).join("");
+ return `${pageHead("Atendimentos","Organize solicitações, tarefas e acompanhamentos.",btn("＋ Novo atendimento","new-ticket","primary"))}
+ ${toolbar("Buscar por título, cliente ou descrição",statuses)}
+ <div class="grid stats">
+ ${stat("Total",db.tickets.length,"◉","Atendimentos registrados")}
+ ${stat("Pendentes",db.tickets.filter(t=>t.status==="Pendente").length,"◷","Aguardando início")}
+ ${stat("Em andamento",db.tickets.filter(t=>t.status==="Em andamento").length,"↗","Em execução")}
+ ${stat("Resolvidos",db.tickets.filter(t=>t.status==="Resolvido").length,"✓","Atendimentos finalizados")}
+ </div>
+ <div class="card"><div class="card-title"><h3>Todos os atendimentos</h3></div>
+ ${rows?`<div class="table-wrap"><table id="data-table"><thead><tr><th>ATENDIMENTO</th><th>CLIENTE</th><th>STATUS</th><th>PRIORIDADE</th><th>DATA</th><th>AÇÕES</th></tr></thead><tbody>${rows}</tbody></table></div><div id="no-results" class="empty" hidden>Nenhum resultado encontrado.</div>`:empty("◉","Nenhum atendimento registrado","Registre uma solicitação para acompanhar o progresso.",btn("＋ Novo atendimento","new-ticket","primary"))}
+ </div>`;
+}
+function renderReports(){
+ const countStatus=s=>db.quotes.filter(q=>q.status===s).length;
+ const months=[];
+ const now=new Date();
+ for(let i=5;i>=0;i--){
+  const d=new Date(now.getFullYear(),now.getMonth()-i,1);
+  months.push({label:d.toLocaleDateString("pt-BR",{month:"short"}).replace(".",""),year:d.getFullYear(),month:d.getMonth()});
+ }
+ const values=months.map(m=>db.quotes.filter(q=>{
+  if(!q.date)return false;
+  const d=new Date(q.date+"T12:00:00");
+  return d.getFullYear()===m.year&&d.getMonth()===m.month;
+ }).reduce((s,q)=>s+Number(q.value||0),0));
+ const max=Math.max(...values,1);
+ const chart=months.map((m,i)=>`<div class="chart-col"><span class="chart-value">${values[i]>=1000?(values[i]/1000).toLocaleString("pt-BR",{maximumFractionDigits:1})+"k":Math.round(values[i])}</span><div class="chart-bar" style="height:${Math.max(3,values[i]/max*135)}px" title="${money(values[i])}"></div><span class="chart-label">${esc(m.label)}</span></div>`).join("");
+ const distribution=["Novo","Em negociação","Aprovado","Recusado","Concluído"].map(s=>({s,n:countStatus(s)}));
+ return `${pageHead("Relatórios","Resumo baseado nos registros locais do sistema.",btn("↓ Exportar CSV","export-csv"))}
+ <div class="grid stats">
+ ${stat("Clientes",db.clients.length,"♙","Base cadastrada")}
+ ${stat("Orçamentos",db.quotes.length,"▤","Propostas criadas")}
+ ${stat("Valor aprovado",money(approvedTotal()),"R$","Propostas aprovadas/concluídas")}
+ ${stat("Atendimentos resolvidos",db.tickets.filter(t=>t.status==="Resolvido").length,"✓","Total finalizado")}
+ </div>
+ <div class="grid columns">
+ <div class="card">${cardTitle("Valor de orçamentos por mês","Soma das propostas criadas nos últimos seis meses")}
+ ${db.quotes.length?`<div class="chart">${chart}</div><p class="muted" style="font-size:11px">Os valores representam orçamentos cadastrados, não receita recebida.</p>`:empty("▥","Ainda não há dados","Cadastre orçamentos para gerar o gráfico.")}</div>
+ <div class="card">${cardTitle("Status das propostas","Distribuição atual")}
+ ${distribution.map(x=>`<div class="progress-row"><div class="progress-info"><span>${x.s}</span><span>${x.n}</span></div><div class="progress"><div style="width:${db.quotes.length?x.n/db.quotes.length*100:0}%"></div></div></div>`).join("")}
+ </div>
+ <div class="card">${cardTitle("Atendimentos","Distribuição por situação")}
+ ${["Pendente","Em andamento","Aguardando","Resolvido","Cancelado"].map(s=>`<div class="progress-row"><div class="progress-info"><span>${s}</span><span>${db.tickets.filter(t=>t.status===s).length}</span></div><div class="progress"><div style="width:${db.tickets.length?db.tickets.filter(t=>t.status===s).length/db.tickets.length*100:0}%"></div></div></div>`).join("")}</div>
+ <div class="card">${cardTitle("Resumo da operação","Visão geral")}
+ <div class="setting-row"><div><strong>Clientes cadastrados</strong><p>Registros na base local</p></div><strong>${db.clients.length}</strong></div>
+ <div class="setting-row"><div><strong>Ticket médio</strong><p>Média por orçamento</p></div><strong>${money(db.quotes.length?db.quotes.reduce((s,q)=>s+Number(q.value||0),0)/db.quotes.length:0)}</strong></div>
+ <div class="setting-row"><div><strong>Taxa de aprovação</strong><p>Aprovados ou concluídos ÷ propostas</p></div><strong>${db.quotes.length?Math.round(db.quotes.filter(q=>["Aprovado","Concluído"].includes(q.status)).length/db.quotes.length*100):0}%</strong></div>
+ </div></div>`;
+}
+function renderNotifications(){
+ const rows=db.notifications;
+ return `${pageHead("Notificações","Acompanhe as atividades e atualizações do sistema.",`<div style="display:flex;gap:8px;flex-wrap:wrap">${btn("Marcar todas como lidas","read-all")}${btn("Limpar notificações","clear-notifications")}</div>`)}
+ <div class="card"><div class="card-title"><h3>Central de notificações</h3><span class="badge">${rows.filter(n=>!n.read).length} não lidas</span></div>
+ ${rows.length?`<div class="notice-list">${rows.map(n=>`<div class="notice"><div class="stat-icon">${n.read?"✓":"♧"}</div><div style="flex:1"><p><strong>${esc(n.title)}</strong>${n.read?"":' <span class="badge">Nova</span>'}</p><p style="margin-top:5px">${esc(n.message)}</p><small>${new Date(n.at).toLocaleString("pt-BR")}</small></div>${!n.read?`<button class="btn small" data-action="read-notice" data-id="${n.id}">Marcar lida</button>`:""}</div>`).join("")}</div>`:empty("♧","Tudo tranquilo por aqui","As notificações de suas atividades aparecerão nesta página.")}
+ </div>`;
+}
+function renderAssistant(){
+ return `${pageHead("Assistente IA","Área preparada para uma futura integração inteligente.")}
+ <div class="card" style="max-width:760px;margin:auto;padding:30px">
+ <div style="width:64px;height:64px;border-radius:18px;background:#a855f722;color:var(--light);display:grid;place-items:center;font-size:32px;margin-bottom:20px">✧</div>
+ <span class="badge">EM DESENVOLVIMENTO</span>
+ <h2 style="font-size:24px;margin:16px 0 10px">Assistente VELTRONIX</h2>
+ <p class="subtitle">Esta área está preparada visualmente, mas ainda não está conectada a um modelo de inteligência artificial. Não envia mensagens nem executa ações automáticas.</p>
+ <div class="section-note" style="margin-top:22px">Próximas etapas: conectar um provedor de IA por meio de um backend seguro, definir as permissões e permitir que o assistente consulte somente os dados autorizados.</div>
+ <h3>O que poderá fazer futuramente</h3>
+ <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr));margin-top:16px">
+ <div class="card"><strong>✧ Análise comercial</strong><p class="muted">Analisar oportunidades e orçamentos.</p></div>
+ <div class="card"><strong>◉ Organização</strong><p class="muted">Ajudar a priorizar tarefas e atendimentos.</p></div>
+ <div class="card"><strong>▥ Relatórios</strong><p class="muted">Resumir indicadores e resultados.</p></div>
+ </div>
+ ${btn("Entendi","assistant-info")}
+ </div>`;
+}
+function renderSettings(){
+ const s=db.settings;
+ return `${pageHead("Configurações","Gerencie as preferências deste navegador.")}
+ <div class="section-note">Estas configurações são locais. Ainda não há autenticação de usuários nem sincronização com outros dispositivos.</div>
+ <div class="grid settings-grid">
+ <div class="card">${cardTitle("Aparência","Personalize o visual do FLOW")}
+ <strong>Cor de destaque</strong><p class="muted">Escolha a paleta do sistema.</p>
+ <div class="theme-options">
+ ${[["purple","Roxo neon","#a855f7","#7928ca"],["blue","Azul","#38bdf8","#2563eb"],["green","Verde","#4ade80","#15803d"],["pink","Rosa","#f472b6","#be185d"]].map(t=>`<button class="theme-swatch ${s.theme===t[0]?"active":""}" data-action="theme" data-theme="${t[0]}"><div class="swatch-color" style="background:linear-gradient(120deg,${t[2]},${t[3]})"></div>${t[1]}</button>`).join("")}
+ </div>
+ <div class="setting-row"><div><strong>Modo compacto</strong><p>Reduz o espaçamento visual das tabelas.</p></div><label class="switch"><input type="checkbox" data-setting="compact" ${s.compact?"checked":""}><span></span></label></div>
+ </div>
+ <div class="card">${cardTitle("Preferências","Comportamento do sistema")}
+ <div class="setting-row"><div><strong>Confirmação de exclusão</strong><p>Perguntar antes de excluir registros.</p></div><label class="switch"><input type="checkbox" data-setting="confirmDelete" ${s.confirmDelete?"checked":""}><span></span></label></div>
+ <div class="setting-row"><div><strong>Notificações internas</strong><p>Registrar avisos de novas atividades.</p></div><label class="switch"><input type="checkbox" data-setting="notify" ${s.notify?"checked":""}><span></span></label></div>
+ <div class="setting-row"><div><strong>Armazenamento</strong><p>Dados salvos neste navegador.</p></div><span class="badge green">Local</span></div>
+ </div>
+ <div class="card">${cardTitle("Dados locais","Gerencie uma cópia dos seus registros")}
+ <p class="muted" style="line-height:1.7">Exporte uma cópia de segurança ou importe um arquivo JSON previamente exportado.</p>
+ <div class="toolbar" style="margin-top:18px"><button class="btn primary" data-action="backup">↓ Exportar backup</button><button class="btn" data-action="restore-prompt">↑ Importar backup</button><input type="file" id="backup-file" accept=".json,application/json" hidden></div>
+ </div>
+ <div class="card">${cardTitle("Zona de manutenção","Ações que afetam os dados")}
+ <p class="muted" style="line-height:1.7">Restaurar as configurações altera somente as preferências. Apagar todos os dados remove clientes, orçamentos e atendimentos deste navegador.</p>
+ <div class="toolbar" style="margin-top:18px"><button class="btn" data-action="reset-settings">Restaurar configurações</button><button class="btn danger" data-action="reset-data">Apagar todos os dados</button></div>
+ </div>
+ </div>`;
+}
+function render(){
+ const renderers={dashboard:renderDashboard,clientes:renderClients,orcamentos:renderQuotes,atendimentos:renderTickets,assistente:renderAssistant,relatorios:renderReports,notificacoes:renderNotifications,configuracoes:renderSettings};
+ $("#content").innerHTML=renderers[currentPage]();
+ $("#top-title").textContent=pageInfo[currentPage][0];
+ $("#top-subtitle").textContent=pageInfo[currentPage][1];
+ $$("#nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===currentPage));
+ const unread=db.notifications.filter(n=>!n.read).length;
+ $("#nav-badge").hidden=!unread;
+ $("#nav-badge").textContent=unread;
+ $("#top-dot").hidden=!unread;
+ document.body.classList.toggle("compact",!!db.settings.compact);
+ document.documentElement.style.setProperty("--purple",({purple:"#a855f7",blue:"#38bdf8",green:"#4ade80",pink:"#f472b6"})[db.settings.theme]||"#a855f7");
+ document.documentElement.style.setProperty("--purple2",({purple:"#7928ca",blue:"#2563eb",green:"#15803d",pink:"#be185d"})[db.settings.theme]||"#7928ca");
+ document.documentElement.style.setProperty("--light",({purple:"#c084fc",blue:"#7dd3fc",green:"#86efac",pink:"#f9a8d4"})[db.settings.theme]||"#c084fc");
+ if(db.settings.compact)document.documentElement.style.setProperty("--table-pad","8px");
+ else document.documentElement.style.setProperty("--table-pad","15px");
+}
+function openPage(p){
+ if(!pageInfo[p])return;
+ currentPage=p;
+ $("#sidebar").classList.remove("open");
+ render();
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function modal(title,body){
+ modalReturnPage=currentPage;
+ $("#modal-root").innerHTML=`<div class="overlay" id="modal-overlay"><div class="modal" role="dialog" aria-modal="true" aria-label="${esc(title)}"><div class="modal-head"><h3>${title}</h3><button class="close" data-action="close-modal" aria-label="Fechar">×</button></div>${body}</div></div>`;
+ $("#modal-overlay").addEventListener("click",e=>{if(e.target.id==="modal-overlay")closeModal()});
+ const first=$("#modal-root input:not([type=hidden]),#modal-root select,#modal-root textarea");
+ if(first)first.focus();
+}
+function closeModal(){$("#modal-root").innerHTML=""}
+function field(label,name,opts={}){
+ const {value="",type="text",placeholder="",required=false,full=false,options=null,step=null,min=null}=opts;
+ let input;
+ if(options){
+  input=`<select name="${name}" ${required?"required":""}>${options.map(o=>`<option value="${esc(o.value??o)}" ${String(o.value??o)===String(value)?"selected":""}>${esc(o.label??o)}</option>`).join("")}</select>`;
+ }else if(type==="textarea"){
+  input=`<textarea name="${name}" placeholder="${esc(placeholder)}" ${required?"required":""}>${esc(value)}</textarea>`;
+ }else{
+  input=`<input name="${name}" type="${type}" value="${esc(value)}" placeholder="${esc(placeholder)}" ${required?"required":""} ${step?`step="${step}"`:""} ${min!==null?`min="${min}"`:""}>`;
+ }
+ return `<div class="field ${full?"full":""}"><label>${label}${required?" *":""}</label>${input}</div>`;
+}
+function formModal(title,fields,values,onSubmit,submitLabel="Salvar"){
+ modal(title,`<form id="entity-form"><div class="form-grid">${fields(values)}</div><div class="form-actions"><button type="button" class="btn" data-action="close-modal">Cancelar</button><button type="submit" class="btn primary">${submitLabel}</button></div></form>`);
+ $("#entity-form").addEventListener("submit",e=>{
+  e.preventDefault();
+  const fd=new FormData(e.currentTarget);
+  const data=Object.fromEntries(fd.entries());
+  onSubmit(data);
+ });
+}
+function clientFields(c){
+ return field("Nome completo","name",{value:c.name||"",required:true,placeholder:"Nome do cliente"})+
+ field("Empresa","company",{value:c.company||"",placeholder:"Nome da empresa"})+
+ field("E-mail","email",{type:"email",value:c.email||"",placeholder:"email@exemplo.com"})+
+ field("Telefone","phone",{value:c.phone||"",placeholder:"(21) 99999-9999"})+
+ field("Observações","notes",{type:"textarea",value:c.notes||"",full:true,placeholder:"Informações adicionais"});
+}
+function openClientForm(existing=null){
+ const c=existing||{};
+ formModal(existing?"Editar cliente":"Novo cliente",clientFields,c,data=>{
+  const name=data.name.trim();
+  if(!name){toast("Informe o nome do cliente.","error");return}
+  if(existing)Object.assign(existing,data,{name});
+  else db.clients.unshift({id:id(),...data,name,createdAt:dateNow()});
+  closeModal();
+  commit(existing?"Cliente atualizado":"Cliente cadastrado");
+ });
+}
+function quoteFields(q){
+ const clients=db.clients.map(c=>({value:c.id,label:c.name}));
+ const clientOptions=[{value:"",label:"Selecione um cliente"},...clients];
+ const statuses=["Novo","Em negociação","Aprovado","Recusado","Concluído"];
+ return field("Cliente","clientId",{value:q.clientId||"",options:clientOptions,required:true})+
+ field("Valor (R$)","value",{type:"number",value:q.value??"",required:true,step:"0.01",min:0,placeholder:"0,00"})+
+ field("Data","date",{type:"date",value:q.date||new Date().toISOString().slice(0,10),required:true})+
+ field("Status","status",{value:q.status||"Novo",options:statuses})+
+ field("Descrição da proposta","description",{value:q.description||"",type:"textarea",full:true,placeholder:"Descreva o serviço ou produto proposto"});
+}
+function openQuoteForm(existing=null){
+ if(!db.clients.length){
+  toast("Cadastre um cliente antes de criar um orçamento.","error");
+  openClientForm();
+  return;
+ }
+ const q=existing||{};
+ formModal(existing?"Editar orçamento":"Novo orçamento",quoteFields,q,data=>{
+  if(!db.clients.some(c=>c.id===data.clientId)){toast("Selecione um cliente válido.","error");return}
+  const value=Number(data.value);
+  if(!Number.isFinite(value)||value<0){toast("Informe um valor válido.","error");return}
+  const extra={...data,value};
+  if(existing)Object.assign(existing,extra);
+  else{
+   const seq=db.quotes.length+1;
+   extra.id=id();
+   extra.code="ORC-"+new Date().getFullYear()+"-"+String(seq).padStart(4,"0");
+   extra.createdAt=dateNow();
+   db.quotes.unshift(extra);
+  }
+  closeModal();
+  commit(existing?"Orçamento atualizado":"Orçamento criado");
+ });
+}
+function ticketFields(t){
+ const clients=[{value:"",label:"Sem cliente vinculado"},...db.clients.map(c=>({value:c.id,label:c.name}))];
+ return field("Título","title",{value:t.title||"",required:true,placeholder:"Ex.: Atualizar site"})+
+ field("Cliente","clientId",{value:t.clientId||"",options:clients})+
+ field("Status","status",{value:t.status||"Pendente",options:["Pendente","Em andamento","Aguardando","Resolvido","Cancelado"]})+
+ field("Prioridade","priority",{value:t.priority||"Média",options:["Baixa","Média","Alta"]})+
+ field("Data","date",{type:"date",value:t.date||new Date().toISOString().slice(0,10),required:true})+
+ field("Descrição","description",{value:t.description||"",type:"textarea",full:true,placeholder:"Detalhes do atendimento"});
+}
+function openTicketForm(existing=null){
+ const t=existing||{};
+ formModal(existing?"Editar atendimento":"Novo atendimento",ticketFields,t,data=>{
+  if(data.clientId&&!db.clients.some(c=>c.id===data.clientId)){toast("Cliente inválido.","error");return}
+  if(existing)Object.assign(existing,data);
+  else db.tickets.unshift({id:id(),...data,createdAt:dateNow()});
+  closeModal();
+  commit(existing?"Atendimento atualizado":"Atendimento registrado");
+ });
+}
+function findById(list,idValue){return list.find(x=>x.id===idValue)}
+function removeRecord(list,idValue,label){
+ const item=findById(list,idValue);
+ if(!item)return;
+ if(!confirmAction(`Deseja realmente excluir ${label}? Essa ação não pode ser desfeita.`))return;
+ const i=list.indexOf(item);
+ list.splice(i,1);
+ commit(`${label.charAt(0).toUpperCase()+label.slice(1)} excluído`);
+}
+function downloadFile(name,content,type){
+ const blob=new Blob([content],{type});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement("a");
+ a.href=url;a.download=name;document.body.append(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function exportCSV(){
+ const records=[
+  ["Clientes",db.clients],
+  ["Orçamentos",db.quotes],
+  ["Atendimentos",db.tickets]
+ ];
+ const lines=[];
+ records.forEach(([label,items])=>{
+  lines.push(label);
+  if(!items.length){lines.push("Sem registros","");return}
+  const keys=[...new Set(items.flatMap(o=>Object.keys(o)))];
+  lines.push(keys.map(k=>`"${k.replace(/"/g,'""')}"`).join(";"));
+  items.forEach(o=>lines.push(keys.map(k=>`"${String(o[k]??"").replace(/"/g,'""')}"`).join(";")));
+  lines.push("");
+ });
+ downloadFile("veltronix-flow-relatorios.csv","\uFEFF"+lines.join("\r\n"),"text/csv;charset=utf-8");
+ toast("Relatório CSV exportado.");
+}
+function backup(){
+ downloadFile("veltronix-flow-backup.json",JSON.stringify({version:3,exportedAt:dateNow(),data:db},null,2),"application/json");
+ toast("Backup exportado.");
+}
+function importBackup(file){
+ if(!file)return;
+ const reader=new FileReader();
+ reader.onload=()=>{
+  try{
+   const parsed=JSON.parse(reader.result);
+   const d=parsed.data||parsed;
+   if(!d||!Array.isArray(d.clients)||!Array.isArray(d.quotes)||!Array.isArray(d.tickets))throw new Error("Formato inválido");
+   if(!confirmAction("Importar este backup substituirá os dados atuais deste navegador. Continuar?"))return;
+   db={...structuredClone(initial),...d,settings:{...initial.settings,...d.settings}};
+   save();closeModal();openPage("dashboard");toast("Backup importado com sucesso.");
+  }catch(e){toast("Arquivo inválido. Selecione um backup JSON do VELTRONIX FLOW.","error")}
+ };
+ reader.readAsText(file);
+}
+function readAll(){
+ db.notifications.forEach(n=>n.read=true);
+ db.readNotifications=db.notifications.length;
+ save();render();toast("Notificações marcadas como lidas.");
+}
+function exportCsvWithCurrent(){
+ if(currentPage==="relatorios")exportCSV();
+}
+function action(actionName,el){
+ const recordId=el?.dataset.id;
+ switch(actionName){
+ case "dashboard":case "clientes":case "orcamentos":case "atendimentos":case "assistente":case "relatorios":case "notificacoes":case "configuracoes":openPage(actionName);break;
+ case "new-client":openClientForm();break;
+ case "new-quote":openQuoteForm();break;
+ case "new-ticket":openTicketForm();break;
+ case "edit-client":{const c=findById(db.clients,recordId);if(c)openClientForm(c);break}
+ case "edit-quote":{const q=findById(db.quotes,recordId);if(q)openQuoteForm(q);break}
+ case "edit-ticket":{const t=findById(db.tickets,recordId);if(t)openTicketForm(t);break}
+ case "delete-client":{
+  const c=findById(db.clients,recordId);if(!c)break;
+  const related=db.quotes.filter(q=>q.clientId===recordId).length+db.tickets.filter(t=>t.clientId===recordId).length;
+  if(related&&!confirmAction(`Este cliente possui ${related} orçamento(s)/atendimento(s) relacionado(s). Excluir o cliente? Os registros relacionados serão mantidos, mas ficarão sem nome de cliente.`))break;
+  if(!related&&!confirmAction("Excluir este cliente?"))break;
+  db.clients=db.clients.filter(x=>x.id!==recordId);commit("Cliente excluído");break;
+ }
+ case "delete-quote":removeRecord(db.quotes,recordId,"orçamento");break;
+ case "delete-ticket":removeRecord(db.tickets,recordId,"atendimento");break;
+ case "close-modal":closeModal();break;
+ case "assistant-info":toast("A integração de IA será adicionada em uma etapa futura.");break;
+ case "read-all":readAll();break;
+ case "read-notice":{const n=findById(db.notifications,recordId);if(n){n.read=true;save();render()}break}
+ case "clear-notifications":
+  if(confirmAction("Apagar todas as notificações?")){db.notifications=[];save();render();toast("Notificações apagadas.")}break;
+ case "export-csv":exportCSV();break;
+ case "backup":backup();break;
+ case "restore-prompt":$("#backup-file").click();break;
+ case "reset-settings":
+  if(confirmAction("Restaurar as configurações padrão?")){db.settings={...initial.settings};save();render();toast("Configurações restauradas.")}break;
+ case "reset-data":
+  if(confirmAction("ATENÇÃO: apagar todos os clientes, orçamentos, atendimentos, atividades e notificações deste navegador? Exporte um backup antes se precisar dos dados.")){
+   const settings={...db.settings};db=structuredClone(initial);db.settings=settings;save();openPage("dashboard");toast("Dados locais apagados.");
+  }break;
+ case "theme":
+  db.settings.theme=el.dataset.theme;save();render();toast("Tema atualizado.");break;
+ default:break;
+ }
+}
+$("#nav").addEventListener("click",e=>{
+ const b=e.target.closest("[data-page]");
+ if(b)openPage(b.dataset.page);
+});
+document.addEventListener("click",e=>{
+ const b=e.target.closest("[data-action]");
+ if(b){action(b.dataset.action,b);return}
+ if(e.target.closest("#quick-quote")){openQuoteForm();return}
+ if(e.target.closest("#top-notifications")){openPage("notificacoes");return}
+ if(e.target.closest("#menu-toggle")){$("#sidebar").classList.toggle("open");return}
+});
+$("#content").addEventListener("input",e=>{
+ if(e.target.id!=="table-search")return;
+ filterTable();
+});
+$("#content").addEventListener("change",e=>{
+ if(e.target.id==="table-filter")filterTable();
+ if(e.target.dataset.setting){
+  db.settings[e.target.dataset.setting]=e.target.checked;
+  save();render();toast("Preferência atualizada.");
+ }
+});
+function filterTable(){
+ const query=($("#table-search")?.value||"").toLowerCase().trim();
+ const status=$("#table-filter")?.value||"";
+ const rows=$$("#data-table tbody tr");
+ let visible=0;
+ rows.forEach(row=>{
+  const matchesQuery=(row.dataset.search||"").includes(query);
+  const matchesStatus=!status||row.dataset.status===status;
+  const show=matchesQuery&&matchesStatus;
+  row.hidden=!show;
+  if(show)visible++;
+ });
+ const emptyEl=$("#no-results");
+ if(emptyEl)emptyEl.hidden=visible>0;
+}
+$("#content").addEventListener("change",e=>{
+ if(e.target.id==="backup-file"&&e.target.files[0])importBackup(e.target.files[0]);
+});
+$("#modal-root").addEventListener("change",e=>{
+ if(e.target.id==="backup-file"&&e.target.files[0])importBackup(e.target.files[0]);
+});
+document.addEventListener("keydown",e=>{
+ if(e.key==="Escape"){closeModal();$("#sidebar").classList.remove("open")}
+});
+window.addEventListener("storage",e=>{
+ if(e.key===STORE){db=load();render()}
+});
+render();
+})();
+</script>
+</body>
+</html>
