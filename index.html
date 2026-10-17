@@ -358,73 +358,82 @@ const NAV_ITEMS = [
   {id:"clients",icon:"♙",label:"Clientes"},
   {id:"products",icon:"▦",label:"Produtos e estoque"},
   {id:"orders",icon:"🧾",label:"Pedidos e vendas"},
-  {id:"expenses",icon:"↘",label:"Despesas"},
-  {id:"projects",icon:"✓",label:"Projetos e tarefas"},
+  {id:"projects",icon:"◷",label:"Projetos e tarefas"},
+  {id:"appointments",icon:"▦",label:"Agenda e agendamentos"},
   {id:"suppliers",icon:"♧",label:"Fornecedores"},
-  {id:"appointments",icon:"◷",label:"Agenda"},
+  {id:"expenses",icon:"↘",label:"Despesas"},
   {id:"quotes",icon:"▤",label:"Orçamentos"},
-  {id:"tickets",icon:"◉",label:"Atendimentos"},
-  {id:"ai",icon:"✧",label:"Assistente IA",soon:true}
+  {id:"tickets",icon:"◴",label:"Atendimentos"},
+  {id:"ai",icon:"✧",label:"Assistente IA",soon:true},
+  {id:"reports",icon:"▥",label:"Relatórios"}
 ];
 const NAV_MORE = [
-  {id:"reports",icon:"▥",label:"Relatórios"},
-  {id:"notifications",icon:"♢",label:"Notificações"},
+  {id:"notifications",icon:"♧",label:"Notificações"},
   {id:"settings",icon:"⚙",label:"Configurações"}
 ];
+
 function navButton(item){
-  return `<button class="${currentPage===item.id?"active":""}" data-nav="${item.id}">
-    <span class="ico">${item.icon}</span><span>${item.label}</span>
+  const dynamicLabels=labels();
+  const shownLabel=item.id==="products"?dynamicLabels.products:item.id==="orders"?dynamicLabels.orders:item.id==="projects"?dynamicLabels.projects:item.id==="expenses"?dynamicLabels.expense:item.label;
+  return `<button type="button" data-page="${item.id}" class="${currentPage===item.id?"active":""}">
+    <span class="ico">${item.icon}</span><span>${shownLabel}</span>
     ${item.soon?'<span class="soon">EM BREVE</span>':""}
+    ${item.id==="notifications" && unreadCount()?`<span class="soon">${unreadCount()}</span>`:""}
   </button>`;
 }
 function renderShell(){
-  const meta=PAGE_META[currentPage]||PAGE_META.dashboard;
-  document.getElementById("app-root").innerHTML=`
-    <div class="app">
-      <aside class="sidebar ${mobileMenuOpen?"open":""}" id="sidebar">
-        <div class="brand">
-          <div class="brand-mark">V</div>
-          <div><strong>VELTRONIX FLOW</strong><small>Gestão inteligente</small></div>
+  const meta = PAGE_META[currentPage] || PAGE_META.dashboard;
+  document.getElementById("app-root").innerHTML = `
+  <div class="app">
+    <aside class="sidebar ${mobileMenuOpen?"open":""}" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark">V</div>
+        <div><strong>VELTRONIX FLOW</strong><small>Gestão inteligente</small></div>
+      </div>
+      <div>
+        <div class="nav-title">MENU PRINCIPAL</div>
+        <nav class="nav" aria-label="Menu principal">${NAV_ITEMS.map(navButton).join("")}</nav>
+      </div>
+      <div>
+        <div class="nav-title">PREFERÊNCIAS</div>
+        <nav class="nav" aria-label="Preferências">${NAV_MORE.map(navButton).join("")}</nav>
+      </div>
+      <div class="sidebar-bottom">
+        <small>ESPAÇO DE TRABALHO</small>
+        <strong>${esc(profileName())}</strong>
+        <small>${db.settings.profileType==="empresa"?"Perfil empresa":"Perfil profissional"}</small>
+      </div>
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <div class="top-left">
+          <button class="icon-btn menu-toggle" type="button" data-action="toggle-menu" aria-label="Abrir menu">☰</button>
+          <div><div class="page-heading">${esc(meta[0])}</div><div class="page-subtitle">${esc(meta[1])}</div></div>
         </div>
-        <div>
-          <div class="nav-title">MENU PRINCIPAL</div>
-          <nav class="nav">${NAV_ITEMS.map(navButton).join("")}</nav>
+        <div class="top-actions">
+          <button class="icon-btn" type="button" data-page="notifications" title="Notificações" aria-label="Notificações">♧${unreadCount()?`<sup style="color:var(--light)">${unreadCount()}</sup>`:""}</button>
+          <button class="icon-btn" type="button" data-page="settings" title="Configurações" aria-label="Configurações">⚙</button>
+          <div class="avatar" title="${esc(profileName())}">${esc(initials())}</div>
         </div>
-        <div>
-          <div class="nav-title">GESTÃO</div>
-          <nav class="nav">${NAV_MORE.map(navButton).join("")}</nav>
-        </div>
-        <div class="sidebar-bottom">
-          <small>ESPAÇO DE TRABALHO</small>
-          <strong>${esc(profileName())}</strong>
-          <small>Versão inicial · Dados locais</small>
-        </div>
-      </aside>
-      <main class="main">
-        <header class="topbar">
-          <div class="top-left">
-            <button class="icon-btn menu-toggle" data-action="toggle-menu" aria-label="Abrir menu">☰</button>
-            <div><div class="page-heading">${meta[0]}</div><div class="page-subtitle">${meta[1]}</div></div>
-          </div>
-          <div class="top-actions">
-            <button class="icon-btn" data-nav="notifications" title="Notificações">♢${unreadCount()?`<sup>${unreadCount()}</sup>`:""}</button>
-            <div class="avatar" title="${esc(profileName())}">${initials()}</div>
-          </div>
-        </header>
-        <section class="content" id="page-content">${renderPage()}</section>
-        <footer class="footer">VELTRONIX FLOW · Tecnologia que impulsiona negócios.</footer>
-      </main>
-    </div>`;
+      </header>
+      <section class="content" id="content"></section>
+      <div class="footer">VELTRONIX FLOW · Seus dados permanecem neste navegador nesta versão.</div>
+    </main>
+  </div>`;
+  renderPage();
 }
 function unreadCount(){
   return db.notifications.filter(n=>!db.readNotifications.includes(n.id)).length;
 }
 function navigate(page){
   if(!PAGE_META[page]) return;
-  currentPage=page; searchTerm=""; currentFilter="Todos"; mobileMenuOpen=false;
+  currentPage = page;
+  searchTerm = "";
+  currentFilter = "Todos";
+  mobileMenuOpen = false;
   renderShell();
+  window.scrollTo({top:0,behavior:"smooth"});
 }
-
 function renderPage(){
   const root = document.getElementById("content");
   if(!root) return;
@@ -570,6 +579,15 @@ function renderTickets(){
   </div>`;
 }
 
+
+/* MÓDULOS DE GESTÃO POR TIPO DE NEGÓCIO */
+function renderProducts(){
+  const term=searchTerm.toLowerCase();
+  const list=db.products.filter(p=>`${p.name} ${p.category||""}`.toLowerCase().includes(term));
+  const low=list.filter(p=>Number(p.stock||0)<=Number(p.minStock||0));
+  return `${pageHead(labels().products, businessType()==="restaurant"?"Controle ingredientes, produtos e alertas de estoque.":"Cadastre itens, preços e quantidades.",
+    `<button class="btn btn-primary" data-action="new-product">＋ Novo item</button>`)}
+    <div class="grid stats">
       ${statCard("Itens cadastrados",db.products.length,"▦")}
       ${statCard("Estoque baixo",db.products.filter(p=>Number(p.stock||0)<=Number(p.minStock||0)).length,"⚠","Itens no limite mínimo")}
       ${statCard("Valor do estoque",money(db.products.reduce((sum,p)=>sum+Number(p.price||0)*Number(p.stock||0),0)),"◈","Preço de venda × quantidade")}
@@ -680,7 +698,6 @@ function showOrderForm(item=null){
     </div>
     <div class="grid" style="grid-template-columns:1fr 1fr">
       <div class="field"><label>Valor (R$) *</label><input class="input" type="number" min="0" step="0.01" name="value" required value="${esc(item?.value??"")}"></div>
-
       <div class="field"><label>Data</label><input class="input" type="date" name="date" value="${esc((item?.date||today()).slice(0,10))}"></div>
     </div>
     <div class="field"><label>Status</label><select class="select" name="status">${(businessType()==="restaurant"?["Recebido","Preparando","Pronto","Saiu para entrega","Entregue","Pago","Cancelado"]:["Recebido","Em andamento","Pronto","Concluído","Pago","Cancelado"]).map(x=>`<option ${((item?.status||"Recebido")===x)?"selected":""}>${x}</option>`).join("")}</select></div>
@@ -831,7 +848,6 @@ function clientOptions(selected=""){
 function openModal(title,body){
   document.getElementById("modal-root").innerHTML = `<div class="modal-backdrop" data-action="close-modal">
     <div class="modal" role="dialog" aria-modal="true" aria-label="${esc(title)}" data-modal-inner>
-
       <div class="modal-head"><h2>${esc(title)}</h2><button class="icon-btn" type="button" data-action="close-modal" aria-label="Fechar">×</button></div>
       ${body}
     </div>
@@ -982,7 +998,6 @@ document.addEventListener("submit",function(event){
   if(form.id==="appointment-form"){
     const old=editing?.type==="appointment"?db.appointments.find(x=>x.id===editing.id):null;
     const client=db.clients.find(c=>c.id===data.clientId);
-
     const item={...(old||{}),id:old?.id||id(),title:data.title.trim(),clientId:data.clientId,clientName:client?.name||"",service:data.service.trim(),date:data.date,time:data.time,value:Number(data.value||0),status:data.status,notes:data.notes.trim(),createdAt:old?.createdAt||now,updatedAt:now};
     if(old) db.appointments=db.appointments.map(x=>x.id===old.id?item:x); else db.appointments.unshift(item);
     logActivity(old?"Agendamento atualizado":"Novo agendamento",item.title);notify("Agendamento salvo",`${item.title} · ${dateText(item.date)} ${item.time||""}`);saveState();closeModal();renderShell();toast("Agendamento salvo.");
@@ -1133,7 +1148,6 @@ function renderSetup(){
           <p class="setup-desc">Primeiro, conte como você trabalha. Vamos adaptar o FLOW ao seu perfil.</p>
           <div class="choice-grid">
             <label class="choice"><input type="radio" name="setup-profile" value="empresa" ${draftSetup.profileType==="empresa"?"checked":""}><div class="choice-content"><div class="choice-icon">▦</div><strong>Empresa</strong><small>Para negócios, equipes, lojas e organizações.</small></div></label>
-            
             <label class="choice"><input type="radio" name="setup-profile" value="profissional" ${draftSetup.profileType==="profissional"?"checked":""}><div class="choice-content"><div class="choice-icon">♙</div><strong>Profissional</strong><small>Para freelancers e pessoas que trabalham por conta própria.</small></div></label>
           </div>
           <div class="field"><label for="setup-name">Nome da empresa ou profissional *</label><input class="input" id="setup-name" required value="${esc(draftSetup.businessName)}" placeholder="Como você quer identificar seu espaço?"></div>
